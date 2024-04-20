@@ -34,12 +34,7 @@ export default function DashboardLayout({children}) {
           ) : (
             <ToolProvider userID={user.uid}>
               <ToolContainer>
-                <div className="w-full">
-                  <SideBar/>
-                  <div className="p-16 max-lg:px-0 max-sm:pt-0 pl-80 pb-48">
-                      {children}
-                  </div>
-                </div>
+                {children}
               </ToolContainer>
             </ToolProvider>
           )}

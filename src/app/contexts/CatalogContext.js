@@ -17,7 +17,7 @@ export const CatalogProvider = ({children}) => {
     }
 
     useEffect(() => {
-        return () => updateCart();
+        updateCart();
     }, [])
 
     const addProductToCatalog = (product, variations) => {

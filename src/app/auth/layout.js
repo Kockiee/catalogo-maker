@@ -5,8 +5,8 @@ import { useAuth } from '../contexts/AuthContext'
 
 
 export default function RootLayout({ children }) {
-  const { user } = useAuth()
-  const pathname = usePathname()
+  const { user } = useAuth();
+  const pathname = usePathname();
 
   if (user && user.emailVerified) {
     return redirect("/dashboard")

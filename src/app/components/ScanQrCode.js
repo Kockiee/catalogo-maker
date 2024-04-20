@@ -16,21 +16,22 @@ export default function ScanQrCode({catalogId, userId}) {
             setQR(data.qr);
         }
 
-        const generateQRIntervalId = setInterval(() => loadQRCode(), 50000);
-        const verifyQRCodeScan = setInterval(async() => {
+        const generateQRIntervalId = setInterval(loadQRCode, 50000);
+        const verifyQRCodeScan = setInterval(async () => {
             const waSession = await getCatalogWhatsapp(`${catalogId}-${userId}`);
             if (waSession.state === "CONNECTED") {
                 await setCatalogWhatsapp(`${catalogId}-${userId}`, catalogId);
                 await updateCatalogs();
             }
-        }, 5000)
+        }, 5000);
+        
+        loadQRCode();
         
         return () => {
-            loadQRCode();
             clearInterval(generateQRIntervalId);
             clearInterval(verifyQRCodeScan);
         }
-      }, []);
+    }, [catalogId, userId, updateCatalogs]);
 
     return (
         <div className="flex flex-wrap">

@@ -21,11 +21,9 @@ export const ToolProvider = ({children, userID}) => {
     }
 
     useEffect(() => {
-        return () => {
-            updateCatalogs();
-            updateOrders();
-        };
-    }, []);
+        updateCatalogs();
+        updateOrders();
+    }, [userID]);
 
     const context = {
         catalogs,

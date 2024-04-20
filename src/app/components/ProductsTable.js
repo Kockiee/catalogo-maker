@@ -15,7 +15,7 @@ export default function ProductsTable({catalogId}) {
     const [notification, setNotification] = useState(<></>)
 
     useEffect(() => {
-      return () => updateCatalogs();
+      updateCatalogs();
     }, [])
 
     const renderProducts = () => {

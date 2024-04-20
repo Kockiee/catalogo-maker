@@ -1,8 +1,10 @@
+'use client'
 import { useTool } from "../contexts/ToolContext";
 import { Spinner } from "flowbite-react"
+import SideBar from "./SideBar";
 
-export default function  ToolContainer({children}) {
-    const { catalogs } = useTool()
+export default function ToolContainer({children}) {
+    const { catalogs } = useTool();
 
     return (
         <>
@@ -13,7 +15,12 @@ export default function  ToolContainer({children}) {
             </div>        
         ) : (
             <>
-            {children}
+                <div className="w-full">
+                    <SideBar/>
+                    <div className="p-16 max-lg:px-0 max-sm:pt-0 pl-80 pb-48">
+                        {children}
+                    </div>
+                </div>
             </>
         )}
         </>

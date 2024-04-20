@@ -23,7 +23,7 @@ export default function PlanCard({recurrenceType = 1, price = 25, disabled = fal
       setPaymentLink(data.payment_link)
     } 
     if (user && !disabled) {
-      return () => getPaymentLink()
+      getPaymentLink()
     }
   }, [user])
 

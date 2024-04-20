@@ -11,7 +11,8 @@ export async function DELETE (req) {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            await stripe.subscriptions.cancel(docSnap.data().last_subscription_id);
+            const lastUserSubscription = docSnap.data().last_subscription_id;
+            if (lastUserSubscription) await stripe.subscriptions.cancel(docSnap.data().last_subscription_id);
             await deleteDoc(docRef);
             return Response.json({ "success": true }, { status: 200 });
         } else {
