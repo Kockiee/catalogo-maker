@@ -1,7 +1,7 @@
 import { useTool } from "../contexts/ToolContext";
 import { Spinner } from "flowbite-react"
 
-export default function  ToolContainer({content}) {
+export default function  ToolContainer({children}) {
     const { catalogs } = useTool()
 
     return (
@@ -13,7 +13,7 @@ export default function  ToolContainer({content}) {
             </div>        
         ) : (
             <>
-            {content}
+            {children}
             </>
         )}
         </>
