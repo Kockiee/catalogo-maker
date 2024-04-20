@@ -6,6 +6,10 @@ import SideBar from "../components/SideBar";
 import { ToolProvider } from '../contexts/ToolContext';
 import ToolContainer from '../components/ToolContainer';
 
+export const metadata = {
+  title: 'Dashboard',
+  description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.",
+};
 
 export default function PAGE({children}) {
     const { DBUser, user } = useAuth()

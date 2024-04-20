@@ -1,5 +1,10 @@
 import { FaWhatsapp } from "react-icons/fa6";
 
+export const metadata = {
+    title: 'Sobre Nós',
+    description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.",
+};
+
 export default function PAGE() {
     return (
         <div className="flex flex-col items-center">
