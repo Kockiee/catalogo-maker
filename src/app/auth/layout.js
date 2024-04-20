@@ -18,13 +18,7 @@ export default function RootLayout({ children }) {
   
   return (
     <>
-      {user ? (
-        {children}
-      ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center text-prussianblue">
-          <p>Carregando...</p>
-        </div>
-      )}
+      {children}
     </>
   );
 }
