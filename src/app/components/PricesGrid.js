@@ -5,7 +5,7 @@ export default function PricesGrid() {
     return (
         <div className="flex flex-col items-center" id="prices">
             <h1 className="text-4xl font-bold text-center">Nossas assinaturas</h1>
-            <p className="text-center">
+            <p className="text-justify">
               Nosso serviço tem os melhores preços do mercado. Assinando um plano você
               nos ajuda a manter o serviço funcionando e aprimorando-se constantemente
               para melhor satisfazer suas necessidades como vendedor.

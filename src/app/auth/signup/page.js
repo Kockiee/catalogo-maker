@@ -59,6 +59,7 @@ export default function PAGE() {
     return (
         <main className="flex justify-center items-center h-full">
             <div className="rounded-lg max-w-md w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
+                <h1 className='font-bold text-xl'>Crie uma conta</h1>
                 <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
                   <div>
                     <div className="mb-2 block">

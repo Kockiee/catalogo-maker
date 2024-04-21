@@ -11,9 +11,9 @@ export default function Home() {
     <main className="flex h-full flex-col items-center space-y-4">
       <div className="w-full h-[650px] max-md:h-full bg-blue flex flex-row max-md:flex-col justify-center items-center max-md:space-y-2">
         <Image src="/catalog-flat-icon.png" width={500} height={500}/>
-        <div className="flex flex-col items-center space-y-2 max-w-[859px] max-md:text-justify">
-          <h1 className="text-gray-800 text-5xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
-          <p className="text-xl w-full">Com o Catálogo Maker você é capaz de ter o seu catálogo online ainda hoje e já começar a receber pedidos !</p>
+        <div className="flex flex-col items-center space-y-2 max-w-[859px] max-md: text-justify">
+          <h1 className="text-gray-800 text-5xl max-sm:text-4xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
+          <p className="text-xl max-sm:text-lg w-full">Com o Catálogo Maker você é capaz de ter o seu catálogo online ainda hoje e já começar a receber pedidos !</p>
           <Link href="/auth/signup">
             <Button
             size="xl"
@@ -23,7 +23,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center pt-6">
         <button
         className="bg-cornflowerblue hover:opacity-70 rounded-full animate-bounce p-3"
         onClick={() => {

@@ -10,10 +10,10 @@ export default function Main({children}) {
     return (
         <>
         {!pathname.includes("/catalog/") ? (
-          <div className={`bg-periwinkle w-full h-full min-h-screen text-lg font-medium text-prussianblue`}>
+          <div className={`bg-periwinkle w-full h-full min-h-screen text-base font-medium text-prussianblue`}>
             <Providers>
               <NavBar/>
-              <div className="px-4">{children}</div>
+              <div className="px-8">{children}</div>
               <CMFooter/>
             </Providers>
           </div>
