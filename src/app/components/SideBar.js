@@ -1,6 +1,6 @@
 'use client'
 import { Sidebar } from 'flowbite-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiChartPie, HiInbox, HiMenu, HiShoppingBag, HiUser, HiViewBoards } from 'react-icons/hi';
 import { useAuth } from '../contexts/AuthContext';
 import { FaSignOutAlt } from "react-icons/fa";
@@ -36,7 +36,7 @@ export default function SideBar() {
 
   return (
     <>
-    <div className='flex justify-between px-2 pt-2'>
+    <div className='flex justify-between px-6 pt-4 max-md:absolute top-0 left-0 max-md:w-full'>
       <button onClick={toggleSidebar} className="p-3">
         <HiMenu className='w-8 h-8 text-prussianblue'/>
       </button>
@@ -50,6 +50,7 @@ export default function SideBar() {
         </button>
       </Link>
     </div>
+    <div className='max-md:h-[90px] w-full'></div>
     <Sidebar className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} aria-label="Sidebar with content separator example">
       <div className='absolute top-0 left-0 w-full h-full p-4 bg-prussianblue'>
       <Sidebar.Items>
@@ -74,7 +75,7 @@ export default function SideBar() {
               Conta
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item href="https://billing.stripe.com/p/login/test_fZe0239w869G7zGeUU" icon={HiShoppingBag} className="hover:!bg-neonblue/70 !text-white">
+          <Sidebar.Item href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" icon={HiShoppingBag} className="hover:!bg-neonblue/70 !text-white">
             Assinatura
           </Sidebar.Item>
         </Sidebar.ItemGroup>

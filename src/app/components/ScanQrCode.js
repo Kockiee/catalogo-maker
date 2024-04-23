@@ -1,7 +1,9 @@
 'use client'
 import { useEffect, useState } from "react";
 import QRCodeComponent from "./QrCodeComponent";
-import { createWhatsappSession, getCatalogWhatsapp, setCatalogWhatsapp } from "../actions";
+import { createWhatsappSession } from "../actions/createWhatsappSession";
+import { getCatalogWhatsapp } from "../actions/getCatalogWhatsapp";
+import { setCatalogWhatsapp } from "../actions/setCatalogWhatsapp";
 import { Spinner } from "flowbite-react";
 import { CiMenuKebab } from "react-icons/ci";
 import { useTool } from "../contexts/ToolContext";

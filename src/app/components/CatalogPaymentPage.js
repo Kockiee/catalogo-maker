@@ -7,7 +7,7 @@ import { HiInformationCircle } from "react-icons/hi";
 import InputMask from 'react-input-mask';
 import { useFormState } from 'react-dom';
 import { redirect } from "next/navigation";
-import { createOrder } from "@/app/actions";
+import { createOrder } from "@/app/actions/createOrder";
 import { MdVerified } from "react-icons/md";
 
 export default function CatalogPaymentPage({catalog}) {
@@ -52,13 +52,16 @@ export default function CatalogPaymentPage({catalog}) {
 
     const totalPrice = calculateTotalPrice();
 
-    const [formState, formAction] = useFormState((state, formdata) => {
+    const [formState, formAction] = useFormState(async(state, formdata) => {
         
         if (phoneNumber.length !== 13) {
-            setError("Seu telefone precisa ter 13 dígitos")
+            setError("Seu telefone precisa ter 13 dígitos");
         } else {
             formdata.set('buyerPhone', phoneNumber);
-            return createOrder(state, formdata, catalog.id, catalog.name, catalog.owner, cart, totalPrice);
+            const createdOrder = await createOrder(state, formdata, catalog.id, catalog.name, catalog.store_name, catalog.owner, cart, totalPrice);
+            setCart([]);
+            localStorage.setItem('cart', JSON.stringify([]));
+            return createdOrder;           
         }
     }, {message: ''});
 

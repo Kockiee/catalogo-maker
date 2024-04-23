@@ -14,6 +14,9 @@ export default function PlanCard({recurrenceType = 1, price = 25, disabled = fal
     async function getPaymentLink () {
       const response = await fetch("/api/payments/payment-link/create", {
         method: "POST",
+        headers: {
+          'Authorization': await user.getIdToken()
+        },
         body: JSON.stringify({
           uid: user.uid,
           recurrenceType: recurrenceType

@@ -1,8 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "../utils/firebase";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 
 const CatalogContext = createContext();
 

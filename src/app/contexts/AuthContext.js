@@ -16,7 +16,7 @@ import {
   browserLocalPersistence,
   signInWithRedirect,
   getRedirectResult,
-  deleteUser
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "@/app/utils/firebase";
 import { useRouter } from "next/navigation";
@@ -46,7 +46,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
       if (currentUser) {
-        const response = await fetch(`/api/auth/get-user/${currentUser.uid}`);
+        const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
+          headers: {
+            'authorization': await currentUser.getIdToken()
+          }
+        });
         const data = await response.json();
         if(response.status === 200) setDBUser(data);
         setUser(currentUser);
@@ -59,7 +63,9 @@ export const AuthProvider = ({ children }) => {
       if (result) {
         const response = await fetch('/api/auth/create-user', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({
             uid: result.user.uid,
             username: result.user.displayName,
@@ -147,7 +153,10 @@ export const AuthProvider = ({ children }) => {
     await handleAction(async () => {
       await fetch('/api/auth/delete-user', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'authorization': await auth.currentUser.getIdToken()
+        },
         body: JSON.stringify({
           uid: auth.currentUser.uid
         }),

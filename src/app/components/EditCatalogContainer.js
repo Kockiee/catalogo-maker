@@ -3,7 +3,7 @@ import { BiSearch } from "react-icons/bi"
 import { useTool } from "../contexts/ToolContext"
 import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react"
 import { useEffect, useState } from "react";
-import { updateCatalog } from "../actions";
+import { updateCatalog } from "../actions/updateCatalog";
 import { useFormState } from 'react-dom'
 import Notification from "./Notification";
 import { HiInformationCircle } from "react-icons/hi";
