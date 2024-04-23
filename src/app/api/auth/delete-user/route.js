@@ -23,5 +23,5 @@ export async function DELETE (req) {
         } else {
             return Response.json({ "error": "Invalid requisition parameters." }, { status: 400 });
         }
-    }
+    })
 }
