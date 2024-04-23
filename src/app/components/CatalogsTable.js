@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteCatalogs } from "@/app/actions";
+import { deleteCatalogs } from "@/app/actions/deleteCatalogs";
 import { useTool } from "@/app/contexts/ToolContext";
 import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import Link from 'next/link'

@@ -8,12 +8,12 @@ import { BiSearch } from "react-icons/bi";
 import { HiInformationCircle, HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
-import { createProduct } from "../actions";
+import { createProduct } from "../actions/createProduct";
 import { useAuth } from "../contexts/AuthContext";
 import { redirect } from "next/navigation"
 
 export default function CreateProductContainer({catalogId}) {
-    const { catalogs, updateCatalogs } = useTool();
+    const { catalogs } = useTool();
     const { user } = useAuth();
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
     const [loading, setLoading] = useState(false);

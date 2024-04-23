@@ -2,7 +2,7 @@
 import { Button, FileInput, Label, TextInput, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { createCatalog } from "../actions";
+import { createCatalog } from "../actions/createCatalog";
 import { useAuth } from "../contexts/AuthContext";
 import { useFormState } from 'react-dom';
 import { useTool } from "../contexts/ToolContext";

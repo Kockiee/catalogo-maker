@@ -2,13 +2,15 @@
 import { useState } from 'react';
 import { HiChevronDown, HiChevronUp, HiX } from "react-icons/hi";
 import { useTool } from "../contexts/ToolContext";
-import { Button, Label, Textarea, TextInput, Tooltip } from 'flowbite-react';
+import { Button, Label, Textarea, Tooltip } from 'flowbite-react';
 import { CiMenuKebab } from 'react-icons/ci';
-import Link from 'next/link';
-import { acceptOrder, cancelOrder, refuseOrder, sendMessage } from '../actions';
+import { acceptOrder } from '../actions/acceptOrder';
+import { cancelOrder } from '../actions/cancelOrder';
+import { refuseOrder } from '../actions/refuseOrder';
 import { formatPhoneNumber } from '../utils/functions';
-import QRCodeComponent from './QrCodeComponent';
 import Notification from './Notification';
+import Link from 'next/link';
+import { FaWhatsapp } from 'react-icons/fa';
 
 export default function OrdersGrid() {
     const { orders, updateOrders, catalogs } = useTool();
@@ -40,7 +42,7 @@ export default function OrdersGrid() {
         return orders.map((order, index) => (
             <div key={index} className="text-sm rounded border-lightcyan border-4 bg-white m-2 flex flex-wrap w-full">
                 {showCancelationForm && (
-                    <div className='fixed z-20 w-full bg-periwinkle h-full max-md:top-16 max-md:px-4 top-6 right-0 flex flex-col items-center'>
+                    <div className='fixed z-20 w-full bg-periwinkle h-full top-16 max-md:px-4 right-0 flex flex-col items-center'>
                         <div className='bg-white !border-4 !border-lightcyan p-4 rounded max-w-lg max-md:max-w-full w-full shadow relative'>
                             <button className='absolute top-2 right-2' onClick={() => setShowCancelationForm(false)}>
                                 <HiX className='w-6 h-6 text-gray-500'/>
@@ -96,8 +98,15 @@ export default function OrdersGrid() {
                     {expandedOrders.includes(index) && (
                         <div className="flex flex-wrap" id={`order-${index}`}>
                             <p className='p-1 w-full'>Feito no catálogo: {order.catalog_name}</p>
-                            <Tooltip placement='right' content="Clique para ir para o WhatsApp">
-                                <p className='p-1 w-full'>Telefone do comprador: <a className='underline underline-offset-2 decoration-2 decoration-jordyblue hover:decoration-neonblue decoration-dashed' href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, tenho informações sobre a sua venda&type=phone_number&app_absent=0`} target='_blank'>{formatPhoneNumber(order.buyer_phone)}</a></p>
+                            <Tooltip placement='right' content="Clique para ir ao WhatsApp">
+                                <p className='p-1 w-full'>Telefone do comprador: 
+                                    <a 
+                                    className='underline underline-offset-2 decoration-2 decoration-jordyblue hover:decoration-neonblue decoration-dashed' 
+                                    href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, tenho informações sobre a sua venda&type=phone_number&app_absent=0`} 
+                                    target='_blank'>
+                                        {formatPhoneNumber(order.buyer_phone)}
+                                    </a>
+                                </p>
                             </Tooltip>
                             <p className='p-1 w-full'>Criado em: {new Date(order.created_at.seconds * 1000).toLocaleString()}</p>
                             <div className='w-full my-2'>
@@ -115,7 +124,7 @@ export default function OrdersGrid() {
                             </div>
                         </div>
                     )}
-                    {order.status === 'waiting-accept' && (
+                    {order.status === 'waiting-accept' ? (
                         <div className='flex flex-wrap max-lg:space-y-2 max-lg:space-x-0 space-x-2 w-full'>
                             <Button
                             onClick={async() => {
@@ -136,6 +145,14 @@ export default function OrdersGrid() {
                                 Aceitar pedido
                             </Button>
                         </div>
+                    ) : (
+                        <Link href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, vamos prosseguir com o pedido ?&type=phone_number&app_absent=0`}>
+                            <Button
+                            size='md' 
+                            className='focus:!ring-jordyblue w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
+                                Prosseguir no Whatsapp <FaWhatsapp className='ml-1 w-6 h-6'/>
+                            </Button>
+                        </Link>
                     )}
                 </div>
                 <button

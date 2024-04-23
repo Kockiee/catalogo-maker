@@ -1,8 +1,7 @@
 'use client'
 import { redirect, usePathname } from 'next/navigation'
 import { useAuth } from "../contexts/AuthContext";
-import { Spinner } from "flowbite-react"
-import SideBar from "../components/SideBar";
+import { Spinner } from "flowbite-react";
 import { ToolProvider } from '../contexts/ToolContext';
 import ToolContainer from '../components/ToolContainer';
 
@@ -32,7 +31,7 @@ export default function DashboardLayout({children}) {
               <span>Carregando...</span>
             </div>
           ) : (
-            <ToolProvider userID={user.uid}>
+            <ToolProvider user={user}>
               <ToolContainer>
                 {children}
               </ToolContainer>

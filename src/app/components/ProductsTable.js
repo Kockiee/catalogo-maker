@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
-import { deleteProducts } from "../actions";
+import { deleteProducts } from "../actions/deleteProducts";
 
 export default function ProductsTable({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();

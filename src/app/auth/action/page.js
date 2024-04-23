@@ -1,16 +1,16 @@
 'use client'
 import { useAuth } from "@/app/contexts/AuthContext"
-import { redirect, useSearchParams } from "next/navigation"
+import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button, Spinner, TextInput } from "flowbite-react"
 
 export default function resetPassword({searchParams}) {
     const { resetPassword, verifyEmail, authLoading } = useAuth()
     const [password, setPassword] = useState("")
-    const [error, setError] = useState()
+    const [error, setError] = useState("")
 
-    const oobCode = searchParams.get('oobCode')
-    const mode = searchParams.get('mode')
+    const oobCode = searchParams.oobCode
+    const mode = searchParams.mode
 
     useEffect(() => {
         async function sendVerifyEmail() {

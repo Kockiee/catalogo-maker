@@ -8,8 +8,7 @@ import { BiSearch } from "react-icons/bi";
 import { HiInformationCircle, HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
-import { updateProduct } from "../actions";
-import { redirect } from "next/navigation"
+import { updateProduct } from "../actions/updateProduct";
 import Notification from "./Notification";
 
 export default function EditProductContainer({catalogId, productId}) { 

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import { HiPlus, HiTrash } from "react-icons/hi"; // Importando o ícone de lixeira
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button, Label } from "flowbite-react";
 
 export default function CreateProductVariants({variations, setVariations}) {
     const [newVariationName, setNewVariationName] = useState('');

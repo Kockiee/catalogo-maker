@@ -4,18 +4,26 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const ToolContext = createContext();
 
-export const ToolProvider = ({children, userID}) => {
+export const ToolProvider = ({children, user}) => {
     const [catalogs, setCatalogs] = useState(false);
     const [orders, setOrders] = useState(false);
 
     const updateCatalogs = async () => {
-        const response = await fetch(`/api/catalogs/get-catalogs/${userID}`);
+        const response = await fetch(`/api/catalogs/get-catalogs/${user.uid}`, {
+            headers: {
+              'Authorization': await user.getIdToken()
+            }
+          });
         const data = await response.json();
         setCatalogs(data);
     };
 
     const updateOrders = async () => {
-        const response =  await fetch(`/api/orders/get-orders/${userID}`);
+        const response =  await fetch(`/api/orders/get-orders/${user.uid}`, {
+            headers: {
+              'Authorization': await user.getIdToken()
+            }
+          });
         const data = await response.json();
         setOrders(data);
     }
@@ -23,7 +31,7 @@ export const ToolProvider = ({children, userID}) => {
     useEffect(() => {
         updateCatalogs();
         updateOrders();
-    }, [userID]);
+    }, [user.uid]);
 
     const context = {
         catalogs,

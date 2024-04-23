@@ -34,7 +34,7 @@ export default function forgotpassword() {
                 </div>
                 <form className="w-full" onSubmit={handleFormSubmit}>
                     <div className="mb-3">
-                        <label className="text-lg font-bold" htmlFor="email">Email</label>
+                        <label htmlFor="email">Email</label>
                         <TextInput
                         onChange={(e) => {
                           setEmail(e.target.value);

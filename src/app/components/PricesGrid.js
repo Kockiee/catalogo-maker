@@ -3,7 +3,7 @@ import PlanCard from "../components/PlanCard";
 
 export default function PricesGrid() {
     return (
-        <div className="flex flex-col items-center" id="prices">
+        <div className="flex flex-col items-center pt-8" id="prices">
             <h1 className="text-4xl font-bold text-center">Nossas assinaturas</h1>
             <p className="text-justify">
               Nosso serviço tem os melhores preços do mercado. Assinando um plano você
