@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button, Spinner, TextInput } from "flowbite-react"
 
-export default function resetPassword({searchParams}) {
+export default function PAGE({searchParams}) {
     const { resetPassword, verifyEmail, authLoading } = useAuth()
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
