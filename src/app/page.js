@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Button } from "flowbite-react";
 import { AiOutlineWhatsApp } from "react-icons/ai";
-import { HiArrowDown, HiCurrencyDollar, HiLightningBolt } from "react-icons/hi";
+import { HiCurrencyDollar, HiLightningBolt } from "react-icons/hi";
 import PricesGrid from "./components/PricesGrid";
 import Link from "next/link";
+import ScrollDownButton from "./components/ScrollDownButton";
 
 export default function Home({searchParams}) {
   return (
@@ -11,7 +12,7 @@ export default function Home({searchParams}) {
       {searchParams.mobileMode ? (
         <main className="flex h-full flex-col items-center space-y-4">
           <div className="w-full h-full bg-blue flex flex-row max-md:flex-col justify-center items-center max-md:space-y-2">
-            <Image src="/catalog-flat-icon.png" width={500} height={500}/>
+            <Image src="/catalog-flat-icon.png" alt="catálogo" width={500} height={500}/>
             <div className="flex flex-col items-center space-y-4 max-w-[859px] max-md:text-justify">
               <div>
                 <h1 className="text-gray-800 text-5xl max-sm:text-4xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
@@ -53,18 +54,7 @@ export default function Home({searchParams}) {
             </div>
           </div>
           <div className="w-full flex justify-center pt-6">
-            <button
-            className="bg-cornflowerblue hover:opacity-70 rounded-full animate-bounce p-3"
-            onClick={() => {
-              const destiny = document.querySelector("#prices");
-              window.scrollTo({
-                top: destiny.offsetTop,
-                behavior: 'smooth'
-              });
-            }}
-            >
-              <HiArrowDown className="text-lightcyan w-8 h-8 "/>
-            </button>
+            <ScrollDownButton destinyId="#prices"/>
           </div>
           <div className="flex flex-col items-center w-full max-w-[1100px] space-y-16 max-md:pt-16">
             <div className="flex flex-row max-md:flex-col items-center">
