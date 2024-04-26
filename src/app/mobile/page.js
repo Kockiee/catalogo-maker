@@ -11,7 +11,7 @@ export default function PAGE() {
               <div className="flex flex-row max-md:flex-col items-center">
                   <div className="p-8">
                       <Image
-                      src="/mobile-download-image1.png" 
+                      src="/mobile-download-image.png" 
                       width={300} 
                       height={300} 
                       alt="garota mechendo no celular"/>
