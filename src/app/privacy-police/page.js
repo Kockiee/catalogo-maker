@@ -1,4 +1,5 @@
 import { FaWhatsapp } from "react-icons/fa6";
+import BackButton from "../components/BackButton";
 
 export const metadata = {
     title: 'Política de Privacidade',
@@ -8,6 +9,9 @@ export const metadata = {
 export default function PAGE() {
     return (
         <div className="flex flex-col items-center">
+            <div className="max-w-4xl w-full">
+                <BackButton/>
+            </div>
             <h1 className="font-bold text-2xl mb-4">Política de Privacidade</h1>
             <div className="max-w-4xl space-y-4">
                 <p>

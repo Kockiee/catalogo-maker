@@ -12,24 +12,25 @@ export default function Home({searchParams}) {
       {searchParams.mobileMode ? (
         <main className="flex h-full flex-col items-center space-y-4">
           <div className="w-full h-full bg-blue flex flex-row max-md:flex-col justify-center items-center max-md:space-y-2">
-            <Image src="/catalog-flat-icon.png" alt="catálogo" width={500} height={500}/>
+            <Image src="/catalog-flat-icon.png" alt="catálogo" width={400} height={400}/>
             <div className="flex flex-col items-center space-y-4 max-w-[859px] max-md:text-justify">
               <div>
-                <h1 className="text-gray-800 text-5xl max-sm:text-4xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
+                <h1 className="text-gray-800 text-5xl max-sm:text-3xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
                 <p className="text-xl max-sm:text-lg w-full">Com o Catálogo Maker você é capaz de ter o seu catálogo online ainda hoje e já começar a receber pedidos.</p>
               </div>
-              <div className="flex space-x-4 items-center w-full">
-                <Link href="/auth/signin" className="w-1/2">
+              <h2 className="text-lg font-bold">Já tem uma conta ? Entre ou crie uma</h2>
+              <div className="flex space-x-4 items-center w-full pb-8">
+                <Link href="/auth/signin?mobileMode=True" className="w-1/2">
                     <Button
                     size='xl'
                     className='w-full !bg-cornflowerblue !text-lightcyan hover:!bg-cornflowerblue/90 focus:!ring-jordyblue'>
                         Entrar
                     </Button>
                 </Link>
-                <Link href="/auth/signup" className="w-1/2">
+                <Link href="/auth/signup?mobileMode=True" className="w-1/2">
                     <Button
                     size='xl'
-                    className='w-full !bg-neonblue !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
+                    className='w-full !bg-neonblue text-left !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
                         Criar Conta
                     </Button>
                 </Link>
