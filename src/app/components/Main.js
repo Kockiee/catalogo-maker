@@ -17,8 +17,7 @@ export default function Main({children}) {
         <Providers>
           {mobileMode ? (
             <>
-              <NavBar/>
-              <div className="px-6 h-full">{children}</div>
+              <div className="px-6 pt-10 h-full">{children}</div>
             </>
           ) : (
             <>

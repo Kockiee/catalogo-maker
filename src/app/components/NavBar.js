@@ -31,7 +31,7 @@ export default function NavBar() {
                 </div>
                 <NavbarCollapse>
                     <NavbarLink className='!text-prussianblue hover:!text-prussianblue/80 active:!text-prussianblue font-bold' href="/">Início</NavbarLink>
-                    <NavbarLink className='!text-prussianblue hover:!text-prussianblue/80 active:!text-prussianblue font-bold' href="/auth/signup">Começar</NavbarLink>
+                    <NavbarLink className='!text-prussianblue hover:!text-prussianblue/80 active:!text-prussianblue font-bold' href="/mobile">Baixar</NavbarLink>
                     <NavbarLink className='!text-prussianblue hover:!text-prussianblue/80 active:!text-prussianblue font-bold' href="/#prices">Preços</NavbarLink>
                     <NavbarLink className='!text-prussianblue hover:!text-prussianblue/80 active:!text-prussianblue font-bold' href="/about">Sobre Nós</NavbarLink>
                     <div className='hidden max-sm:flex max-sm:flex-col mt-3 space-y-2'>

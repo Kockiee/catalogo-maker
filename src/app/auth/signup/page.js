@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 
-export default function PAGE() {
+export default function PAGE({searchParams}) {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -133,18 +133,20 @@ export default function PAGE() {
                   </div>
                   <p className='text-red-600 text-sm'>{error}</p>
                   <div className="flex items-center gap-2">
-                    <Checkbox onChange={(e) => setIsTermsAccepted(e.target.checked)} id="agree" required color="blue"/>
-                    <Label htmlFor="agree" className="flex">
+                    <Checkbox className='w-6 h-6 mr-2' onChange={(e) => setIsTermsAccepted(e.target.checked)} id="agree" required color="blue"/>
+                    <Label htmlFor="agree">
                       Eu concordo com os&nbsp;
-                      <Link href="#" className="text-neonblue hover:underline dark:text-cyan-500">
-                        termos e condições
+                      <Link href={searchParams.mobileMode ? "/use-terms" : "/use-terms?mobileMode=True"} className="inline-flex text-neonblue hover:underline dark:text-cyan-500">
+                        termos de uso
+                      </Link> e as <Link href={searchParams.mobileMode ? "/privacy-police" : "/privacy-police?mobileMode=True"} className="inline-flex text-neonblue hover:underline dark:text-cyan-500">
+                        políticas de privacidade
                       </Link>
                     </Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Label htmlFor="agree" className="flex">
+                    <Label htmlFor='donthaveaccount' className="flex">
                       Já tem uma conta ?&nbsp;
-                      <Link href="/auth/signin" className="text-neonblue hover:underline dark:text-cyan-500">
+                      <Link href={searchParams.mobileMode ? "/auth/signin" : "/auth/signin?mobileMode=True"} className="text-neonblue hover:underline dark:text-cyan-500">
                         Entrar na conta
                       </Link>
                     </Label>
