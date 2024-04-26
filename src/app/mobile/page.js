@@ -17,7 +17,7 @@ export default function PAGE() {
                       alt="garota mechendo no celular"/>
                   </div>
                   <div className="flex flex-col items-center">
-                      <a href="https://expo.dev/artifacts/eas/qok2BZYe8RFf3qcbaLCpKT.apk" target="blank">
+                      <a href={process.env.NEXT_PUBLIC_ANDROID_APK_LINK} target="blank">
                         <Button
                         size="lg"
                         className="w-72 bg-neonblue hover:!bg-neonblue/80 focus:ring-0 shadow-sm shadow-neonblue !mt-4 px-6">
