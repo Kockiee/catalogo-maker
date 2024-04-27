@@ -51,31 +51,34 @@ export default function SideBar() {
       </Link>
     </div>
     <div className='max-md:h-[90px] w-full'></div>
-    <Sidebar className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} aria-label="Sidebar with content separator example">
+    <Sidebar className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0 max-sm:!w-[80%]'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} aria-label="Sidebar with content separator example">
       <div className='absolute top-0 left-0 w-full h-full p-4 bg-prussianblue'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Link href="/dashboard">
-            <Sidebar.Item icon={HiChartPie} className="hover:!bg-neonblue/70 !text-white">
+            <Sidebar.Item icon={HiChartPie} className="hover:!bg-neonblue/70 !text-white py-3">
               Dashboard
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/catalogs">
-            <Sidebar.Item icon={HiViewBoards} className="hover:!bg-neonblue/70 !text-white">
+            <Sidebar.Item icon={HiViewBoards} className="hover:!bg-neonblue/70 !text-white py-3">
               Catálogos
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/orders">
-            <Sidebar.Item icon={HiInbox} className="hover:!bg-neonblue/70 !text-white">
+            <Sidebar.Item icon={HiInbox} className="hover:!bg-neonblue/70 !text-white py-3">
               Pedidos
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/account">
-            <Sidebar.Item icon={HiUser} className="hover:!bg-neonblue/70 !text-white">
+            <Sidebar.Item icon={HiUser} className="hover:!bg-neonblue/70 !text-white py-3">
               Conta
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" icon={HiShoppingBag} className="hover:!bg-neonblue/70 !text-white">
+          <Sidebar.Item 
+          href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" 
+          icon={HiShoppingBag} 
+          className="hover:!bg-neonblue/70 !text-white py-3">
             Assinatura
           </Sidebar.Item>
         </Sidebar.ItemGroup>
