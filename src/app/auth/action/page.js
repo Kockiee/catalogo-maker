@@ -8,9 +8,8 @@ export default function PAGE({searchParams}) {
     const { resetPassword, verifyEmail, authLoading } = useAuth()
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-    const searchParams = useSearchParams();
-    const mobileMode = searchParams.get("mobileMode");
 
+    const mobileMode = searchParams.mobileMode
     const oobCode = searchParams.oobCode
     const mode = searchParams.mode
 
