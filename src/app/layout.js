@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
     title: {
-      default: 'Catálogo Maker: Criar Catálogo Online Para Sua Loja',
+      default: 'Catálogo Maker: Criar Catálogo de Produtos Online',
       template: '%s - Catálogo Maker'
     },
     description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.",

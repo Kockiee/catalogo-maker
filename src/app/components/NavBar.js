@@ -23,7 +23,7 @@ export default function NavBar() {
                     </Link>
                     <Link href="/auth/signup">
                         <Button
-                        className='max-sm:hidden !bg-neonblue !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-prussianblue'>
+                        className='max-sm:hidden !bg-neonblue !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
                             Criar Conta
                         </Button>
                     </Link>

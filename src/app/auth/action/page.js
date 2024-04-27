@@ -1,6 +1,6 @@
 'use client'
 import { useAuth } from "@/app/contexts/AuthContext"
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button, Spinner, TextInput } from "flowbite-react"
 
@@ -9,6 +9,7 @@ export default function PAGE({searchParams}) {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
+    const mobileMode = searchParams.mobileMode
     const oobCode = searchParams.oobCode
     const mode = searchParams.mode
 
@@ -23,7 +24,7 @@ export default function PAGE({searchParams}) {
             }
         }
         if (!oobCode) {
-            redirect("/login")
+            redirect(`/login${mobileMode && "?mobileMode=True"}`)
         }
         if (mode === 'verifyEmail') {
             sendVerifyEmail()

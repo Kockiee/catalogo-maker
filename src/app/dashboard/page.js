@@ -10,11 +10,13 @@ export default function PAGE() {
     var billing = 0
     var ordersInLastSevenDays = 0
     
-    for (const order of orders) {
-        if (!passedSevenDaysOrMore(order.created_at)) {
-            ordersInLastSevenDays += 1
-            if (order.status === "accepted") {
-                billing += order.price
+    if (orders) {
+        for (const order of orders) {
+            if (!passedSevenDaysOrMore(order.created_at)) {
+                ordersInLastSevenDays += 1
+                if (order.status === "accepted") {
+                    billing += order.price
+                }
             }
         }
     }
