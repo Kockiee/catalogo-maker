@@ -146,13 +146,15 @@ export default function OrdersGrid() {
                             </Button>
                         </div>
                     ) : (
-                        <Link href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, vamos prosseguir com o pedido ?&type=phone_number&app_absent=0`}>
+                        <a 
+                        href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, vamos prosseguir com o pedido ?&type=phone_number&app_absent=0`}
+                        target='_blank'>
                             <Button
                             size='md' 
                             className='focus:!ring-jordyblue w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
                                 Prosseguir no Whatsapp <FaWhatsapp className='ml-1 w-6 h-6'/>
                             </Button>
-                        </Link>
+                        </a>
                     )}
                 </div>
                 <button
