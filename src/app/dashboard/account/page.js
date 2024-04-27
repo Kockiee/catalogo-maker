@@ -3,6 +3,7 @@ import DeleteAccountButton from "@/app/components/DeleteAccountButton"
 import { useAuth } from "@/app/contexts/AuthContext"
 import moment from "moment-timezone"
 import { Button } from "flowbite-react"
+import CopyButton from "@/app/components/CopyButton"
 
 export default function PAGE() {
   const { user, logout, DBUser } = useAuth()
@@ -19,14 +20,14 @@ export default function PAGE() {
         {DBUser && user && (
           <>
             <ul>
-              <li>Nome de usuário: {user.displayName}</li>
-              <li>Email verificado: {user.emailVerified ? "✅ Verificado" : " ❌ Não verificado"}</li>
-              <li className="break-words">Id da conta (para suporte): {user.uid}</li>
+              <li className="py-2 flex flex-row items-center"><p>Nome de usuário: {user.displayName}</p> <CopyButton toCopy={user.displayName} successMessage="Informação copiada !"/></li>
+              <li className="py-2">Email verificado: {user.emailVerified ? "✅ Verificado" : " ❌ Não verificado"}</li>
+              <li className="break-words py-2 flex flex-row items-center">Id da conta (para suporte): <span className="break-all contents ">{user.uid}</span> <CopyButton toCopy={user.uid} successMessage="Informação copiada !"/></li>
             </ul>
             <ul>
-              <li>Seu email: {user.email}</li>
-              <li>Data de criação: {moment(user.metadata.creationTime).format('DD/MM/YYYY')}</li>
-              <li>Plano premium: {DBUser.premium ? "👑 Ativado" : "Desativado"}</li>
+              <li className="py-2 flex flex-row items-center">Seu email: {user.email} <CopyButton toCopy={user.email} successMessage="Informação copiada !"/></li>
+              <li className="py-2">Data de criação: {moment(user.metadata.creationTime).format('DD/MM/YYYY')}</li>
+              <li className="py-2">Plano premium: {DBUser.premium ? "👑 Ativado" : "Desativado"}</li>
             </ul>
           </>
         )}

@@ -42,7 +42,7 @@ export default function SideBar() {
       </button>
       
       <Link href="/dashboard/account">
-        <button className='flex-col leading-none space bg-prussianblue text-lightcyan p-4 rounded-full w-12 h-12 flex items-center justify-center text-xl'>
+        <button className='flex-col leading-none space bg-prussianblue text-lightcyan/80 p-4 rounded-full w-12 h-12 flex items-center justify-center text-xl'>
           {DBUser ? (<>
             {DBUser.premium && <span><BiSolidCrown className='w-4 h-4 text-yellow-400'/></span>}
             {DBUser.username[0]}
@@ -51,33 +51,35 @@ export default function SideBar() {
       </Link>
     </div>
     <div className='max-md:h-[90px] w-full'></div>
-    <Sidebar className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0 max-sm:!w-[80%]'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} aria-label="Sidebar with content separator example">
+    <Sidebar 
+    className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0 max-sm:!w-[80%]'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} 
+    aria-label="Sidebar with content separator example">
       <div className='absolute top-0 left-0 w-full h-full p-4 bg-prussianblue'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Link href="/dashboard">
-            <Sidebar.Item icon={HiChartPie} className="hover:!bg-neonblue/70 !text-white py-3">
+            <Sidebar.Item icon={() => <HiChartPie className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
               Dashboard
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/catalogs">
-            <Sidebar.Item icon={HiViewBoards} className="hover:!bg-neonblue/70 !text-white py-3">
+            <Sidebar.Item icon={() => <HiViewBoards className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
               Catálogos
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/orders">
-            <Sidebar.Item icon={HiInbox} className="hover:!bg-neonblue/70 !text-white py-3">
+            <Sidebar.Item icon={() => <HiInbox className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
               Pedidos
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/account">
-            <Sidebar.Item icon={HiUser} className="hover:!bg-neonblue/70 !text-white py-3">
+            <Sidebar.Item icon={() => <HiUser className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
               Conta
             </Sidebar.Item>
           </Link>
           <a href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" target="_blank">
             <Sidebar.Item
-            icon={HiShoppingBag} 
+            icon={() => <HiShoppingBag className='text-lightcyan/80 w-6 h-6'/>} 
             className="hover:!bg-neonblue/70 !text-white py-3">
               Assinatura
             </Sidebar.Item>
@@ -86,9 +88,9 @@ export default function SideBar() {
         <Sidebar.ItemGroup>
           {user && (
             <Sidebar.Item 
-            icon={FaSignOutAlt} 
+            icon={() => <FaSignOutAlt className='text-lightcyan/80 w-6 h-6'/>} 
             onClick={handleSignOut} 
-            className="!text-red-400 hover:cursor-pointer hover:!bg-neonblue/70">
+            className="!text-red-300 hover:cursor-pointer hover:!bg-neonblue/70">
               Sair da conta
             </Sidebar.Item>
           )}
