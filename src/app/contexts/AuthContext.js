@@ -17,9 +17,26 @@ import {
   signInWithRedirect,
   getRedirectResult,
   deleteUser,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/app/utils/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
+async function createUser(result) {
+  const response = await fetch('/api/auth/create-user', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      uid: result.user.uid,
+      username: result.user.displayName,
+      email: result.user.email
+    }),
+  });
+  const data = await response.json();
+  return data
+}
 
 const AuthContext = createContext();
 
@@ -28,6 +45,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [DBUser, setDBUser] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const mobileMode = searchParams.get("mobileMode");
 
   const handleAction = useCallback(async (action) => {
     try {
@@ -61,18 +80,7 @@ export const AuthProvider = ({ children }) => {
 
     getRedirectResult(auth).then(async(result) => {
       if (result) {
-        const response = await fetch('/api/auth/create-user', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            uid: result.user.uid,
-            username: result.user.displayName,
-            email: result.user.email
-          }),
-        });
-        const data = await response.json();
+        const data = await createUser(result)
         setDBUser(data.createdUser);
       }
     })
@@ -82,20 +90,12 @@ export const AuthProvider = ({ children }) => {
   
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {
     await handleAction(async () => {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, {
         displayName: username,
       });
 
-      await fetch('/api/auth/create-user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          uid: response.user.uid,
-          username: username,
-          email: response.user.email,
-        }),
-      });
+      await createUser(result)
     });
   }, [handleAction]);
 
@@ -117,7 +117,12 @@ export const AuthProvider = ({ children }) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
         const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider);
+        if (mobileMode) {
+          const result = signInWithPopup(auth, provider);
+          await createUser(result)
+        } else {
+          await signInWithRedirect(auth, provider);
+        }
       });
     });
   }, [handleAction, handleAuthentication]);
