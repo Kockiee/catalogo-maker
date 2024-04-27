@@ -75,12 +75,13 @@ export default function SideBar() {
               Conta
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item 
-          href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" 
-          icon={HiShoppingBag} 
-          className="hover:!bg-neonblue/70 !text-white py-3">
-            Assinatura
-          </Sidebar.Item>
+          <a href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" target="_blank">
+            <Sidebar.Item
+            icon={HiShoppingBag} 
+            className="hover:!bg-neonblue/70 !text-white py-3">
+              Assinatura
+            </Sidebar.Item>
+          </a>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           {user && (
