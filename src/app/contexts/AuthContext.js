@@ -17,7 +17,6 @@ import {
   signInWithRedirect,
   getRedirectResult,
   deleteUser,
-  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/app/utils/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -117,12 +116,7 @@ export const AuthProvider = ({ children }) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
         const provider = new GoogleAuthProvider();
-        if (mobileMode) {
-          const result = signInWithPopup(auth, provider);
-          await createUser(result)
-        } else {
-          await signInWithRedirect(auth, provider);
-        }
+        await signInWithRedirect(auth, provider);
       });
     });
   }, [handleAction, handleAuthentication]);
