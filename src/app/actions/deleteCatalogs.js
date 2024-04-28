@@ -2,6 +2,7 @@
 
 import { db } from "../utils/firebase";
 import { deleteDoc, collection, doc, getDocs, query, where } from "firebase/firestore";
+import { deleteWhatsappSession } from "./deleteWhatsappSession";
 
 export async function deleteCatalogs(catalogs) {
     for (const catalog of catalogs) {
@@ -10,6 +11,7 @@ export async function deleteCatalogs(catalogs) {
         for (const doc of querySnapshot.docs) {
             await deleteDoc(doc.ref);
         }
+        await deleteWhatsappSession(catalog.whatsapp_session);
         await deleteDoc(doc(db, "catalogs", catalog.id));
     }
 }

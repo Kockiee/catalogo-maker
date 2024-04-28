@@ -30,7 +30,7 @@ export default function Home({searchParams}) {
                 <Link href="/auth/signup?mobileMode=True" className="w-1/2">
                     <Button
                     size='xl'
-                    className='w-full !bg-neonblue text-left !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
+                    className='w-full !bg-neonblue text-center !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
                         Criar Conta
                     </Button>
                 </Link>

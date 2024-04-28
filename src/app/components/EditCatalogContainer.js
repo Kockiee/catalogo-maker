@@ -23,7 +23,9 @@ export default function PAGE({catalogId}) {
     const [error, setError] = useState("");
     const [notification, setNotification] = useState(<></>);
 
-    const [formState, formAction] = useFormState((state, formdata) => {
+    const [formState, formAction] = useFormState(async(state, formdata) => {
+        setLoading(true);
+        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando catálogo."/>);
         return updateCatalog(state, formdata, catalog.id);
     }, {message: ''});
 
@@ -31,7 +33,7 @@ export default function PAGE({catalogId}) {
         if (formState.message !== '') {
             setLoading(false);
             if (formState.message === 'catalog-updated') {
-                setNotification(<Notification setPattern={setNotification} type="success" message="Catalogo atualizado com sucesso."/>)
+                setNotification(<Notification setPattern={setNotification} type="success" message="Catalogo atualizado com sucesso."/>);
                 updateCatalogs();
             } else if (formState.message === 'invalid-params') {
                 setError("Informações de catálogo inválidas.");

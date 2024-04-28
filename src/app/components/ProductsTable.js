@@ -61,7 +61,7 @@ export default function ProductsTable({catalogId}) {
   return(
       <>
         <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
-          <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:p-2 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
+          <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
             {selectedProducts.length > 0 && (
               <Button 
               disabled={deletingProducts}
@@ -72,20 +72,20 @@ export default function ProductsTable({catalogId}) {
                 setNotification(<Notification setPattern={setNotification} type="success" message="Produtos excluídos com sucesso"/>)
                 updateCatalogs();
               }} 
-              className="bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 max-sm:m-0 m-2 max-sm:px-6">
-                <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> <span className="max-sm:hidden">Deletar selecionados</span>
+              className="bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
+                <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
               </Button>
             )}
             <Link href={`/dashboard/catalogs/${catalogId}/new-product`}>
               <Button 
-              className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue max-sm:m-0 m-2 max-sm:px-6">
-                <HiPlus className="w-5 h-5 mr-1 "/> Criar um produto
+              className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                <HiPlus className="w-5 h-5 mr-1 "/> Criar
               </Button>
             </Link>
             {selectedProducts.length === 1 && (
               <Link href={`/dashboard/catalogs/${catalogId}/${selectedProducts[0]}`}>
-                <Button className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue max-sm:m-0 m-2 max-sm:px-6">
-                  <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> <span className="max-sm:hidden">Editar selecionado</span>
+                <Button className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                  <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
                 </Button>
               </Link>
             )}
@@ -102,8 +102,8 @@ export default function ProductsTable({catalogId}) {
                   if (selectedProducts.length === catalog.products.length) {
                     setSelectedProducts([]);
                   } else {
-                      const allProductIds = catalog.products.map(product => product.id);
-                      setSelectedProducts(allProductIds);
+                    const allProductIds = catalog.products.map(product => product.id);
+                    setSelectedProducts(allProductIds);
                   }
                 }}
                 className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>

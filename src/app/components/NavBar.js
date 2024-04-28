@@ -17,12 +17,14 @@ export default function NavBar() {
                 <div className="flex md:order-2 space-x-2">
                     <Link href="/auth/signin">
                         <Button
+                        size='md'
                         className='max-sm:hidden !bg-cornflowerblue !text-lightcyan hover:!bg-cornflowerblue/90 focus:!ring-jordyblue'>
                             Entrar
                         </Button>
                     </Link>
                     <Link href="/auth/signup">
                         <Button
+                        size='md'
                         className='max-sm:hidden !bg-neonblue !border-4 !border-jordyblue text-lightcyan hover:!bg-neonblue/90 focus:!ring-0'>
                             Criar Conta
                         </Button>

@@ -38,7 +38,8 @@ export default function ScanQrCode({catalogId, userId}) {
     return (
         <div className="flex flex-wrap">
             {QR ? (
-                <QRCodeComponent data={QR} />
+                <></>
+                // <QRCodeComponent data={QR} />
             ) : (
                 <div className="flex justify-center items-center w-[225px] h-[225px]">
                     <Spinner className="text-lightcyan" size={'xl'}/>
@@ -46,6 +47,7 @@ export default function ScanQrCode({catalogId, userId}) {
             )}
             <div className="p-4 pl-6 text-sm">
                 <ul className="list-decimal">
+                    <li>Abra a página deste catálogo no computador</li>
                     <li>Abra seu WhatsApp no celular</li>
                     <li>Toque em <CiMenuKebab className="inline-flex" /> no campo superior direito</li>
                     <li>Toque em "Dispositivos conectados"</li>

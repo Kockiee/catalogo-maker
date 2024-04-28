@@ -27,6 +27,8 @@ export default function EditProductContainer({catalogId, productId}) {
     const [notification, setNotification] = useState(<></>)
 
     const [formState, formAction] = useFormState((state, formdata) => {
+        setLoading(true);
+        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando produto...."/>);
         toAddImages.forEach(img => {
             formdata.append('imagesToCreate', img);
         });

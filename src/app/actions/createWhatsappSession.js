@@ -2,7 +2,10 @@
 
 export async function createWhatsappSession(sessionId) {
     const session = async() => {return await fetch(`https://flashy-powder-production.up.railway.app/session/qr/${sessionId}`, {
-        headers: {'Content-Type': 'application/json', 'x-api-key': process.env.WHATSAPP_API_KEY}
+        headers: {
+            'Content-Type': 'application/json', 
+            'x-api-key': process.env.WHATSAPP_API_KEY
+        }
     }).then(response => response.json())};
 
     const sessionExistent = await session();
