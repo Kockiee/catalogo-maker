@@ -2,6 +2,7 @@
 import { useTool } from "../contexts/ToolContext";
 import { Spinner } from "flowbite-react"
 import SideBar from "./SideBar";
+import BackButton from "./BackButton";
 
 export default function ToolContainer({children}) {
     const { catalogs } = useTool();
@@ -18,6 +19,7 @@ export default function ToolContainer({children}) {
                 <div className="w-full">
                     <SideBar/>
                     <div className="p-16 max-lg:px-0 max-sm:pt-0 pl-80 pb-48">
+                        <BackButton/>
                         {children}
                     </div>
                 </div>

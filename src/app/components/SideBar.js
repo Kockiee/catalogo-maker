@@ -1,11 +1,12 @@
 'use client'
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { HiChartPie, HiInbox, HiMenu, HiShoppingBag, HiUser, HiViewBoards } from 'react-icons/hi';
+import { HiChartPie,  HiMenu, HiShoppingBag, HiUser, HiViewBoards } from 'react-icons/hi';
 import { useAuth } from '../contexts/AuthContext';
 import { FaSignOutAlt } from "react-icons/fa";
 import { BiSolidCrown } from "react-icons/bi";
 import Link from 'next/link';
+import { FaBoxesStacked } from 'react-icons/fa6';
 
 
 export default function SideBar() {
@@ -68,7 +69,7 @@ export default function SideBar() {
             </Sidebar.Item>
           </Link>
           <Link href="/dashboard/orders">
-            <Sidebar.Item icon={() => <HiInbox className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
+            <Sidebar.Item icon={() => <FaBoxesStacked className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
               Pedidos
             </Sidebar.Item>
           </Link>

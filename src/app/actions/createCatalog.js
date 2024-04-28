@@ -36,7 +36,7 @@ export async function createCatalog(prevState, formData, userId) {
         });
 
         if (newCatalog) {
-            const bannerImage = formData.get('bannerImage')
+            const bannerImage = formData.get('bannerImage');
             if (bannerImage) {
                 const storageRef = ref(storage, `${uid}/catalog-banner`);
                 await uploadBytes(storageRef, bannerImage);
@@ -49,7 +49,7 @@ export async function createCatalog(prevState, formData, userId) {
             }
         }
 
-        return {message: "catalog-created"};
+        return { catalogId: newCatalog.id, message: "catalog-created"};
     } else {
         return {message: "invalid-params"};
     }

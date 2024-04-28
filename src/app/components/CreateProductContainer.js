@@ -24,6 +24,7 @@ export default function CreateProductContainer({catalogId}) {
     const [selectedImages, setSelectedImages] = useState([]);
     const [selectedImagesURL, setSelectedImagesURL] = useState([]);
     const [variations, setVariations] = useState([]);
+    const [notification, setNotification] = useState(<></>);
 
     const renderProductImages = () => {
         return selectedImagesURL.map((imageUrl, index) => (
@@ -48,6 +49,7 @@ export default function CreateProductContainer({catalogId}) {
 
     const [formState, formAction] = useFormState((state, formdata) => {
         setLoading(true);
+        setNotification(<Notification setPattern={setNotification} type="warning" message="Criando produto..."/>);
         selectedImages.forEach(img => {
             formdata.append('images', img);
         });
@@ -59,7 +61,8 @@ export default function CreateProductContainer({catalogId}) {
         if (formState.message !== '') {
             setLoading(false);
             if (formState.message === 'product-created') {
-                redirect(`/dashboard/catalogs/${catalog.id}#products-table`)
+                setNotification(<Notification setPattern={setNotification} type="success" message="Produto criado com sucesso !"/>);
+                redirect(`/dashboard/catalogs/${catalog.id}#products-table`);
             } else if (formState.message === 'product-already-exists') {
                 setError("Você já tem um produto igual a este no catálogo selecionado.");
             } else if (formState.message === 'invalid-params') {

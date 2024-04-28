@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
 import { Toast, ToastToggle } from 'flowbite-react';
+import Notification from "./Notification";
 
 export default function CatalogsTable() {
     const { catalogs, updateCatalogs } = useTool();
@@ -24,8 +25,8 @@ export default function CatalogsTable() {
           <TableRow key={index} className="bg-lightcyan text-prussianblue">
             <TableCell>
               <Checkbox
-              checked={selectedCatalogs.includes(catalog.id)}
-              onChange={() => toggleCatalogSelection(catalog.id)}
+              checked={selectedCatalogs.find(object => object.id === catalog.id)}
+              onChange={() => toggleCatalogSelection(catalog)}
               className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
             </TableCell>
             <TableCell className="whitespace-nowrap font-bold">
@@ -51,42 +52,42 @@ export default function CatalogsTable() {
         ))
     }
 
-    const toggleCatalogSelection = (catalogId) => {
-      if (selectedCatalogs.includes(catalogId)) {
-        setSelectedCatalogs(selectedCatalogs.filter(id => id !== catalogId));
+    const toggleCatalogSelection = (catalog) => {
+      if (selectedCatalogs.find(object => object.id === catalog.id)) {
+        setSelectedCatalogs(selectedCatalogs.filter(catalog => catalog.id !== catalog.id));
       } else {
-        setSelectedCatalogs([...selectedCatalogs, catalogId]);
+        setSelectedCatalogs([...selectedCatalogs, {id: catalog.id, waSession: catalog.whatsapp_session}]);
       }
     };
 
     return (
         <>
             <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
-              <div className="flex space-x-2 flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:p-2 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
+              <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
                 {selectedCatalogs.length > 0 && (
                   <Button 
                   disabled={deletingCatalogs}
                   onClick={async() => {
                     setDeletingCatalogs(true);
-                    setNotification(<Notification setPattern={setNotification} type="warning" message="Excluíndo catálogos..."/>)
+                    setNotification(<Notification setPattern={setNotification} type="warning" message="Excluíndo catálogos..."/>);
                     await deleteCatalogs(selectedCatalogs);
-                    setNotification(<Notification setPattern={setNotification} type="success" message="Catálogos excluídos com sucesso"/>)
+                    setNotification(<Notification setPattern={setNotification} type="success" message="Catálogos excluídos com sucesso"/>);
                     updateCatalogs();
                   }} 
-                  className="bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 max-sm:m-0 m-2 max-sm:px-6">
-                    <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> <span className="max-sm:hidden">Deletar selecionados</span>
+                  className="bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
+                    <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
                   </Button>
                 )}
                 <Link href="/dashboard/catalogs/new-catalog">
                   <Button 
-                  className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue max-sm:m-0 m-2 max-sm:px-6">
-                    <HiPlus className="w-5 h-5 mr-1"/> Criar um catálogo
+                  className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                    <HiPlus className="w-5 h-5 mr-1"/> Criar
                   </Button>
                 </Link>
                 {selectedCatalogs.length === 1 && (
-                  <Link href={`/dashboard/catalogs/${selectedCatalogs[0]}`}>
-                    <Button className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue max-sm:m-0 m-2 max-sm:px-6">
-                      <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> <span className="max-sm:hidden">Editar selecionado</span>
+                  <Link href={`/dashboard/catalogs/${selectedCatalogs[0].id}`}>
+                    <Button className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                      <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
                     </Button>
                   </Link>
                 )}
@@ -100,9 +101,15 @@ export default function CatalogsTable() {
                     <Checkbox
                     checked={selectedCatalogs.length === catalogs.length}
                     onChange={() => {
-                      catalogs.forEach(catalog => {
-                        toggleCatalogSelection(catalog.id)
-                      });
+                      if (selectedCatalogs.length === catalogs.length) {
+                        setSelectedCatalogs([]);
+                      } else {
+                        const allCatalogIds = catalogs.map(catalog => {return {
+                          id: catalog.id, 
+                          waSession: catalog.whatsapp_session
+                        }});
+                        setSelectedCatalogs(allCatalogIds);
+                      }
                     }}
                     className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
                     )}

@@ -7,6 +7,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFormState } from 'react-dom';
 import { useTool } from "../contexts/ToolContext";
 import { HiInformationCircle } from "react-icons/hi";
+import Notification from "./Notification";
+import { redirect } from "next/navigation";
 
 
 export default function CreateCatalogContainer() {
@@ -18,19 +20,24 @@ export default function CreateCatalogContainer() {
     const [textColor, setTextColor] = useState("#ffffff");
     const [bannerImage, setBannerImage] = useState();
     const { user } = useAuth();
-    const { updateCatalogs, catalogs } = useTool()
+    const { updateCatalogs } = useTool()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [notification, setNotification] = useState(<></>);
+
 
     const [formState, formAction] = useFormState((state, formdata) => {
         setLoading(true)
+        setNotification(<Notification setPattern={setNotification} type="warning" message="Criando catálogo..."/>);
         return createCatalog(state, formdata, user.uid);
     }, {message: ''});
 
     useEffect(() => {
         if (formState.message !== '') {
             if (formState.message === 'catalog-created') {
+                setNotification(<Notification setPattern={setNotification} type="success" message="Catálogo criado com sucesso !"/>);
                 updateCatalogs();
+                redirect(`/dashboard/catalogs/${formState.catalogId}`);
             } else if (formState.message === 'catalog-already-exists') {
                 setError("Você já tem um catálogo com essas informações.");
             } else if (formState.message === 'invalid-params') {
@@ -159,11 +166,11 @@ export default function CreateCatalogContainer() {
                                 setTextColor(e.target.value);
                             }}/>
                         </div>
-                        
                         <div className="py-2 w-full">
                             <p className='text-red-600 text-sm'>{error}</p>
                             <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
                         </div>
+                        {notification}
                     </div>
                 </form>
             </div>
