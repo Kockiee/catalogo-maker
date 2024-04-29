@@ -5,6 +5,8 @@ import { HiCurrencyDollar, HiLightningBolt } from "react-icons/hi";
 import PricesGrid from "./components/PricesGrid";
 import Link from "next/link";
 import ScrollDownButton from "./components/ScrollDownButton";
+import { FiSmartphone } from "react-icons/fi";
+import { FaAndroid } from "react-icons/fa6";
 
 export default function Home({searchParams}) {
   return (
@@ -62,7 +64,7 @@ export default function Home({searchParams}) {
               <AiOutlineWhatsApp className="text-neonblue w-28 h-28"/>
               <div className="flex flex-col pl-6 max-md:pl-0 max-w-[780px]">
                 <h1 className="text-gray-800 text-2xl ">
-                  Receba seus pedidos via Whatsapp.
+                  Receba seus pedidos via Whatsapp
                 </h1>
                 <p>
                   Nós implementamos em nossa solução uma automação de whatsapp que 
@@ -96,6 +98,24 @@ export default function Home({searchParams}) {
                   por isso o Catálogo Maker é a melhor opção para você
                   que quer seu catálogo ainda hoje !
                 </p>
+              </div>
+            </div>
+            <div className="flex flex-row max-md:flex-col items-center">
+              <FiSmartphone className="text-neonblue w-32 h-32"/>
+              <div className="flex flex-col pl-6 max-md:pl-0 max-w-[780px]">
+                <h1 className="text-gray-800 text-2xl">
+                  Baixe nosso aplicativo para dispositivos móveis
+                </h1>
+                <p>
+                  Com nosso aplicativo de celular você consegue gerenciar seus catálogos e pedidos em qualquer lugar, baixe agora. 
+                </p>
+                <a href='/catalogo-maker.apk'>
+                  <Button
+                  size="lg"
+                  className="w-72 bg-neonblue hover:!bg-neonblue/80 focus:ring-0 shadow-sm shadow-neonblue !mt-4 px-6">
+                    <FaAndroid className="w-6 h-6 mr-2"/> Baixar para Android
+                  </Button>
+                </a>
               </div>
             </div>
             <PricesGrid/>
