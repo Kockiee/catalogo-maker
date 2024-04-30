@@ -39,7 +39,7 @@ export async function POST(req) {
         after_completion: {
           type: "redirect",
           redirect: {
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment-finished`
           }
         },
         restrictions: {
@@ -65,7 +65,7 @@ export async function POST(req) {
         after_completion: {
           type: "redirect",
           redirect: {
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`
+            url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/payment-finished`
           }
         },
         restrictions: {

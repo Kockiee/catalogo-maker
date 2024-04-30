@@ -26,17 +26,15 @@ export async function POST(req) {
     });
   };
 
-  // console.log(event)
-
   if (event.type === "customer.subscription.deleted" && event.data.object.status === "canceled") {
     const subscriptionId = event.data.object.id;
     const q = query(collection(db, "accounts"), where("last_subscription_id", "==", subscriptionId));
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach(async(doc) => {
+    const querySnapshot = await getDocs(q);
+    for(const doc of querySnapshot) {
       await updateDoc(doc.ref, {
         premium: false
       });
-    });
+    }
   };
 
   return Response.json({status: 200});
