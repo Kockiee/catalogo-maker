@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 
-export default function PAGE() {
+export default function PAGE({searchParams}) {
+  const mobileMode = searchParams.mobileMode;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -85,7 +86,7 @@ export default function PAGE() {
           <div className="flex items-center gap-2">
             <Label htmlFor="agree" className="flex">
               Não tem uma conta ?&nbsp;
-              <Link href="/auth/signup" className="text-neonblue hover:underline dark:text-cyan-500">
+              <Link href={`/auth/signup${mobileMode ? "?mobileMode=True" : ""}`} className="text-neonblue hover:underline dark:text-cyan-500">
                 Criar uma conta
               </Link>
             </Label>
@@ -93,7 +94,7 @@ export default function PAGE() {
           <div className="flex items-center gap-2">
             <Label htmlFor="agree" className="flex">
               Esqueceu a senha ?&nbsp;
-              <Link href="/auth/signin/forgot-password" className="text-neonblue hover:underline dark:text-cyan-500">
+              <Link href={`/auth/signin/forgot-password${mobileMode ? "?mobileMode=True" : ""}`} className="text-neonblue hover:underline dark:text-cyan-500">
                 Redefinir agora
               </Link>
             </Label>
