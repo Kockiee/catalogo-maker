@@ -116,7 +116,7 @@ export default function CatalogsTable() {
                   </Table.HeadCell>
                   <TableHeadCell className="bg-cornflowerblue text-white">Nome</TableHeadCell>
                   <TableHeadCell className="bg-cornflowerblue text-white">Loja</TableHeadCell>
-                  <TableHeadCell className="bg-cornflowerblue text-white">Produtos</TableHeadCell>
+                  <TableHeadCell className="bg-cornflowerblue text-white">Qtd. de Produtos</TableHeadCell>
                   <TableHeadCell className="bg-cornflowerblue text-white">Data de criação</TableHeadCell>
                   <TableHeadCell className="bg-cornflowerblue text-white">
                     <span className="sr-only">Editar</span>
