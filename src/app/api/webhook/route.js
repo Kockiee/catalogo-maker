@@ -40,6 +40,6 @@ export async function POST(req) {
   return Response.json({status: 200});
 };
 
-// iniciar ouvinte local de webhook
+// Comando para iniciar ouvinte local de webhook:
 // stripe trigger checkout.session.completed
 // stripe listen --forward-to localhost:3000/api/webhook
