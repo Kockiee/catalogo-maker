@@ -6,23 +6,23 @@ import { ToolProvider } from '../contexts/ToolContext';
 import ToolContainer from '../components/ToolContainer';
 
 export default function DashboardLayout({children}) {
-    const { DBUser, user } = useAuth()
-    const pathname = usePathname()
+    const { DBUser, user } = useAuth();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const mobileMode = searchParams.get("mobileMode");
 
-    var isPremiumUser = DBUser === false ? null : (DBUser.premium ? true : false)
+    var isPremiumUser = DBUser === false ? null : (DBUser.premium ? true : false);
 
     if (user === null) {
-      return redirect(`/auth/signin${mobileMode && "?mobileMode=True"}`);
+      return redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
     }
 
     if (user && !user.emailVerified) {
-      return redirect(`/auth/verify-email${mobileMode && "?mobileMode=True"}`);
+      return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
     }
 
     if (isPremiumUser === false && pathname != "/dashboard/plan" && pathname != "/dashboard/account") {
-      return redirect(`/dashboard${mobileMode && "?mobileMode=True"}`)
+      return redirect(`/dashboard${mobileMode ? "?mobileMode=True" : ""}`);
     }
 
     return (

@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     return redirect("/dashboard")
   } else if (user && !user.emailVerified) {
     if (pathname != "/auth/verify-email" && pathname != "/auth/action") {
-      return redirect(`/auth/verify-email${mobileMode && "?mobileMode=True"}`)
+      return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`)
     }
   }
   
