@@ -44,8 +44,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [DBUser, setDBUser] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const mobileMode = searchParams.get("mobileMode");
 
   const handleAction = useCallback(async (action) => {
     try {
