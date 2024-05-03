@@ -9,29 +9,29 @@ export const ToolProvider = ({children, user}) => {
     const [orders, setOrders] = useState(false);
 
     const updateCatalogs = async () => {
-        const response = await fetch(`/api/catalogs/get-catalogs/${user.uid}`, {
-            headers: {
-              'Authorization': await user.getIdToken()
-            }
-          });
-        const data = await response.json();
-        setCatalogs(data);
+      const response = await fetch(`/api/catalogs/get-catalogs/${user.uid}`, {
+          headers: {
+            'Authorization': await user.getIdToken()
+          }
+        });
+      const data = await response.json();
+      setCatalogs(data);
     };
 
     const updateOrders = async () => {
-        const response =  await fetch(`/api/orders/get-orders/${user.uid}`, {
-            headers: {
-              'Authorization': await user.getIdToken()
-            }
-          });
-        const data = await response.json();
-        setOrders(data);
+      const response =  await fetch(`/api/orders/get-orders/${user.uid}`, {
+        headers: {
+          'Authorization': await user.getIdToken()
+        }
+      });
+      const data = await response.json();
+      setOrders(data);
     }
 
     useEffect(() => {
-        updateCatalogs();
-        updateOrders();
-    }, [user.uid]);
+      updateCatalogs();
+      updateOrders();
+    }, []);
 
     const context = {
         catalogs,

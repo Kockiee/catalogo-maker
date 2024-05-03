@@ -15,12 +15,10 @@ export default function DashboardLayout({children}) {
 
     if (user === null) {
       return redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
-    }
-
-    if (user && !user.emailVerified) {
+    } else if (user && !user.emailVerified) {
       return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
     }
-
+    
     if (isPremiumUser === false && pathname != "/dashboard/plan" && pathname != "/dashboard/account") {
       return redirect(`/dashboard${mobileMode ? "?mobileMode=True" : ""}`);
     }
