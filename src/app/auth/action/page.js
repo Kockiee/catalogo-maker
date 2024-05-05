@@ -3,6 +3,7 @@ import { useAuth } from "@/app/contexts/AuthContext"
 import { redirect, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button, Spinner, TextInput } from "flowbite-react"
+import ErrorCard from "@/app/components/errorCard"
 
 export default function PAGE({searchParams}) {
     const { resetPassword, verifyEmail, authLoading } = useAuth()
@@ -57,7 +58,7 @@ export default function PAGE({searchParams}) {
                             <p>Verificando seu E-mail...</p>
                         </div>
                     ): (
-                        <p className='text-red-600 text-sm'>{error}</p>
+                        <ErrorCard error={error}/>
                     )}
                 </div>
             </div>
@@ -80,7 +81,7 @@ export default function PAGE({searchParams}) {
                             required 
                             shadow />
                         </div>
-                        <p className='text-red-600 text-sm'>{error}</p>
+                        <ErrorCard error={error}/>
                         <Button
                             type="submit"
                             className="w-full !bg-neonblue hover:!bg-neonblue/80 enabled:focus:ring-4 enabled:focus:outline-none enabled:focus:!ring-jordyblue"

@@ -7,6 +7,7 @@ import { updateCatalog } from "../actions/updateCatalog";
 import { useFormState } from 'react-dom'
 import Notification from "./Notification";
 import { HiInformationCircle } from "react-icons/hi";
+import ErrorCard from "./errorCard";
 
 export default function PAGE({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();
@@ -174,7 +175,7 @@ export default function PAGE({catalogId}) {
                         </div>
                     </div>
                     <div className="py-2 w-full">
-                        <p className='text-red-600 text-sm'>{error}</p>
+                        <ErrorCard error={error}/>
                         <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando..." : "Salvar alterações"}</Button>
                     </div>
                     {notification}

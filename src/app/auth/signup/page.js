@@ -1,4 +1,5 @@
 'use client'
+import ErrorCard from '@/app/components/errorCard';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Button, Checkbox, Label, Spinner, TextInput } from 'flowbite-react';
 import Link from 'next/link';
@@ -132,7 +133,7 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
-                  <p className='text-red-600 text-sm'>{error}</p>
+                  <ErrorCard error={error}/>
                   <div className="flex items-center gap-2">
                     <Checkbox className='w-6 h-6 mr-2' onChange={(e) => setIsTermsAccepted(e.target.checked)} id="agree" required color="blue"/>
                     <Label htmlFor="agree">

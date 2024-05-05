@@ -20,21 +20,11 @@ import {
 } from "firebase/auth";
 import { auth } from "@/app/utils/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
+import { createAccount } from "../actions/createAccount";
 
 async function createUser(result) {
-  const response = await fetch('/api/auth/create-user', {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      uid: result.user.uid,
-      username: result.user.displayName,
-      email: result.user.email
-    }),
-  });
-  const data = await response.json();
-  return data
+  const data = await createAccount(result.user.uid, result.user.displayName, result.user.email);
+  return data;
 }
 
 const AuthContext = createContext();

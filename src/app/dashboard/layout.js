@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 
 export const metadata = {

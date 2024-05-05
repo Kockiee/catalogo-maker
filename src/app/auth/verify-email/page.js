@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Button, Spinner, Toast } from "flowbite-react";
 import { HiPaperAirplane } from "react-icons/hi";
+import ErrorCard from "@/app/components/errorCard";
 
 export default function PAGE() {
     const [emailInvited, setEmailInvited] = useState(false)
@@ -31,7 +32,7 @@ export default function PAGE() {
           <Button onClick={handleVerifyEmail} className="w-full !bg-neonblue hover:!bg-neonblue/80 enabled:focus:ring-4 enabled:focus:outline-none enabled:focus:!ring-jordyblue">
             {!authLoading ? <>Enviar Email</> : <Spinner color={'warning'} size={'md'}></Spinner>}
           </Button>
-          <p className='text-red-600 text-sm'>{error}</p>
+          <ErrorCard error={error}/>
         </div>
         <Toast className={`fixed border bottom-24 transition-opacity duration-300 ease-in-out opacity-100 ${emailInvited ? '' : 'opacity-0'}`}>
           <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">

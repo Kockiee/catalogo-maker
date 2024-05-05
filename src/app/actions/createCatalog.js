@@ -37,16 +37,14 @@ export async function createCatalog(prevState, formData, userId) {
 
         if (newCatalog) {
             const bannerImage = formData.get('bannerImage');
-            if (bannerImage) {
-                const storageRef = ref(storage, `${uid}/catalog-banner`);
-                await uploadBytes(storageRef, bannerImage);
-                await getDownloadURL(storageRef).then(async(url) => {
-                    const docRef = doc(db, "catalogs", newCatalog.id);
-                    await updateDoc(docRef, {
-                      banner_url: url
-                    });
+            const storageRef = ref(storage, `${uid}/${newCatalog.id}/catalog-banner`);
+            await uploadBytes(storageRef, bannerImage);
+            await getDownloadURL(storageRef).then(async(url) => {
+                const docRef = doc(db, "catalogs", newCatalog.id);
+                await updateDoc(docRef, {
+                  banner_url: url
                 });
-            }
+            });
         }
 
         return { catalogId: newCatalog.id, message: "catalog-created"};

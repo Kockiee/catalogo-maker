@@ -22,7 +22,7 @@ export async function GET(req, {params}) {
         if (orders.length > 0) { 
             return Response.json(orders, {status: 200});
         } else {
-            return Response.json(null, {status: 404});
+            return Response.json(null, {status: 200});
         };
     });
 };

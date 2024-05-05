@@ -11,7 +11,7 @@ export default function NavBar() {
         {!pathname.includes("dashboard") && (
             <Navbar className='bg-transparent max-md:bg-periwinkle !p-6' fluid>
                 <NavbarBrand href="/">
-                    <Image src="/logo.png" width={48} height={48}/>
+                    <Image alt="Catálogo Maker" src="/logo.png" width={48} height={48}/>
                     <span className="text-prussianblue max-[306px]:hidden self-center whitespace-nowrap text-xl font-bold dark:text-white pl-2">Catálogo Maker</span>
                 </NavbarBrand>
                 <div className="flex md:order-2 space-x-2">

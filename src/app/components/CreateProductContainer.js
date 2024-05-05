@@ -11,6 +11,7 @@ import CreateProductVariants from "./ProductVariantsContainer";
 import { createProduct } from "../actions/createProduct";
 import { useAuth } from "../contexts/AuthContext";
 import { redirect } from "next/navigation"
+import ErrorCard from "./errorCard";
 
 export default function CreateProductContainer({catalogId}) {
     const { catalogs } = useTool();
@@ -48,13 +49,16 @@ export default function CreateProductContainer({catalogId}) {
     };
 
     const [formState, formAction] = useFormState((state, formdata) => {
-        setLoading(true);
-        setNotification(<Notification setPattern={setNotification} type="warning" message="Criando produto..."/>);
-        selectedImages.forEach(img => {
-            formdata.append('images', img);
-        });
-        formdata.set("price", productPrice)
-        return createProduct(state, formdata, catalog.id, user.uid, variations);
+        if (selectedImages.length > 0) {
+            setNotification(<Notification setPattern={setNotification} type="warning" message="Criando produto..."/>);
+            selectedImages.forEach(img => {
+                formdata.append('images', img);
+            });
+            formdata.set("price", productPrice);
+            return createProduct(state, formdata, catalog.id, user.uid, variations);
+        } else {
+            setError("Você precisa selecionar ao menos uma imagem para o produto.");
+        }
     }, {message: ''});
 
     useEffect(() => {
@@ -75,7 +79,9 @@ export default function CreateProductContainer({catalogId}) {
         <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
             <div className="flex flex-col w-1/2 max-xl:w-full">
                 <h1 className="text-xl font-black w-full">Crie um novo produto para {catalog.name}</h1>
-                <form action={(formdata) => formAction(formdata)}>
+                <form 
+                onSubmit={() => setLoading(true)}
+                action={(formdata) => formAction(formdata)}>
                     <div className="py-2 w-full">
                         <Label
                         htmlFor="name"
@@ -116,7 +122,6 @@ export default function CreateProductContainer({catalogId}) {
                         htmlFor="price"
                         value="Preço do produto" />
                         <TextInput
-                        
                         onChange={(e) => {
                             const value = e.target.value.replace(/\D/g, '');
                             const valueInBRL = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -128,16 +133,16 @@ export default function CreateProductContainer({catalogId}) {
                             
                             setProductPrice(formattedValue);
                         }} 
-                        color="light"
+                        color="blue"
                         name="price"
+                        type="text"
                         placeholder="R$ 180,00"
                         aria-disabled={loading}
-                        required
-                        shadow />
+                        required/>
                     </div>
                     <div className="py-2 w-full">
                         <Label 
-                        htmlFor="store-banner" 
+                        htmlFor="product-images" 
                         value="Imagens do produto" />
                         <div className="flex-wrap flex justify-center items-center">
                             {renderProductImages()}
@@ -146,20 +151,27 @@ export default function CreateProductContainer({catalogId}) {
                         required
                         multiple
                         aria-disabled={loading}
-                        name="bannerImage"
+                        name="productImages"
                         color="light"
-                        id="store-banner" 
+                        id="product-images" 
                         accept="image/*"
                         onChange={e => {
-                            const file = e.target.files[0];
+                            const files = e.target.files;
+                            if (files.length + selectedImages.length > 10) {
+                                setError("Você só pode selecionar até 10 imagens para o produto.");
+                                return;
+                            }
                             setError("");
-                            setSelectedImages([...selectedImages, file]);
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                                setSelectedImagesURL([...selectedImagesURL, reader.result])
-                            };
-                            if (file) { 
-                                reader.readAsDataURL(file);
+                            for (let i = 0; i < files.length; i++) {
+                                const file = files[i];
+                                setSelectedImages(prevState => [...prevState, file]);
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                    setSelectedImagesURL(prevState => [...prevState, reader.result])
+                                };
+                                if (file) { 
+                                    reader.readAsDataURL(file);
+                                }
                             }
                         }}
                         helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)."/>
@@ -168,8 +180,8 @@ export default function CreateProductContainer({catalogId}) {
                         <CreateProductVariants variations={variations} setVariations={setVariations}/>
                     </div>
                     <div className="py-2 w-full">
-                        <p className='text-red-600 text-sm'>{error}</p>
-                        <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando produto..." : "Criar produto"}</Button>
+                        <ErrorCard error={error}/>
+                        <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
                     </div>
                 </form>
             </div>

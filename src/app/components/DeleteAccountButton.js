@@ -3,6 +3,7 @@ import { Button, Card } from "flowbite-react"
 import { useState } from "react"
 import { HiArrowRight } from "react-icons/hi"
 import { useAuth } from "../contexts/AuthContext"
+import ErrorCard from "./errorCard"
 
 export default function DeleteAccountButton() {
   const [showingConfirmation, setShowingConfirmation] = useState(false)
@@ -32,7 +33,7 @@ export default function DeleteAccountButton() {
             Sua assinatura NÃO será reembolsada.<br/>
             Você não poderá reverter essa ação após confirmar que sim.
           </p>
-          <p className='text-red-600 text-sm'>{error}</p>
+          <ErrorCard error={error}/>
           <div className="flex flex-row max-sm:flex-col space-x-2 max-sm:space-x-0 max-sm:space-y-2">
           <Button onClick={handleDeleteAccount} className="!border-4 !border-jordyblue focus:!ring-0 hover:!bg-jordyblue !text-prussianblue w-full" color="">
             Sim

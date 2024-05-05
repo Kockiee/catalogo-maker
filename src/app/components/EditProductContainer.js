@@ -10,6 +10,7 @@ import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
 import { updateProduct } from "../actions/updateProduct";
 import Notification from "./Notification";
+import ErrorCard from "./errorCard";
 
 export default function EditProductContainer({catalogId, productId}) { 
     const { catalogs } = useTool();
@@ -55,7 +56,7 @@ export default function EditProductContainer({catalogId, productId}) {
     const renderProductImages = () => {
         return actualImagesURL.map((imageUrl, index) => {
             return (<div key={index} className="relative">
-                <Image src={imageUrl} width={100} height={100} className="size-24 m-1"/>
+                <Image priority alt={product.name} src={imageUrl} width={100} height={100} className="size-24 m-1"/>
                 <button type="button"
                 onClick={() => {
                     const newActualImagesURL = actualImagesURL.filter((_, i) => i !== index);
@@ -174,7 +175,7 @@ export default function EditProductContainer({catalogId, productId}) {
                         <CreateProductVariants variations={variations} setVariations={setVariations}/>
                     </div>
                     <div className="py-2 w-full">
-                        <p className='text-red-600 text-sm'>{error}</p>
+                        <ErrorCard error={error}/>
                         <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando produto..." : "Salvar alterações"}</Button>
                     </div>
                     {notification}
@@ -193,11 +194,11 @@ export default function EditProductContainer({catalogId, productId}) {
                             <div 
                             className={actualImagesURL.length < 1 ? "p-4 rounded" : ""}
                             style={actualImagesURL.length < 1 ? {backgroundColor: catalog.secondary_color} : {}}>
-                                <Image className="size-72" alt="Primeira imagem do produto." src={actualImagesURL[0]} width={288} height={288}/>
+                                <Image priority className="size-72" alt={product.name} src={actualImagesURL[0]} width={288} height={288}/>
                             </div>
                             <div className="overflow-x-auto flex flex-row">
                                 {actualImagesURL.map((imageUrl, index) => (
-                                    <Image key={index} src={imageUrl} width={48} height={48} className="size-12 m-1"/>
+                                    <Image priority key={index} alt={product.name} src={imageUrl} width={48} height={48} className="size-12 m-1"/>
                                 ))}
                             </div>
                         </div>

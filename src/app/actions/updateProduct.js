@@ -24,7 +24,7 @@ export async function updateProduct(prevState, formData, catalogId, productId, v
         const docRef = doc(db, "products", productId);
         const docSnap = await getDoc(docRef);
 
-        let productImages = docSnap.data().images
+        var productImages = docSnap.data().images
 
         await updateDoc(docRef, {
             name: name,

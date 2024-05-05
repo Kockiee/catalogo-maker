@@ -34,7 +34,7 @@ export async function createProduct(prevState, formData, catalogId, uid, variant
         if (newProduct) {
             const productImages = [];
             for (const image of images) {
-                const storageRef = ref(storage, `${uid}/products-images/${image.name}`);
+                const storageRef = ref(storage, `${uid}/${catalogId}/products/${newProduct.id}/${image.name}`);
                 await uploadBytes(storageRef, image);
                 const url = await getDownloadURL(storageRef);
                 productImages.push(url);
