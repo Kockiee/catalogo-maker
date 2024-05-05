@@ -27,6 +27,6 @@ export async function GET(req, {params}) {
             products: catalogProducts
         }, {status: 200})
     } else {
-        return Response.json({message: 'catalog not found'}, {status: 404})
+        return Response.json({message: 'Catalog not found'}, {status: 404})
     }
 };

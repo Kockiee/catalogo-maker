@@ -1,5 +1,6 @@
 'use client'
 
+import ErrorCard from '@/app/components/errorCard';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { Button, Label, Spinner, TextInput } from 'flowbite-react';
 import Link from 'next/link';
@@ -82,7 +83,7 @@ export default function PAGE({searchParams}) {
             required 
             shadow />
           </div>
-          <p className='text-red-600 text-sm'>{error}</p>
+          <ErrorCard error={error}/>
           <div className="flex items-center gap-2">
             <Label htmlFor="agree" className="flex">
               Não tem uma conta ?&nbsp;

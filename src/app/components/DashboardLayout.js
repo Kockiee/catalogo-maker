@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Spinner } from "flowbite-react";
 import { ToolProvider } from '../contexts/ToolContext';
 import ToolContainer from '../components/ToolContainer';
+import { useEffect } from 'react';
 
 export default function DashboardLayout({children}) {
     const { DBUser, user } = useAuth();
@@ -19,10 +20,13 @@ export default function DashboardLayout({children}) {
       return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
     }
     
-    if (isPremiumUser === false && pathname != "/dashboard/plan" && pathname != "/dashboard/account") {
-      return redirect(`/dashboard${mobileMode ? "?mobileMode=True" : ""}`);
-    }
+    useEffect(() => {
+      if (isPremiumUser === false && pathname != "/dashboard/plan" && pathname != "/dashboard/account") {
+        return redirect(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
+      }
+    }, [pathname, isPremiumUser])
 
+    // MODIFICAR DELETAR USUÁRIO
     return (
         <div>
           {user === false ? (

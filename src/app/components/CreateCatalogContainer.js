@@ -9,6 +9,7 @@ import { useTool } from "../contexts/ToolContext";
 import { HiInformationCircle } from "react-icons/hi";
 import Notification from "./Notification";
 import { redirect } from "next/navigation";
+import ErrorCard from "./errorCard";
 
 
 export default function CreateCatalogContainer() {
@@ -18,7 +19,7 @@ export default function CreateCatalogContainer() {
     const [secondaryColor, setSecondaryColor] = useState("#5465ff");
     const [tertiaryColor, setTertiaryColor] = useState("#788bff");
     const [textColor, setTextColor] = useState("#ffffff");
-    const [bannerImage, setBannerImage] = useState();
+    const [bannerImage, setBannerImage] = useState(null);
     const { user } = useAuth();
     const { updateCatalogs } = useTool()
     const [loading, setLoading] = useState(false);
@@ -27,9 +28,13 @@ export default function CreateCatalogContainer() {
 
 
     const [formState, formAction] = useFormState((state, formdata) => {
-        setLoading(true)
-        setNotification(<Notification setPattern={setNotification} type="warning" message="Criando catálogo..."/>);
-        return createCatalog(state, formdata, user.uid);
+        if (bannerImage) {
+            setLoading(true)
+            setNotification(<Notification setPattern={setNotification} type="warning" message="Criando catálogo..."/>);
+            return createCatalog(state, formdata, user.uid);
+        } else {
+            setError("Você precisa selecionar uma imagem para ser o banner do catálogo")
+        }
     }, {message: ''});
 
     useEffect(() => {
@@ -58,6 +63,7 @@ export default function CreateCatalogContainer() {
                         htmlFor="identification-name" 
                         value="Nome de identificação" />
                         <TextInput
+                        maxLength={50}
                         color="light"
                         name="identificationName"
                         id="identification-name" 
@@ -114,6 +120,7 @@ export default function CreateCatalogContainer() {
                         htmlFor="store-banner" 
                         value="Banner" />
                         <FileInput
+                        required
                         aria-disabled={loading}
                         name="bannerImage"
                         color={"light"} 
@@ -167,7 +174,7 @@ export default function CreateCatalogContainer() {
                             }}/>
                         </div>
                         <div className="py-2 w-full">
-                            <p className='text-red-600 text-sm'>{error}</p>
+                            <ErrorCard error={error}/>
                             <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
                         </div>
                         {notification}

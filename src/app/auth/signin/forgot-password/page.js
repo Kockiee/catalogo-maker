@@ -1,4 +1,5 @@
 'use client'
+import ErrorCard from "@/app/components/errorCard"
 import { useAuth } from "@/app/contexts/AuthContext"
 import { Button, Spinner, TextInput, Toast } from "flowbite-react"
 import { useState } from "react"
@@ -46,7 +47,7 @@ export default function forgotpassword() {
                         required 
                         shadow />
                     </div>
-                    <p className='text-red-600 text-sm'>{error}</p>
+                    <ErrorCard error={error}/>
                     <Button
                         type="submit"
                         className="w-full !bg-neonblue hover:!bg-neonblue/80 enabled:focus:ring-4 enabled:focus:outline-none enabled:focus:!ring-jordyblue"

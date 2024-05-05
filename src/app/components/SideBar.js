@@ -7,6 +7,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { BiSolidCrown } from "react-icons/bi";
 import Link from 'next/link';
 import { FaBoxesStacked } from 'react-icons/fa6';
+import SidebarItem from './SidebarItem';
 
 
 export default function SideBar() {
@@ -58,33 +59,32 @@ export default function SideBar() {
       <div className='absolute top-0 left-0 w-full h-full p-4 bg-prussianblue'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Link href="/dashboard">
-            <Sidebar.Item icon={() => <HiChartPie className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
-              Dashboard
-            </Sidebar.Item>
-          </Link>
-          <Link href="/dashboard/catalogs">
-            <Sidebar.Item icon={() => <HiViewBoards className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
-              Catálogos
-            </Sidebar.Item>
-          </Link>
-          <Link href="/dashboard/orders">
-            <Sidebar.Item icon={() => <FaBoxesStacked className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
-              Pedidos
-            </Sidebar.Item>
-          </Link>
-          <Link href="/dashboard/account">
-            <Sidebar.Item icon={() => <HiUser className='text-lightcyan/80 w-6 h-6'/>} className="hover:!bg-neonblue/70 !text-white py-3">
-              Conta
-            </Sidebar.Item>
-          </Link>
-          <a href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" target="_blank">
-            <Sidebar.Item
-            icon={() => <HiShoppingBag className='text-lightcyan/80 w-6 h-6'/>} 
-            className="hover:!bg-neonblue/70 !text-white py-3">
-              Assinatura
-            </Sidebar.Item>
-          </a>
+          <SidebarItem
+          text="Dashboard"
+          href="/dashboard" 
+          icon={<HiChartPie className='text-lightcyan/80 w-6 h-6'/>}
+          />
+          <SidebarItem
+          text="Catálogos"
+          href="/dashboard/catalogs" 
+          icon={<HiViewBoards className='text-lightcyan/80 w-6 h-6'/>}
+          />
+          <SidebarItem
+          text="Pedidos"
+          href="/dashboard/orders" 
+          icon={<FaBoxesStacked className='text-lightcyan/80 w-6 h-6'/>}
+          />
+          <SidebarItem
+          text="Conta"
+          href="/dashboard/account" 
+          icon={<HiUser className='text-lightcyan/80 w-6 h-6'/>}
+          />
+          <SidebarItem
+          text="Assinatura"
+          href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" 
+          target="_blank"
+          icon={<HiShoppingBag className='text-lightcyan/80 w-6 h-6'/>}
+          />
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           {user && (

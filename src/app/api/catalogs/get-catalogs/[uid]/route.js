@@ -35,7 +35,7 @@ export async function GET(req, {params}) {
         if (catalogs.length > 0) { 
             return Response.json(catalogs, {status: 200});
         } else {
-            return Response.json(null, {status: 404});
+            return Response.json(null, {status: 200});
         };
     });
 };

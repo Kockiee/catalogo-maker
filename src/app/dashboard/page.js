@@ -30,7 +30,7 @@ export default function PAGE() {
                 <div className="flex flex-wrap space-x-2 max-lg:space-x-0 max-lg:space-y-2 justify-center">
                     <div className="p-4 bg-lightcyan border-4 border-jordyblue rounded-lg w-2/5 max-lg:w-full">
                         <h1 className="text-2xl font-bold mb-2">Seus pedidos nos últimos 7 dias</h1>
-                        <p className="text-xl my-2"><span className="font-black">{orders.length}</span> Pedidos</p>
+                        <p className="text-xl my-2"><span className="font-black">{orders ? orders.length : 0}</span> Pedidos</p>
                         <div className="bg-gray-300 border border-gray-400 p-2 text-sm rounded">
                             <h1 className="font-bold">OBS:</h1>
                             <p>O valor a cima inclúi tanto pedidos aceitos como não aceitos ainda.</p>

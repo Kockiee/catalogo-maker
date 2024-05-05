@@ -34,7 +34,7 @@ export async function updateCatalog(prevState, formData, catalogId) {
     
             const bannerImage = formData.get('bannerImage')
             if (bannerImage) {
-                const storageRef = ref(storage, `${catalog.owner}/catalog-banner`);
+                const storageRef = ref(storage, `${catalog.owner}/${catalogId}/catalog-banner`);
                 await uploadBytes(storageRef, bannerImage);
                 await getDownloadURL(storageRef).then(async(url) => {      
                     await updateDoc(docRef, {
