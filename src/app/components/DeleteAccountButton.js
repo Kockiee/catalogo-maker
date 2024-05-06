@@ -3,7 +3,7 @@ import { Button, Card } from "flowbite-react"
 import { useState } from "react"
 import { HiArrowRight } from "react-icons/hi"
 import { useAuth } from "../contexts/AuthContext"
-import ErrorCard from "./errorCard"
+import ErrorCard from "./ErrorCard"
 
 export default function DeleteAccountButton() {
   const [showingConfirmation, setShowingConfirmation] = useState(false)

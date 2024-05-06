@@ -1,5 +1,5 @@
 'use client'
-import ErrorCard from "@/app/components/errorCard"
+import ErrorCard from "@/app/components/ErrorCard"
 import { useAuth } from "@/app/contexts/AuthContext"
 import { Button, Spinner, TextInput, Toast } from "flowbite-react"
 import { useState } from "react"

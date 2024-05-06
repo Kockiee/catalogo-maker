@@ -9,7 +9,7 @@ import { useTool } from "../contexts/ToolContext";
 import { HiInformationCircle } from "react-icons/hi";
 import Notification from "./Notification";
 import { redirect } from "next/navigation";
-import ErrorCard from "./errorCard";
+import ErrorCard from "./ErrorCard";
 
 
 export default function CreateCatalogContainer() {

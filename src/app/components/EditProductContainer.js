@@ -10,7 +10,7 @@ import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
 import { updateProduct } from "../actions/updateProduct";
 import Notification from "./Notification";
-import ErrorCard from "./errorCard";
+import ErrorCard from "./ErrorCard";
 
 export default function EditProductContainer({catalogId, productId}) { 
     const { catalogs } = useTool();

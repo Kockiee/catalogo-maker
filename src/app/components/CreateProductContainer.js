@@ -11,7 +11,7 @@ import CreateProductVariants from "./ProductVariantsContainer";
 import { createProduct } from "../actions/createProduct";
 import { useAuth } from "../contexts/AuthContext";
 import { redirect } from "next/navigation"
-import ErrorCard from "./errorCard";
+import ErrorCard from "./ErrorCard";
 
 export default function CreateProductContainer({catalogId}) {
     const { catalogs } = useTool();
