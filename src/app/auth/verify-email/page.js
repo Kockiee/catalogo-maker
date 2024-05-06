@@ -3,11 +3,11 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Button, Spinner, Toast } from "flowbite-react";
 import { HiPaperAirplane } from "react-icons/hi";
-import ErrorCard from "@/app/components/errorCard";
+import ErrorCard from "@/app/components/ErrorCard";
 
 export default function PAGE() {
     const [emailInvited, setEmailInvited] = useState(false)
-    const [error, setError] = useState()
+    const [error, setError] = useState("")
     const { signUpEmailVerification, authLoading, user } = useAuth()
 
     const handleVerifyEmail = async() => {

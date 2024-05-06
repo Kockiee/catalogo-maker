@@ -3,7 +3,7 @@ import { useAuth } from "@/app/contexts/AuthContext"
 import { redirect, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Button, Spinner, TextInput } from "flowbite-react"
-import ErrorCard from "@/app/components/errorCard"
+import ErrorCard from "@/app/components/ErrorCard"
 
 export default function PAGE({searchParams}) {
     const { resetPassword, verifyEmail, authLoading } = useAuth()
@@ -25,7 +25,7 @@ export default function PAGE({searchParams}) {
             }
         }
         if (!oobCode) {
-            redirect(`/login${mobileMode ? "?mobileMode=True" : ""}`)
+            redirect(`/auth/login${mobileMode ? "?mobileMode=True" : ""}`)
         }
         if (mode === 'verifyEmail') {
             sendVerifyEmail()

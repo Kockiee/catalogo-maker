@@ -7,7 +7,7 @@ import { updateCatalog } from "../actions/updateCatalog";
 import { useFormState } from 'react-dom'
 import Notification from "./Notification";
 import { HiInformationCircle } from "react-icons/hi";
-import ErrorCard from "./errorCard";
+import ErrorCard from "./ErrorCard";
 
 export default function PAGE({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();
