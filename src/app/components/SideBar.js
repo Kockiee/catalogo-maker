@@ -38,21 +38,23 @@ export default function SideBar() {
 
   return (
     <>
-    <div className='flex justify-between px-6 pt-4 max-md:absolute top-0 left-0 max-md:w-full'>
-      <button onClick={toggleSidebar} className="p-3">
-        <HiMenu className='w-8 h-8 text-prussianblue'/>
-      </button>
-      
-      <Link href="/dashboard/account">
-        <button className='flex-col leading-none space bg-prussianblue text-lightcyan/80 p-4 rounded-full w-12 h-12 flex items-center justify-center text-xl'>
-          {DBUser ? (<>
-            {DBUser.premium && <span><BiSolidCrown className='w-4 h-4 text-yellow-400'/></span>}
-            {DBUser.username[0]}
-          </>) : ("...")}
+    <div className='max-md:px-4 max-md:fixed z-10 top-0 left-0 max-md:w-full'>
+      <div className='flex items-center justify-between px-6 pt-4 max-md:py-3 max-md:mt-4 max-md:rounded-lg max-md:bg-neonblue max-md:shadow-md'>
+        <button onClick={toggleSidebar} className="p-3">
+          <HiMenu className='w-8 h-8 text-prussianblue max-md:text-lightcyan'/>
         </button>
-      </Link>
+
+        <Link href="/dashboard/account">
+          <button className='flex-col leading-none bg-prussianblue max-md:bg-cornflowerblue text-lightcyan font-bold p-4 rounded-full w-12 h-12 flex items-center justify-center text-xl'>
+            {DBUser ? (<>
+              {DBUser.premium && <span><BiSolidCrown className='w-4 h-4 text-yellow-400'/></span>}
+              {DBUser.username[0]}
+            </>) : ("...")}
+          </button>
+        </Link>
+      </div>
     </div>
-    <div className='max-md:h-[90px] w-full'></div>
+    <div className='max-md:h-[120px] w-full'></div>
     <Sidebar 
     className={`${!isOpen ? 'max-lg:-translate-x-full' : 'max-md:-translate-x-0 max-sm:!w-[80%]'} !fixed !z-50 left-0 top-0 dark right-0 transition-transform duration-300 ease-in-out transform `} 
     aria-label="Sidebar with content separator example">
