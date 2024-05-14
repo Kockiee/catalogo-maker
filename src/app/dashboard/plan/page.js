@@ -22,6 +22,9 @@ export default function PAGE() {
         Assinando um plano você obtém acesso total ao Catálogo Maker e nos
         ajuda a manter e aprimorar nossas tecnologias.
       </p>
+      <div className="bg-green-400 rounded-full py-2 px-4 mt-4 text-white">
+        <p>Atenção! Os preços dos planos serão aumentados em 07/06/2024</p>
+      </div>
       <div className="flex flex-wrap items-center justify-center w-full">
         <div className="m-3 max-w-xs w-full">
           <PlanCard recurrenceType={2} price={65}/>
