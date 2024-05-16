@@ -63,7 +63,7 @@ export default function CatalogsTable() {
             {new Date(catalog.created_at.seconds * 1000).toLocaleString()}
           </TableCell>
           <TableCell>
-            <Link href={`/dashboard/catalogs/${catalog.id}`} className="font-medium text-neonblue hover:underline">
+            <Link href={`/dashboard/catalogs/${catalog.id}`} className="font-bold text-neonblue hover:underline">
               Editar
             </Link>
           </TableCell>
@@ -79,26 +79,26 @@ export default function CatalogsTable() {
               <Button 
                 disabled={notification !== null}
                 onClick={handleDeleteCatalogs}
-                className="bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
+                className="duration-200 bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
                 <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
               </Button>
             )}
             <Link href="/dashboard/catalogs/new-catalog">
               <Button 
-                className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
                 <HiPlus className="w-5 h-5 mr-1"/> Criar
               </Button>
             </Link>
             {selectedCatalogs.length === 1 && (
               <Link href={`/dashboard/catalogs/${selectedCatalogs[0].id}`}>
-                <Button className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+                <Button className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
                   <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
                 </Button>
               </Link>
             )}
           </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto shadow-md rounded-lg">
           <Table>
             <TableHead>
               <TableHeadCell className="p-4 bg-cornflowerblue">

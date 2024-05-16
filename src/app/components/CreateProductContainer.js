@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { useTool } from "../contexts/ToolContext";
 import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react";
 import Image from 'next/image'
-import { BiSearch } from "react-icons/bi";
-import { HiInformationCircle, HiTrash } from "react-icons/hi";
+import { HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
 import { createProduct } from "../actions/createProduct";
@@ -30,7 +29,7 @@ export default function CreateProductContainer({catalogId}) {
     const renderProductImages = () => {
         return selectedImagesURL.map((imageUrl, index) => (
             <div key={index} className="relative">
-                <Image src={imageUrl} width={100} height={100} className="size-24 m-1"/>
+                <Image src={imageUrl} width={100} height={100} className="size-24 m-1 rounded-lg"/>
                 <button
                 onClick={() => {
                     const newSelectedImagesURL = [...selectedImagesURL];
@@ -76,8 +75,8 @@ export default function CreateProductContainer({catalogId}) {
     }, [formState]);
 
     return (
-        <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
-            <div className="flex flex-col w-1/2 max-xl:w-full">
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
+            <div className="flex flex-col w-full">
                 <h1 className="text-xl font-black w-full">Crie um novo produto para {catalog.name}</h1>
                 <form 
                 onSubmit={() => setLoading(true)}
@@ -181,52 +180,9 @@ export default function CreateProductContainer({catalogId}) {
                     </div>
                     <div className="py-2 w-full">
                         <ErrorCard error={error}/>
-                        <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
+                        <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
                     </div>
                 </form>
-            </div>
-            <div className="w-1/2 max-xl:w-full p-4">
-                <div className="w-full relative p-4 rounded-lg" style={{backgroundColor: catalog.primary_color, color: catalog.text_color}}>
-                    <div className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" style={{backgroundColor: catalog.secondary_color}}>
-                        <h1 className="font-bold break-all">{catalog.store_name}</h1>
-                        <div className="relative w-64 p-5 rounded-lg" style={{backgroundColor: catalog.primary_color}}>
-                            <BiSearch className="absolute top-3 right-3"/>
-                        </div>
-                    </div>
-                    <div className="py-[72px] flex flex-wrap text-sm">
-                        <div className="w-1/2 max-lg:w-full p-4 flex-col">
-                            <div 
-                            className={selectedImagesURL.length < 1 ? "p-4 rounded" : ""}
-                            style={selectedImagesURL.length < 1 ? {backgroundColor: catalog.secondary_color} : {}}>
-                                <Image className="size-72" alt="Primeira imagem do produto." src={selectedImagesURL[0]} width={288} height={288}/>
-                            </div>
-                            <div className="overflow-x-auto flex flex-row">
-                                {selectedImagesURL.map((imageUrl, index) => (
-                                    <Image key={index} src={imageUrl} width={48} height={48} className="size-12 m-1"/>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="w-1/2 max-lg:w-full p-4" style={{color: catalog.text_color === catalog.primary_color ? "#000000" : catalog.text_color}}>
-                            <p className="text-xl font-bold">{productName || "Nome do produto"}</p>
-                            <p className="text-xl font-black">{productPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                            <button 
-                            style={{backgroundColor: catalog.secondary_color, color: catalog.text_color}}
-                            className="rounded p-2.5 px-6 inline-flex items-center justify-center text-base hover:opacity-80 w-full">
-                                Adicionar ao carrinho
-                            </button>
-                        </div>
-                        <div className="w-full p-4">
-                            <p className="break-all">
-                                {productDescription}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="w-full p-2 rounded-lg flex flex-col text-sm" style={{backgroundColor: catalog.secondary_color}}>
-                        <h1 className="font-bold break-all">{catalog.store_name}</h1>
-                        <p className="break-all">{catalog.store_description}</p>
-                    </div>
-                </div>
-                <p className="text-base inline-flex mt-2"><HiInformationCircle className="w-6 h-6 mr-1"/> Isto é uma versão simplificada</p>
             </div>
         </div>
     );

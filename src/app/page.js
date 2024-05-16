@@ -50,7 +50,7 @@ export default function Home({searchParams}) {
               <Link href="/auth/signup">
                 <Button
                 size="xl"
-                className="bg-neonblue hover:!bg-neonblue/80 focus:ring-0 shadow-sm shadow-neonblue !mt-4 px-6">
+                className="bg-neonblue hover:!bg-neonblue/90 focus:ring-0 hover:shadow-lg hover:shadow-neonblue/50 hover:-translate-y-1 duration-500 !mt-4 px-6">
                   Começar Agora
                 </Button>
               </Link>
@@ -112,7 +112,7 @@ export default function Home({searchParams}) {
                 <a href='/catalogo-maker.apk'>
                   <Button
                   size="lg"
-                  className="w-72 bg-neonblue hover:!bg-neonblue/80 focus:ring-0 shadow-sm shadow-neonblue !mt-4 px-6">
+                  className="duration-200 w-72 bg-neonblue hover:!bg-neonblue/80 focus:ring-0 shadow-sm shadow-neonblue !mt-4 px-6">
                     <FaAndroid className="w-6 h-6 mr-2"/> Baixar para Android
                   </Button>
                 </a>

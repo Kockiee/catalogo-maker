@@ -33,7 +33,7 @@ export default function PAGE() {
         )}
       </div>
       <div className="flex max-sm:w-full max-sm:space-x-0 max-sm:flex-col max-sm:space-y-2 space-x-2 mt-4">
-        <Button color="failure" onClick={handleSignOut}>Sair da conta</Button>
+        <Button color="failure" className="duration-200" onClick={handleSignOut}>Sair da conta</Button>
         <DeleteAccountButton/>
       </div>
     </div>

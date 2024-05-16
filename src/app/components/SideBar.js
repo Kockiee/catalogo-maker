@@ -93,7 +93,7 @@ export default function SideBar() {
             <Sidebar.Item 
             icon={() => <FaSignOutAlt className='text-lightcyan/80 w-6 h-6'/>} 
             onClick={handleSignOut} 
-            className="!text-red-300 hover:cursor-pointer hover:!bg-neonblue/70">
+            className="!text-red-300 duration-100 hover:cursor-pointer hover:!bg-neonblue/70">
               Sair da conta
             </Sidebar.Item>
           )}

@@ -50,7 +50,7 @@ export default function CreateProductVariants({variations, setVariations}) {
             onChange={(e) => setNewVariationName(e.target.value)}
             className="border border-gray-300 px-3 py-2 w-full rounded-md mr-2 text-sm"
           />
-          <Button onClick={addVariation} className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full mt-2">
+          <Button onClick={addVariation} className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full mt-2">
             Adicionar Variação
           </Button>
         </div>
@@ -58,7 +58,7 @@ export default function CreateProductVariants({variations, setVariations}) {
           <div key={index} className="mb-4">
             <div className="flex items-center justify-between mb-2"> {/* Adicionando div para botão de exclusão */}
               <h3 className="font-semibold mb-2 text-base">{variation.name}</h3>
-              <Button onClick={() => deleteVariation(index)} className="text-red-300 bg-red-600 hover:!bg-red-500 focus:!ring-red-400"> {/* Botão de exclusão */}
+              <Button onClick={() => deleteVariation(index)} className="duration-200 text-red-300 bg-red-600 hover:!bg-red-500 focus:!ring-red-400"> {/* Botão de exclusão */}
                 <HiTrash className="w-4 h-4"/>
               </Button>
             </div>
@@ -72,7 +72,7 @@ export default function CreateProductVariants({variations, setVariations}) {
               />
               <Button
                 onClick={() => addVariant(index)}
-                className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full"
+                className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full"
               >
                 <HiPlus/>Adicionar Variante
               </Button>
@@ -81,7 +81,7 @@ export default function CreateProductVariants({variations, setVariations}) {
               {variation.variants.map((variant, vIndex) => (
                 <li key={vIndex} className="inline-flex bg-lightcyan p-1.5 border-2 border-cornflowerblue rounded-lg m-2 text-sm items-center">
                   {variant}
-                  <Button onClick={() => deleteVariant(vIndex, index)} className="text-red-300 bg-red-600 hover:!bg-red-500 focus:!ring-red-400 ml-2 !p-0">
+                  <Button onClick={() => deleteVariant(vIndex, index)} className="duration-200 text-red-300 bg-red-600 hover:!bg-red-500 focus:!ring-red-400 ml-2 !p-0">
                     <HiTrash className="w-4 h-4" />
                   </Button>
                 </li>

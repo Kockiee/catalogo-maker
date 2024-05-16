@@ -71,7 +71,7 @@ export default function OrdersGrid() {
                                 <Button
                                 size='sm'
                                 type='submit'
-                                className='bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full mt-2'
+                                className='duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full mt-2'
                                 >
                                     Cancelar pedido
                                 </Button>
@@ -132,7 +132,7 @@ export default function OrdersGrid() {
                                 await updateOrders()
                             }}
                             size='md' 
-                            className='focus:!ring-jordyblue bg-transparent w-[49%] max-lg:w-full border-neonblue border-2 text-neonblue hover:text-white hover:!bg-neonblue'>
+                            className='duration-200 focus:!ring-jordyblue bg-transparent w-[49%] max-lg:w-full border-neonblue border-2 text-neonblue hover:text-white hover:!bg-neonblue'>
                                 Recusar pedido
                             </Button>
                             <Button
@@ -141,7 +141,7 @@ export default function OrdersGrid() {
                                 updateOrders()
                             }}
                             size='md' 
-                            className='focus:!ring-jordyblue w-[49%] max-lg:w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
+                            className='duration-200 focus:!ring-jordyblue w-[49%] max-lg:w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
                                 Aceitar pedido
                             </Button>
                         </div>
@@ -151,14 +151,14 @@ export default function OrdersGrid() {
                         target='_blank'>
                             <Button
                             size='md' 
-                            className='focus:!ring-jordyblue w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
+                            className='duration-200 focus:!ring-jordyblue w-full bg-neonblue hover:!bg-neonblue/80 text-white'>
                                 Prosseguir no Whatsapp <FaWhatsapp className='ml-1 w-6 h-6'/>
                             </Button>
                         </a>
                     )}
                 </div>
                 <button
-                    className="bg-gray-200 p-1 w-full flex justify-center hover:bg-gray-300"
+                    className="duration-200 bg-gray-200 p-1 w-full flex justify-center hover:bg-gray-300"
                     onClick={() => toggleOrder(index)}
                 >
                     {expandedOrders.includes(index) ? <HiChevronUp className="w-6 h-6"/> : <HiChevronDown className="w-6 h-6"/>}
