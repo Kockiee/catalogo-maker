@@ -65,7 +65,7 @@ export default function PlanCard({recurrenceType = 1, price = 25, disabled = fal
       {disabled && (
         <Link href="/dashboard/plan" className="w-full">
           <Button
-          className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
+          className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
             {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
           </Button>
         </Link>
@@ -73,7 +73,7 @@ export default function PlanCard({recurrenceType = 1, price = 25, disabled = fal
       {paymentLink && (
         <Link href={paymentLink} className="w-full">
           <Button
-          className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
+          className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
             {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
           </Button>
         </Link>

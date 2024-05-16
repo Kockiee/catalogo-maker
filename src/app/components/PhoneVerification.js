@@ -51,7 +51,7 @@ export default function PhoneVerification({catalogId}) {
                 <Button onClick={async() => {
                     await setCatalogWhatsapp('catalog-maker', catalogId)
                     updateCatalogs()
-                }} disabled={orderForm === 2} size="md" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full">Continuar</Button>
+                }} disabled={orderForm === 2} size="md" className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full">Continuar</Button>
             </div>
         </div>
     )

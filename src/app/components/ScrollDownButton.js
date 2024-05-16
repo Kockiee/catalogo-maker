@@ -14,7 +14,7 @@ export default function ScrollDownButton({ destinyId }) {
 
   return (
     <button
-      className="bg-cornflowerblue hover:opacity-70 rounded-full animate-bounce p-3"
+      className="duration-200 bg-cornflowerblue hover:opacity-70 rounded-full animate-bounce p-3"
       onClick={handleClick}
     >
       <HiArrowDown className="text-lightcyan w-8 h-8" />

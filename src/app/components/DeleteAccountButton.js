@@ -35,10 +35,10 @@ export default function DeleteAccountButton() {
           </p>
           <ErrorCard error={error}/>
           <div className="flex flex-row max-sm:flex-col space-x-2 max-sm:space-x-0 max-sm:space-y-2">
-          <Button onClick={handleDeleteAccount} className="!border-4 !border-jordyblue focus:!ring-0 hover:!bg-jordyblue !text-prussianblue w-full" color="">
+          <Button onClick={handleDeleteAccount} className="duration-200 !border-4 !border-jordyblue focus:!ring-0 hover:!bg-jordyblue !text-prussianblue w-full" color="">
             Sim
           </Button>
-          <Button onClick={() => setShowingConfirmation(false)} className="!bg-cornflowerblue !text-lightcyan hover:!bg-jordyblue focus:!ring-cornflowerblue w-full">
+          <Button onClick={() => setShowingConfirmation(false)} className="duration-200 !bg-cornflowerblue !text-lightcyan hover:!bg-jordyblue focus:!ring-cornflowerblue w-full">
             Não
             <HiArrowRight className="ml-1"/>
           </Button>
@@ -46,7 +46,7 @@ export default function DeleteAccountButton() {
         </Card>
       </div>
     )}
-    <Button color="failure" onClick={() => setShowingConfirmation(true)}>Deletar conta</Button>
+    <Button className="duration-200" color="failure" onClick={() => setShowingConfirmation(true)}>Deletar conta</Button>
     </>
   )
 }

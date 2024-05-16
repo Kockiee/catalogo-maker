@@ -56,7 +56,7 @@ export default function EditProductContainer({catalogId, productId}) {
     const renderProductImages = () => {
         return actualImagesURL.map((imageUrl, index) => {
             return (<div key={index} className="relative">
-                <Image priority alt={product.name} src={imageUrl} width={100} height={100} className="size-24 m-1"/>
+                <Image priority alt={product.name} src={imageUrl} width={100} height={100} className="size-24 m-1 rounded-lg"/>
                 <button type="button"
                 onClick={() => {
                     const newActualImagesURL = actualImagesURL.filter((_, i) => i !== index);
@@ -79,150 +79,113 @@ export default function EditProductContainer({catalogId, productId}) {
     };
 
     return (
-        <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
-            <div className="flex flex-col w-1/2 max-xl:w-full">
-                <form
-                onSubmit={() => {
-                    setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando produto..."/>)
-                    setLoading(true)
-                }}
-                action={(formdata) => formAction(formdata)}>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="name"
-                        value="Nome do produto" />
-                        <TextInput
-                        
-                        value={productName}
-                        onChange={(e) => {
-                            setProductName(e.target.value);
-                        }}
-                        color="light"
-                        name="name"
-                        type="text"
-                        placeholder="Tênis De Corrida e Caminhada"
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="description"
-                        value="Descrição do produto" />
-                        <Textarea
-                        className='focus:ring-jordyblue focus:border-none focus:ring-2'
-                        value={productDescription}
-                        onChange={(e) => {
-                            setProductDescription(e.target.value);
-                        }} 
-                        color="light"
-                        name="description"
-                        placeholder="Ótimo tênis para caminhada e corrida" 
-                        rows={5}
-                        maxLength={2000}
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="price"
-                        value="Preço do produto" />
-                        <TextInput
-                        
-                        value={productPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                        onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '');
-                            const valueInBRL = (value / 100);
-                            setProductPrice(valueInBRL);
-                        }} 
-                        color="light"
-                        name="price"
-                        placeholder="R$ 180,00"
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="store-banner" 
-                        value="Imagens do produto" />
-                        <div className="flex-wrap flex justify-center items-center">
-                            {renderProductImages()}
-                        </div>
-                        <FileInput
-                        multiple
-                        aria-disabled={loading}
-                        name="bannerImage"
-                        color="light"
-                        id="store-banner" 
-                        accept="image/*"
-                        onChange={e => {
-                            const file = e.target.files[0];
-                            setError("");
-                            setToAddImages([...toAddImages, file]);
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                                setActualImagesURL([...actualImagesURL, reader.result]);
-                            };
-                            if (file) { 
-                                reader.readAsDataURL(file);
-                            };
-                        }}
-                        helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)."/>
-                    </div>
-                    <div className="py-2 w-full">
-                        <CreateProductVariants variations={variations} setVariations={setVariations}/>
-                    </div>
-                    <div className="py-2 w-full">
-                        <ErrorCard error={error}/>
-                        <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando produto..." : "Salvar alterações"}</Button>
-                    </div>
-                    {notification}
-                </form>
+        <div className="flex flex-row w-full max-xl:flex-col">
+            <div className="p-8 w-1/3 max-xl:w-full max-xl:p-0">
+                <Image className="max-xl:hidden size-80 rounded-lg" width={300} height={300} src={actualImagesURL[0]} alt={productName} />
+                <h1 className="font-black text-3xl mb-4">{productName}</h1>
             </div>
-            <div className="w-1/2 max-xl:w-full p-4">
-                <div className="w-full relative p-4 rounded-lg" style={{backgroundColor: catalog.primary_color, color: catalog.text_color}}>
-                    <div className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" style={{backgroundColor: catalog.secondary_color}}>
-                        <h1 className="font-bold break-all">{catalog.store_name}</h1>
-                        <div className="relative w-64 p-5 rounded-lg" style={{backgroundColor: catalog.primary_color}}>
-                            <BiSearch className="absolute top-3 right-3"/>
+            <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap w-full">
+                <div className="flex flex-col w-full">
+                    <form
+                    onSubmit={() => {
+                        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando produto..."/>)
+                        setLoading(true)
+                    }}
+                    action={(formdata) => formAction(formdata)}>
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="name"
+                            value="Nome do produto" />
+                            <TextInput
+
+                            value={productName}
+                            onChange={(e) => {
+                                setProductName(e.target.value);
+                            }}
+                            color="light"
+                            name="name"
+                            type="text"
+                            placeholder="Tênis De Corrida e Caminhada"
+                            aria-disabled={loading}
+                            required
+                            shadow />
                         </div>
-                    </div>
-                    <div className="py-[72px] flex flex-wrap text-sm" style={{color: catalog.text_color === catalog.primary_color ? "#000000" : catalog.text_color}}>
-                        <div className="w-1/2 max-lg:w-full p-4 flex-col">
-                            <div 
-                            className={actualImagesURL.length < 1 ? "p-4 rounded" : ""}
-                            style={actualImagesURL.length < 1 ? {backgroundColor: catalog.secondary_color} : {}}>
-                                <Image priority className="size-72" alt={product.name} src={actualImagesURL[0]} width={288} height={288}/>
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="description"
+                            value="Descrição do produto" />
+                            <Textarea
+                            className='focus:ring-jordyblue focus:border-none focus:ring-2'
+                            value={productDescription}
+                            onChange={(e) => {
+                                setProductDescription(e.target.value);
+                            }} 
+                            color="light"
+                            name="description"
+                            placeholder="Ótimo tênis para caminhada e corrida" 
+                            rows={5}
+                            maxLength={2000}
+                            aria-disabled={loading}
+                            required
+                            shadow />
+                        </div>
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="price"
+                            value="Preço do produto" />
+                            <TextInput
+                            type="text"
+                            value={productPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, '');
+                                const valueInBRL = (value / 100);
+                                setProductPrice(valueInBRL);
+                            }} 
+                            color="light"
+                            name="price"
+                            placeholder="R$ 180,00"
+                            aria-disabled={loading}
+                            required
+                            shadow />
+                        </div>
+                        <div className="py-2 w-full">
+                            <Label 
+                            htmlFor="store-banner" 
+                            value="Imagens do produto" />
+                            <div className="flex-wrap flex justify-center items-center">
+                                {renderProductImages()}
                             </div>
-                            <div className="overflow-x-auto flex flex-row">
-                                {actualImagesURL.map((imageUrl, index) => (
-                                    <Image priority key={index} alt={product.name} src={imageUrl} width={48} height={48} className="size-12 m-1"/>
-                                ))}
-                            </div>
+                            <FileInput
+                            multiple
+                            aria-disabled={loading}
+                            name="bannerImage"
+                            color="light"
+                            id="store-banner" 
+                            accept="image/*"
+                            onChange={e => {
+                                const file = e.target.files[0];
+                                setError("");
+                                setToAddImages([...toAddImages, file]);
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                    setActualImagesURL([...actualImagesURL, reader.result]);
+                                };
+                                if (file) { 
+                                    reader.readAsDataURL(file);
+                                };
+                            }}
+                            helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)."/>
                         </div>
-                        <div className="w-1/2 max-lg:w-full p-4">
-                            <p className="text-xl font-bold">{productName || "Nome do produto"}</p>
-                            <p className="text-xl font-black">{productPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                            <button 
-                            style={{backgroundColor: catalog.secondary_color, color: catalog.text_color}}
-                            className="rounded p-2.5 px-6 inline-flex items-center justify-center text-base hover:opacity-80 w-full">
-                                Adicionar ao carrinho
-                            </button>
+                        <div className="py-2 w-full">
+                            <CreateProductVariants variations={variations} setVariations={setVariations}/>
                         </div>
-                        <div className="w-full p-4">
-                            <p className="break-all">
-                                {productDescription}
-                            </p>
+                        <div className="py-2 w-full">
+                            <ErrorCard error={error}/>
+                            <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando produto..." : "Salvar alterações"}</Button>
                         </div>
-                    </div>
-                    <div className="w-full p-2 rounded-lg flex flex-col text-sm" style={{backgroundColor: catalog.secondary_color}}>
-                        <h1 className="font-bold break-all">{catalog.store_name}</h1>
-                        <p className="break-all">{catalog.store_description}</p>
-                    </div>
+                        {notification}
+                    </form>
                 </div>
-                <p className="text-base inline-flex mt-2"><HiInformationCircle className="w-6 h-6 mr-1"/> Isto é uma versão simplificada</p>
             </div>
         </div>
     )

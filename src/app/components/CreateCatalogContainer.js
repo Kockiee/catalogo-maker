@@ -52,7 +52,7 @@ export default function CreateCatalogContainer() {
     }, [formState]);
 
     return (
-        <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
+        <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
             <div className="flex flex-col w-1/2 max-xl:w-full">
                 <h1 className="text-xl font-black w-full">Crie um catálogo agora.</h1>
                 <form 
@@ -175,14 +175,15 @@ export default function CreateCatalogContainer() {
                         </div>
                         <div className="py-2 w-full">
                             <ErrorCard error={error}/>
-                            <Button aria-disabled={loading} type="submit" className="bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
+                            <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
                         </div>
                         {notification}
                     </div>
                 </form>
             </div>
-            <div className="w-1/2 max-xl:w-full p-4">
-                <div className="w-full relative p-4 rounded-lg" style={{backgroundColor: primaryColor, color: textColor}}>
+            <div className="w-1/2 max-xl:w-full max-xl:mt-6 max-xl:pl-0 pl-8">
+                <p className="text-lg mb-2">Pré-visualização:</p>
+                <div className="w-full relative p-4 rounded-lg shadow-md" style={{backgroundColor: primaryColor, color: textColor}}>
                     <div className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" style={{backgroundColor: secondaryColor}}>
                         <h1 className="font-bold break-all">{storeName}</h1>
                         <div className="relative w-64 p-5 rounded-lg" style={{backgroundColor: primaryColor}}>
