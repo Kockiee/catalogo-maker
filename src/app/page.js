@@ -43,7 +43,7 @@ export default function Home({searchParams}) {
       ) : (
         <main className="flex h-full flex-col items-center space-y-4">
           <div className="w-full h-[650px] max-md:h-full bg-blue flex flex-row max-md:flex-col justify-center items-center max-md:space-y-2">
-            <Image alt="Catálogo Maker" src="/catalog-flat-icon.png" width={500} height={500}/>
+            <Image className="duration-500 hover:scale-110" alt="Catálogo Maker" src="/catalog-flat-icon.png" width={500} height={500}/>
             <div className="flex flex-col items-center space-y-2 max-w-[859px] max-md: text-justify">
               <h1 className="text-gray-800 text-5xl max-sm:text-4xl font-black ">Seu catálogo pronto em 10 minutos.</h1>
               <p className="text-xl max-sm:text-lg w-full">Com o Catálogo Maker você é capaz de ter o seu catálogo online ainda hoje e já começar a receber pedidos.</p>
