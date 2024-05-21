@@ -52,163 +52,165 @@ export default function CreateCatalogContainer() {
     }, [formState]);
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
-            <div className="flex flex-col w-1/2 max-xl:w-full">
-                <h1 className="text-xl font-black w-full">Crie um catálogo agora.</h1>
-                <form 
-                onSubmit={() => setLoading(true)}
-                action={(formdata) => formAction(formdata)}>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="identification-name" 
-                        value="Nome de identificação" />
-                        <TextInput
-                        maxLength={50}
-                        color="light"
-                        name="identificationName"
-                        id="identification-name" 
-                        type="text"
-                        onChange={() => {
-                            setError("")
-                        }}
-                        placeholder="Catálogo01"
-                        aria-disabled={loading}
-                        required 
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="store-name" 
-                        value="Nome da loja" />
-                        <TextInput
-                        onChange={(e) => {
-                            setError("")
-                            setStoreName(e.target.value);
-                        }} 
-                        color="light"
-                        name="storeName"
-                        id="store-name" 
-                        type="text"
-                        placeholder="Mister Store" 
-                        maxLength={40}
-                        aria-disabled={loading}
-                        required 
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="store-description" 
-                        value="Descrição da loja" />
-                        <Textarea
-                        className='focus:ring-jordyblue focus:border-none focus:ring-2'
-                        onChange={(e) => {
-                            setError("")
-                            setStoreDescription(e.target.value);
-                        }} 
-                        color="light"
-                        name="storeDescription"
-                        id="store-description"
-                        placeholder="Uma loja de roupas, calçados e acessórios..." 
-                        rows={4}
-                        maxLength={2000}
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="store-banner" 
-                        value="Banner" />
-                        <FileInput
-                        required
-                        aria-disabled={loading}
-                        name="bannerImage"
-                        color={"light"} 
-                        id="store-banner" 
-                        accept="image/*"
-                        onChange={e => {
-                            setError("")
-                            const file = e.target.files[0]
-                            const reader = new FileReader();
-
-                            reader.onloadend = () => {
-                                setBannerImage(reader.result);
-                            };
-                            if (file) { 
-                                reader.readAsDataURL(file);
-                            }
-                        }}
-                        helperText="O banner que deve aparecer no topo do catálogo"/>
-                    </div>
-                    <div>
-                        <div className="p-2 inline-flex items-center space-x-2">
+        <div>
+            <h1 className="text-3xl font-black mb-2">Crie um catálogo agora.</h1>
+            <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
+                <div className="flex flex-col w-1/2 max-xl:w-full">
+                    <form 
+                    onSubmit={() => setLoading(true)}
+                    action={(formdata) => formAction(formdata)}>
+                        <div className="py-2 w-full">
                             <Label 
-                            htmlFor="primary-color" 
-                            value="Cor principal" />
-                            <input aria-disabled={loading} name="primaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={primaryColor} onChange={(e) => {
-                                setPrimaryColor(e.target.value);
-                            }}/>
-                        </div>
-                        <div className="p-2 inline-flex items-center space-x-2">
-                            <Label 
-                            htmlFor="secondary-color" 
-                            value="Cor secundária" />
-                            <input aria-disabled={loading} name="secondaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={secondaryColor} onChange={(e) => {
-                                setSecondaryColor(e.target.value);
-                            }}/>
-                        </div>
-                        <div className="p-2 inline-flex items-center space-x-2">
-                            <Label 
-                            htmlFor="tertiary-color" 
-                            value="Cor terciária" />
-                            <input aria-disabled={loading} name="tertiaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={tertiaryColor} onChange={(e) => {
-                                setTertiaryColor(e.target.value);
-                            }}/>
-                        </div>
-                        <div className="p-2 inline-flex items-center space-x-2">
-                            <Label 
-                            htmlFor="text-color" 
-                            value="Cor dos textos" />
-                            <input aria-disabled={loading} name="textColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={textColor} onChange={(e) => {
-                                setTextColor(e.target.value);
-                            }}/>
+                            htmlFor="identification-name" 
+                            value="Nome de identificação" />
+                            <TextInput
+                            maxLength={50}
+                            color="light"
+                            name="identificationName"
+                            id="identification-name" 
+                            type="text"
+                            onChange={() => {
+                                setError("")
+                            }}
+                            placeholder="Catálogo01"
+                            aria-disabled={loading}
+                            required 
+                            shadow />
                         </div>
                         <div className="py-2 w-full">
-                            <ErrorCard error={error}/>
-                            <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
+                            <Label 
+                            htmlFor="store-name" 
+                            value="Nome da loja" />
+                            <TextInput
+                            onChange={(e) => {
+                                setError("")
+                                setStoreName(e.target.value);
+                            }} 
+                            color="light"
+                            name="storeName"
+                            id="store-name" 
+                            type="text"
+                            placeholder="Mister Store" 
+                            maxLength={40}
+                            aria-disabled={loading}
+                            required 
+                            shadow />
                         </div>
-                        {notification}
-                    </div>
-                </form>
-            </div>
-            <div className="w-1/2 max-xl:w-full max-xl:mt-6 max-xl:pl-0 pl-8">
-                <p className="text-lg mb-2">Pré-visualização:</p>
-                <div className="w-full relative p-4 rounded-lg shadow-md" style={{backgroundColor: primaryColor, color: textColor}}>
-                    <div className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" style={{backgroundColor: secondaryColor}}>
-                        <h1 className="font-bold break-all">{storeName}</h1>
-                        <div className="relative w-64 p-5 rounded-lg" style={{backgroundColor: primaryColor}}>
-                            <BiSearch className="absolute top-3 right-3"/>
+                        <div className="py-2 w-full">
+                            <Label 
+                            htmlFor="store-description" 
+                            value="Descrição da loja" />
+                            <Textarea
+                            className='focus:ring-jordyblue focus:border-none focus:ring-2'
+                            onChange={(e) => {
+                                setError("")
+                                setStoreDescription(e.target.value);
+                            }} 
+                            color="light"
+                            name="storeDescription"
+                            id="store-description"
+                            placeholder="Uma loja de roupas, calçados e acessórios..." 
+                            rows={4}
+                            maxLength={2000}
+                            aria-disabled={loading}
+                            required
+                            shadow />
                         </div>
-                    </div>
-                    <div className="py-[72px] flex flex-wrap text-sm">
-                        <div className="p-4 w-full h-16 rounded-lg flex justify-center items-center bg-cover bg-center" style={{backgroundColor: tertiaryColor, backgroundImage: `url(${bannerImage})`}}></div>
-                        <div className="p-2 rounded-lg flex flex-col m-2" style={{color: textColor === primaryColor ? "#000000" : textColor, border: `2px solid ${tertiaryColor}`}}>
-                            <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
-                            <p>Nome de um produto</p>
-                            <p>R$0.00</p>
+                        <div className="py-2 w-full">
+                            <Label 
+                            htmlFor="store-banner" 
+                            value="Banner" />
+                            <FileInput
+                            required
+                            aria-disabled={loading}
+                            name="bannerImage"
+                            color={"light"} 
+                            id="store-banner" 
+                            accept="image/*"
+                            onChange={e => {
+                                setError("")
+                                const file = e.target.files[0]
+                                const reader = new FileReader();
+
+                                reader.onloadend = () => {
+                                    setBannerImage(reader.result);
+                                };
+                                if (file) { 
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                            helperText="O banner que deve aparecer no topo do catálogo"/>
                         </div>
-                        <div className="p-2 rounded-lg flex flex-col m-2" style={{color: textColor === primaryColor ? "#000000" : textColor, border: `2px solid ${tertiaryColor}`}}>
-                            <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
-                            <p>Nome de um produto</p>
-                            <p>R$0.00</p>
+                        <div>
+                            <div className="p-2 inline-flex items-center space-x-2">
+                                <Label 
+                                htmlFor="primary-color" 
+                                value="Cor principal" />
+                                <input aria-disabled={loading} name="primaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={primaryColor} onChange={(e) => {
+                                    setPrimaryColor(e.target.value);
+                                }}/>
+                            </div>
+                            <div className="p-2 inline-flex items-center space-x-2">
+                                <Label 
+                                htmlFor="secondary-color" 
+                                value="Cor secundária" />
+                                <input aria-disabled={loading} name="secondaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={secondaryColor} onChange={(e) => {
+                                    setSecondaryColor(e.target.value);
+                                }}/>
+                            </div>
+                            <div className="p-2 inline-flex items-center space-x-2">
+                                <Label 
+                                htmlFor="tertiary-color" 
+                                value="Cor terciária" />
+                                <input aria-disabled={loading} name="tertiaryColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={tertiaryColor} onChange={(e) => {
+                                    setTertiaryColor(e.target.value);
+                                }}/>
+                            </div>
+                            <div className="p-2 inline-flex items-center space-x-2">
+                                <Label 
+                                htmlFor="text-color" 
+                                value="Cor dos textos" />
+                                <input aria-disabled={loading} name="textColor" className="bg-gray-100 border rounded p-0 w-12 h-8 cursor-pointer" type="color" value={textColor} onChange={(e) => {
+                                    setTextColor(e.target.value);
+                                }}/>
+                            </div>
+                            <div className="py-2 w-full">
+                                <ErrorCard error={error}/>
+                                <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
+                            </div>
+                            {notification}
                         </div>
-                    </div>
-                    <div className="w-full p-2 rounded-lg flex flex-col text-sm" style={{backgroundColor: secondaryColor}}>
-                        <h1 className="font-bold break-all">{storeName}</h1>
-                        <p className="break-all">{storeDescription}</p>
-                    </div>
+                    </form>
                 </div>
-                <p className="text-base inline-flex mt-2"><HiInformationCircle className="w-6 h-6 mr-1"/> Isto é uma versão simplificada</p>
+                <div className="w-1/2 max-xl:w-full max-xl:mt-6 max-xl:pl-0 pl-8">
+                    <p className="text-lg mb-2">Pré-visualização:</p>
+                    <div className="w-full relative p-4 rounded-lg shadow-md" style={{backgroundColor: primaryColor, color: textColor}}>
+                        <div className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" style={{backgroundColor: secondaryColor}}>
+                            <h1 className="font-bold break-all">{storeName}</h1>
+                            <div className="relative w-64 p-5 rounded-lg" style={{backgroundColor: primaryColor}}>
+                                <BiSearch className="absolute top-3 right-3"/>
+                            </div>
+                        </div>
+                        <div className="py-[72px] flex flex-wrap text-sm">
+                            <div className="p-4 w-full h-16 rounded-lg flex justify-center items-center bg-cover bg-center" style={{backgroundColor: tertiaryColor, backgroundImage: `url(${bannerImage})`}}></div>
+                            <div className="p-2 rounded-lg flex flex-col m-2" style={{color: textColor === primaryColor ? "#000000" : textColor, border: `2px solid ${tertiaryColor}`}}>
+                                <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
+                                <p>Nome de um produto</p>
+                                <p>R$0.00</p>
+                            </div>
+                            <div className="p-2 rounded-lg flex flex-col m-2" style={{color: textColor === primaryColor ? "#000000" : textColor, border: `2px solid ${tertiaryColor}`}}>
+                                <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
+                                <p>Nome de um produto</p>
+                                <p>R$0.00</p>
+                            </div>
+                        </div>
+                        <div className="w-full p-2 rounded-lg flex flex-col text-sm" style={{backgroundColor: secondaryColor}}>
+                            <h1 className="font-bold break-all">{storeName}</h1>
+                            <p className="break-all">{storeDescription}</p>
+                        </div>
+                    </div>
+                    <p className="text-base inline-flex mt-2"><HiInformationCircle className="w-6 h-6 mr-1"/> Isto é uma versão simplificada</p>
+                </div>
             </div>
         </div>
     );

@@ -75,114 +75,116 @@ export default function CreateProductContainer({catalogId}) {
     }, [formState]);
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
-            <div className="flex flex-col w-full">
-                <h1 className="text-xl font-black w-full">Crie um novo produto para {catalog.name}</h1>
-                <form 
-                onSubmit={() => setLoading(true)}
-                action={(formdata) => formAction(formdata)}>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="name"
-                        value="Nome do produto" />
-                        <TextInput
-                        
-                        onChange={(e) => {
-                            setProductName(e.target.value);
-                        }}
-                        color="light"
-                        name="name"
-                        type="text"
-                        placeholder="Tênis De Corrida e Caminhada"
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="description"
-                        value="Descrição do produto" />
-                        <Textarea
-                        className='focus:ring-jordyblue focus:border-none focus:ring-2'
-                        onChange={(e) => {
-                            setProductDescription(e.target.value);
-                        }} 
-                        color="light"
-                        name="description"
-                        placeholder="Ótimo tênis para caminhada e corrida" 
-                        rows={5}
-                        maxLength={2000}
-                        aria-disabled={loading}
-                        required
-                        shadow />
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label
-                        htmlFor="price"
-                        value="Preço do produto" />
-                        <TextInput
-                        onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '');
-                            const valueInBRL = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                            e.target.value = valueInBRL;
-
-                            const numericString = valueInBRL.replace(/[^\d,]/g, '');
-                            const replacedComma = numericString.replace(',', '.');
-                            const formattedValue = parseFloat(replacedComma);
+        <div>
+            <h1 className="text-3xl font-black mb-2">Crie um produto para o catálogo {catalog.name}</h1>
+            <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
+                <div className="flex flex-col w-full">
+                    <form 
+                    onSubmit={() => setLoading(true)}
+                    action={(formdata) => formAction(formdata)}>
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="name"
+                            value="Nome do produto" />
+                            <TextInput
                             
-                            setProductPrice(formattedValue);
-                        }} 
-                        color="blue"
-                        name="price"
-                        type="text"
-                        placeholder="R$ 180,00"
-                        aria-disabled={loading}
-                        required/>
-                    </div>
-                    <div className="py-2 w-full">
-                        <Label 
-                        htmlFor="product-images" 
-                        value="Imagens do produto" />
-                        <div className="flex-wrap flex justify-center items-center">
-                            {renderProductImages()}
+                            onChange={(e) => {
+                                setProductName(e.target.value);
+                            }}
+                            color="light"
+                            name="name"
+                            type="text"
+                            placeholder="Tênis De Corrida e Caminhada"
+                            aria-disabled={loading}
+                            required
+                            shadow />
                         </div>
-                        <FileInput
-                        required
-                        multiple
-                        aria-disabled={loading}
-                        name="productImages"
-                        color="light"
-                        id="product-images" 
-                        accept="image/*"
-                        onChange={e => {
-                            const files = e.target.files;
-                            if (files.length + selectedImages.length > 10) {
-                                setError("Você só pode selecionar até 10 imagens para o produto.");
-                                return;
-                            }
-                            setError("");
-                            for (let i = 0; i < files.length; i++) {
-                                const file = files[i];
-                                setSelectedImages(prevState => [...prevState, file]);
-                                const reader = new FileReader();
-                                reader.onloadend = () => {
-                                    setSelectedImagesURL(prevState => [...prevState, reader.result])
-                                };
-                                if (file) { 
-                                    reader.readAsDataURL(file);
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="description"
+                            value="Descrição do produto" />
+                            <Textarea
+                            className='focus:ring-jordyblue focus:border-none focus:ring-2'
+                            onChange={(e) => {
+                                setProductDescription(e.target.value);
+                            }} 
+                            color="light"
+                            name="description"
+                            placeholder="Ótimo tênis para caminhada e corrida" 
+                            rows={5}
+                            maxLength={2000}
+                            aria-disabled={loading}
+                            required
+                            shadow />
+                        </div>
+                        <div className="py-2 w-full">
+                            <Label
+                            htmlFor="price"
+                            value="Preço do produto" />
+                            <TextInput
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, '');
+                                const valueInBRL = (value / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                                e.target.value = valueInBRL;
+                                
+                                const numericString = valueInBRL.replace(/[^\d,]/g, '');
+                                const replacedComma = numericString.replace(',', '.');
+                                const formattedValue = parseFloat(replacedComma);
+                                
+                                setProductPrice(formattedValue);
+                            }} 
+                            color="blue"
+                            name="price"
+                            type="text"
+                            placeholder="R$ 180,00"
+                            aria-disabled={loading}
+                            required/>
+                        </div>
+                        <div className="py-2 w-full">
+                            <Label 
+                            htmlFor="product-images" 
+                            value="Imagens do produto" />
+                            <div className="flex-wrap flex justify-center items-center">
+                                {renderProductImages()}
+                            </div>
+                            <FileInput
+                            required
+                            multiple
+                            aria-disabled={loading}
+                            name="productImages"
+                            color="light"
+                            id="product-images" 
+                            accept="image/*"
+                            onChange={e => {
+                                const files = e.target.files;
+                                if (files.length + selectedImages.length > 10) {
+                                    setError("Você só pode selecionar até 10 imagens para o produto.");
+                                    return;
                                 }
-                            }
-                        }}
-                        helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)."/>
-                    </div>
-                    <div className="py-2 w-full">
-                        <CreateProductVariants variations={variations} setVariations={setVariations}/>
-                    </div>
-                    <div className="py-2 w-full">
-                        <ErrorCard error={error}/>
-                        <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
-                    </div>
-                </form>
+                                setError("");
+                                for (let i = 0; i < files.length; i++) {
+                                    const file = files[i];
+                                    setSelectedImages(prevState => [...prevState, file]);
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        setSelectedImagesURL(prevState => [...prevState, reader.result])
+                                    };
+                                    if (file) { 
+                                        reader.readAsDataURL(file);
+                                    }
+                                }
+                            }}
+                            helperText="SVG, PNG, JPG or GIF (MAX. 800x400px)."/>
+                        </div>
+                        <div className="py-2 w-full">
+                            <CreateProductVariants variations={variations} setVariations={setVariations}/>
+                        </div>
+                        <div className="py-2 w-full">
+                            <ErrorCard error={error}/>
+                            <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
