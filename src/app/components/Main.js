@@ -4,11 +4,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import Providers from "./Providers"
 import NavBar from "./NavBar"
 import CMFooter from "./Footer"
+import { useEffect, useState } from "react"
 
 export default function Main({children}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const mobileMode = searchParams.get("mobileMode");
+  
   
   return (
     <>

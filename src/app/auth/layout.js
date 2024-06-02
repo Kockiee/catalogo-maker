@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
   const mobileMode = searchParams.get("mobileMode");
 
   if (user && user.emailVerified) {
-    return redirect("/dashboard")
+    return redirect(`/dashboard`)
   } else if (user && !user.emailVerified) {
     if (pathname != "/auth/verify-email" && pathname != "/auth/action") {
       return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`)
