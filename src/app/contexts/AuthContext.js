@@ -34,6 +34,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(false);
   const [DBUser, setDBUser] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [mobileMode, setMobileMode] = useState(false);
 
   const handleAction = useCallback(async (action) => {
     try {
@@ -45,11 +47,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const handleAuthentication = useCallback(async(authAction) => {
+    localStorage.setItem("mobileMode", JSON.stringify(searchParams.get("mobileMode")));
     await setPersistence(auth, browserLocalPersistence);
     await authAction();
   }, []);
 
   useEffect(() => {
+    setMobileMode(localStorage.getItem("mobileMode"));
+
     const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
       if (currentUser) {
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
@@ -157,6 +162,7 @@ export const AuthProvider = ({ children }) => {
     user,
     DBUser,
     authLoading,
+    mobileMode,
     signUpWithEmailAndPassword,
     signUpEmailVerification,
     loginWithEmailAndPassword,

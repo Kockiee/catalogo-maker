@@ -21,7 +21,7 @@ export default function CreateCatalogContainer() {
     const [textColor, setTextColor] = useState("#ffffff");
     const [bannerImage, setBannerImage] = useState(null);
     const { user } = useAuth();
-    const { updateCatalogs } = useTool()
+    const { updateCatalogs } = useTool();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [notification, setNotification] = useState(<></>);
@@ -42,7 +42,7 @@ export default function CreateCatalogContainer() {
             if (formState.message === 'catalog-created') {
                 setNotification(<Notification setPattern={setNotification} type="success" message="Catálogo criado com sucesso !"/>);
                 updateCatalogs();
-                redirect(`/dashboard/catalogs/${formState.catalogId}`);
+                redirect(`/dashboard/catalogs`);
             } else if (formState.message === 'catalog-already-exists') {
                 setError("Você já tem um catálogo com essas informações.");
             } else if (formState.message === 'invalid-params') {

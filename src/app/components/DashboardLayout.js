@@ -7,10 +7,8 @@ import ToolContainer from '../components/ToolContainer';
 import { useEffect } from 'react';
 
 export default function DashboardLayout({children}) {
-    const { DBUser, user } = useAuth();
+    const { DBUser, user, mobileMode } = useAuth();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const mobileMode = searchParams.get("mobileMode");
 
     var isPremiumUser = DBUser === false ? null : (DBUser.premium ? true : false);
 

@@ -87,7 +87,7 @@ export default function CreateProductContainer({catalogId}) {
                             htmlFor="name"
                             value="Nome do produto" />
                             <TextInput
-                            
+                            value={productName}
                             onChange={(e) => {
                                 setProductName(e.target.value);
                             }}
@@ -104,6 +104,7 @@ export default function CreateProductContainer({catalogId}) {
                             htmlFor="description"
                             value="Descrição do produto" />
                             <Textarea
+                            value={productDescription}
                             className='focus:ring-jordyblue focus:border-none focus:ring-2'
                             onChange={(e) => {
                                 setProductDescription(e.target.value);
@@ -183,6 +184,7 @@ export default function CreateProductContainer({catalogId}) {
                             <ErrorCard error={error}/>
                             <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
                         </div>
+                        {notification}
                     </form>
                 </div>
             </div>
