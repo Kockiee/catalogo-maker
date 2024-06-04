@@ -29,7 +29,6 @@ export default function CreateCatalogContainer() {
 
     const [formState, formAction] = useFormState((state, formdata) => {
         if (bannerImage) {
-            setLoading(true)
             setNotification(<Notification setPattern={setNotification} type="warning" message="Criando catálogo..."/>);
             return createCatalog(state, formdata, user.uid);
         } else {

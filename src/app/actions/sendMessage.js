@@ -1,7 +1,7 @@
 'use server'
 
 export async function sendMessage(waSessionId, chatId, message) {
-    const response = await fetch(`https://flashy-powder-production.up.railway.app/client/sendMessage/${waSessionId}`, {
+    const response = await fetch(`${process.env.WHATSAPP_API_URL}/client/sendMessage/${waSessionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

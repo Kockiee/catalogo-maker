@@ -1,5 +1,5 @@
 export async function deleteWhatsappSession(waSession) {
-    const response = await fetch(`https://flashy-powder-production.up.railway.app/session/terminate/${waSession}`, {
+    const response = await fetch(`${process.env.WHATSAPP_API_URL}/session/terminate/${waSession}`, {
         headers: {
             'Content-Type': 'application/json', 
             'x-api-key': process.env.WHATSAPP_API_KEY

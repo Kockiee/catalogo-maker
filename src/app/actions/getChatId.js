@@ -1,5 +1,5 @@
 export async function getChatId(waSessionId) {
-    const waSession = await fetch(`https://flashy-powder-production.up.railway.app/client/getClassInfo/${waSessionId}`, {
+    const waSession = await fetch(`${process.env.WHATSAPP_API_URL}/client/getClassInfo/${waSessionId}`, {
         headers: {
             'x-api-key': process.env.WHATSAPP_API_KEY
         }
