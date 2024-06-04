@@ -18,7 +18,7 @@ export default function ToolContainer({children}) {
             <>
                 <div className="w-full">
                     <SideBar/>
-                    <div className="p-16 max-lg:px-0 max-sm:pt-0 pl-80 pb-48">
+                    <div className="p-16 max-lg:px-0 max-sm:pt-4 pl-80 pb-48">
                         <BackButton/>
                         {children}
                     </div>
