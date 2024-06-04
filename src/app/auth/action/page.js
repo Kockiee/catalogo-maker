@@ -25,7 +25,7 @@ export default function PAGE({searchParams}) {
             }
         }
         if (!oobCode) {
-            redirect(`/auth/login${mobileMode ? "?mobileMode=True" : ""}`)
+            redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`)
         }
         if (mode === 'verifyEmail') {
             sendVerifyEmail()
