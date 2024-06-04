@@ -81,7 +81,8 @@ export default function CreateProductContainer({catalogId}) {
                 <div className="flex flex-col w-full">
                     <form 
                     onSubmit={() => setLoading(true)}
-                    action={(formdata) => formAction(formdata)}>
+                    // action={(formdata) => formAction(formdata)}
+                    >
                         <div className="py-2 w-full">
                             <Label
                             htmlFor="name"
