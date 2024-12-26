@@ -140,7 +140,7 @@ export default function PAGE({searchParams}) {
                       Eu concordo com os&nbsp;
                       <Link href={`/use-terms${mobileMode ? "?mobileMode=True" : ""}`} className="inline-flex text-neonblue hover:underline dark:text-cyan-500">
                         termos de uso
-                      </Link> e as <Link href={`/privacy-police${mobileMode ? "?mobileMode=True" : ""}`} className="inline-flex text-neonblue hover:underline dark:text-cyan-500">
+                      </Link> e as <Link href={`/privacy-policy${mobileMode ? "?mobileMode=True" : ""}`} className="inline-flex text-neonblue hover:underline dark:text-cyan-500">
                         políticas de privacidade
                       </Link>
                     </Label>

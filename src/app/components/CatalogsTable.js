@@ -40,7 +40,7 @@ export default function CatalogsTable() {
     };
 
     const renderCatalogs = () => {
-      return catalogs.map((catalog, index) => (
+      return catalogs?.map((catalog, index) => (
         <TableRow key={index} className="bg-lightcyan text-prussianblue">
           <TableCell>
             <Checkbox

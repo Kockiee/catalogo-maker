@@ -17,14 +17,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-br">
-      <head>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-16547155834"></Script>
-        <Script dangerouslySetInnerHTML={{__html: `window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-          gtag('config', 'AW-16547155834');`}}>
-        </Script>
-      </head>
       <body className={`${inter.className}`}>
         <Suspense>
           <Main>

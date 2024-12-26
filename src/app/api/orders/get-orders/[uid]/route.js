@@ -1,5 +1,5 @@
 import verifyJWTToken from "@/app/api/middlewares/verifyJWTToken";
-import { db } from "@/app/utils/firebase";
+import { db } from "../../../../utils/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 export async function GET(req, {params}) {

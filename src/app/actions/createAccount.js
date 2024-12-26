@@ -1,5 +1,6 @@
+'use server'
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/app/utils/firebase";
+import { db } from "../utils/firebase";
 
 export async function createAccount(uid, username, email) {
     const docRef = doc(db, "accounts", uid);
