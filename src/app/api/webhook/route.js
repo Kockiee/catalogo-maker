@@ -1,7 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY);
 import { headers } from 'next/headers';
 import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { db } from '@/app/utils/firebase';
+import { db } from '../../utils/firebase';
 
 export async function POST(req) {
   const body = await req.text();

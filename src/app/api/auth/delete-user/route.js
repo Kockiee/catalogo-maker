@@ -1,4 +1,4 @@
-import { db } from "@/app/utils/firebase";
+import { db } from "../../../utils/firebase";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import verifyJWTToken from "../../middlewares/verifyJWTToken";
 import { deleteStorageDirectory } from "@/app/actions/deleteStorageDirectory";

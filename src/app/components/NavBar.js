@@ -18,7 +18,7 @@ export default function NavBar() {
                     <Link href="/auth/signin">
                         <Button
                         size='md'
-                        className='max-sm:hidden !bg-cornflowerblue !text-lightcyan hover:!bg-cornflowerblue/90 focus:!ring-jordyblue'>
+                        className='max-sm:hidden !bg-cornflowerblue !text-lightcyan hover:!bg-cornflowerblue/90 focus:!ring-jordyblue h-full'>
                             Entrar
                         </Button>
                     </Link>

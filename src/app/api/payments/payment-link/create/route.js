@@ -9,11 +9,11 @@ export async function POST(req) {
   
     if (uid && recurrenceType && uid !== "" && recurrenceType !== "") {
       const price_id = recurrenceType === 1 ? 
-      'price_1OrPUhH1tqRgYbc3wlwQf7zb' 
+      process.env.STRIPE_MONTHLY_PRICE_ID
       : recurrenceType === 2 ? 
-      'price_1OrQjSH1tqRgYbc3Imc73UUL' 
+      process.env.STRIPE_QUARTERLY_PRICE_ID
       : recurrenceType === 3 &&
-      'price_1P6HsiH1tqRgYbc3qTmjXtir'
+      process.env.STRIPE_ANNUAL_PRICE_ID
       
       const paymentLinks = await stripe.paymentLinks.list();
   

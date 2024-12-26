@@ -19,12 +19,12 @@ export default function CMFooter() {
               />
               <FooterLinkGroup className="text-lightcyan">
                 <FooterLink href="/about">Sobre nós</FooterLink>
-                <FooterLink href="/privacy-police">Política de privacidade</FooterLink>
+                <FooterLink href="/privacy-policy">Política de privacidade</FooterLink>
                 <FooterLink href="/use-terms">Termos de uso</FooterLink>
               </FooterLinkGroup>
             </div>
             <FooterDivider />
-            <FooterCopyright href="/" by="Catálogo Maker™" year={2024} className="text-lightcyan/70" />
+            <FooterCopyright href="/" by="Imagen" year={new Date().getFullYear()} className="text-lightcyan/70" />
           </div>
         </Footer>
       )}

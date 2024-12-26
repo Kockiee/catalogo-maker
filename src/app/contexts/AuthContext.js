@@ -1,5 +1,3 @@
-'use client'
-
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import {
   GoogleAuthProvider,
@@ -14,13 +12,12 @@ import {
   applyActionCode,
   updateProfile,
   browserLocalPersistence,
-  signInWithRedirect,
-  getRedirectResult,
   deleteUser,
+  signInWithPopup,
 } from "firebase/auth";
-import { auth } from "@/app/utils/firebase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createAccount } from "../actions/createAccount";
+import { auth } from "../utils/firebase";
 
 async function createUser(result) {
   const data = await createAccount(result.user.uid, result.user.displayName, result.user.email);
@@ -70,13 +67,6 @@ export const AuthProvider = ({ children }) => {
       }
     });
 
-    getRedirectResult(auth).then(async(result) => {
-      if (result) {
-        const data = await createUser(result)
-        setDBUser(data.createdUser);
-      }
-    })
-
     return () => unsubscribe();
   }, []);
   
@@ -109,7 +99,9 @@ export const AuthProvider = ({ children }) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
         const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider);
+        const result = await signInWithPopup(auth, provider); // Realiza o login com o popup
+        const data = await createUser(result); // Cria o usuário no banco de dados
+        setDBUser(data.createdUser); // Atualiza o estado com os dados do usuário do banco
       });
     });
   }, [handleAction, handleAuthentication]);

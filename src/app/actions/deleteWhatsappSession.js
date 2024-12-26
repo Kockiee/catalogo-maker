@@ -1,3 +1,4 @@
+'use server'
 export async function deleteWhatsappSession(waSession) {
     const response = await fetch(`${process.env.WHATSAPP_API_URL}/session/terminate/${waSession}`, {
         headers: {
