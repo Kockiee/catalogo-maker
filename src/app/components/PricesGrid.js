@@ -11,7 +11,7 @@ export default function PricesGrid() {
               para melhor satisfazer suas necessidades como vendedor.
             </p>
             <div className="bg-green-400 rounded-full py-2 px-4 mt-4 text-white">
-              <p>Atenção! Os preços dos planos serão aumentados em 01/02/2025</p>
+              <p>Atenção! Os preços dos planos serão aumentados em {process.env.NEXT_PUBLIC_NEXT_PRICE_ALTERATION_DAY}</p>
             </div>
             <div className="flex flex-wrap items-center justify-center w-full">
               <div className="m-3 max-w-xs w-full">
