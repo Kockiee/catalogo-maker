@@ -38,8 +38,7 @@ export default function ScanQrCode({catalogId, userId}) {
     return (
         <div className="flex flex-wrap">
             {QR ? (
-                <></>
-                // <QRCodeComponent data={QR} />
+                <QRCodeComponent data={QR} />
             ) : (
                 <div className="flex justify-center items-center w-[225px] h-[225px]">
                     <Spinner className="text-lightcyan" size={'xl'}/>
