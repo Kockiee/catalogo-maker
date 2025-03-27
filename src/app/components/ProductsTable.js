@@ -8,6 +8,7 @@ import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
 import { deleteProducts } from "../actions/deleteProducts";
 import Notification from "./Notification";
+import ButtonAPP from "./ButtonAPP";
 
 export default function ProductsTable({ catalogId }) {
     const { catalogs, updateCatalogs } = useTool();
@@ -72,25 +73,25 @@ export default function ProductsTable({ catalogId }) {
         <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
           <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
             {selectedProducts.length > 0 && (
-              <Button 
+              <ButtonAPP
                 disabled={notification !== null}
                 onClick={handleDeleteProducts}
-                className="duration-200 bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
+                className="m-2 max-[344px]:px-6"
+                negative>
                 <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
-              </Button>
+              </ButtonAPP>
             )}
-            <Link href={`/dashboard/catalogs/${catalogId}/new-product`}>
-              <Button 
-                className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
-                <HiPlus className="w-5 h-5 mr-1 "/> Criar
-              </Button>
-            </Link>
+            <ButtonAPP
+              href={`/dashboard/catalogs/${catalogId}/new-product`}
+              className="m-2 max-[344px]:px-6">
+              <HiPlus className="w-5 h-5 mr-1 "/> Criar
+            </ButtonAPP>
             {selectedProducts.length === 1 && (
-              <Link href={`/dashboard/catalogs/${catalogId}/${selectedProducts[0]}`}>
-                <Button className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
-                  <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
-                </Button>
-              </Link>
+              <ButtonAPP
+              href={`/dashboard/catalogs/${catalogId}/${selectedProducts[0]}`}
+              className="m-2 max-[344px]:px-6">
+                <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
+              </ButtonAPP>
             )}
           </div>
         </div>

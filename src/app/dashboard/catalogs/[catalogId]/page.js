@@ -26,7 +26,7 @@ export default function PAGE({ params }) {
               <input type="text" className="focus:border-none focus:ring-0 border-none p-0 w-full bg-transparent" value={`${process.env.NEXT_PUBLIC_SITE_URL}/catalog/${catalog.id}`} readOnly/>
               <div className="absolute right-2 top-0 h-full flex items-center">
                 <Tooltip className="w-42" content="Copiar link do catálogo" placement="top-end" arrow={false} trigger="hover">
-                  <Tooltip content="Link copiado com sucesso !" placement="left" className="bg-green-400" arrow={false} trigger="click">
+                  <Tooltip content="Link copiado com sucesso!" placement="left" className="bg-green-400" arrow={false} trigger="click">
                     <button className="bg-gray-200 rounded p-2 border border-gray-300" onClick={() => {
                       navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SITE_URL}/catalog/${catalog.id}`)
                     }}>

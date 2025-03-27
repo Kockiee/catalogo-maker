@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import Providers from "./Providers"
 import NavBar from "./NavBar"
 import CMFooter from "./Footer"
@@ -9,7 +9,6 @@ export default function Main({children}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const mobileMode = searchParams.get("mobileMode");
-  
   
   return (
     <>

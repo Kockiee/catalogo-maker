@@ -28,8 +28,8 @@ export default function PAGE() {
             <CreateCatalogContainer/>
         ) : (
             <div className="flex flex-col">
-                <div className="flex flex-wrap space-x-2 max-lg:space-x-0 space-y-2 justify-center">
-                    <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md">
+                <div className="flex flex-wrap space-x-2 max-lg:space-x-0 max-lg:space-y-2 my-2 justify-center h-full">
+                    <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md h-full">
                         <h1 className="text-2xl font-bold mb-2">Pedidos nos últimos 7 dias</h1>
                         <p className="text-xl my-2"><span className="font-black">{orders ? orders.length : 0}</span> Pedidos</p>
                         <div className="bg-gray-300 border border-gray-400 p-2 text-sm rounded">
@@ -37,7 +37,7 @@ export default function PAGE() {
                             <p>O valor a cima inclúi tanto pedidos aceitos como não aceitos ainda.</p>
                         </div>
                     </div>
-                    <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md">
+                    <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md h-full">
                         <h1 className="text-2xl font-bold mb-2">Faturamento nos últimos 7 dias</h1>
                         <p className="text-xl my-2 font-medium">{(billing).toLocaleString('pt-BR', {style: "currency", currency: "BRL"})}</p>
                         <div className="bg-gray-300 border border-gray-400 p-2 text-sm rounded">

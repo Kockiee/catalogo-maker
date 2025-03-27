@@ -2,12 +2,13 @@
 import { useState, useEffect } from "react";
 import { deleteCatalogs } from "@/app/actions/deleteCatalogs";
 import { useTool } from "@/app/contexts/ToolContext";
-import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Toast } from 'flowbite-react';
+import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow} from 'flowbite-react';
 import Link from 'next/link';
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
 import Notification from "./Notification";
 import { useAuth } from "../contexts/AuthContext";
+import ButtonAPP from "./ButtonAPP";
 
 export default function CatalogsTable() {
     const { user } = useAuth();
@@ -76,25 +77,25 @@ export default function CatalogsTable() {
         <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
           <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
             {selectedCatalogs.length > 0 && (
-              <Button 
+              <ButtonAPP
                 disabled={notification !== null}
                 onClick={handleDeleteCatalogs}
-                className="duration-200 bg-red-500 hover:!bg-red-500/80 focus:ring-red-700 m-2 max-[344px]:px-6">
+                className="m-2 max-[344px]:px-6"
+                negative>
                 <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
-              </Button>
+              </ButtonAPP>
             )}
             <Link href="/dashboard/catalogs/new-catalog">
-              <Button 
-                className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
+              <ButtonAPP
+                className="m-2 max-[344px]:px-6"
+              >
                 <HiPlus className="w-5 h-5 mr-1"/> Criar
-              </Button>
+              </ButtonAPP>
             </Link>
             {selectedCatalogs.length === 1 && (
-              <Link href={`/dashboard/catalogs/${selectedCatalogs[0].id}`}>
-                <Button className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue m-2 max-[344px]:px-6">
-                  <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
-                </Button>
-              </Link>
+              <ButtonAPP href={`/dashboard/catalogs/${selectedCatalogs[0].id}`} className="m-2 max-[344px]:px-6">
+                <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
+              </ButtonAPP>
             )}
           </div>
         </div>
