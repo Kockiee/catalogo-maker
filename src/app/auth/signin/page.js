@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 
 export default function PAGE({searchParams}) {
-  const mobileMode = searchParams.mobileMode;
+  const mobileMode = searchParams.mobileMode === "True";
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

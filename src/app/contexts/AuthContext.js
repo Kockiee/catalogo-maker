@@ -51,25 +51,32 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    setMobileMode(localStorage.getItem("mobileMode"));
+    const mode = localStorage.getItem("mobileMode");
+    setMobileMode(mode === "True"); // Certificando-se de que o valor seja um booleano
+  }, []);  
 
-    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
           headers: {
-            'authorization': await currentUser.getIdToken()
-          }
+            'authorization': await currentUser.getIdToken(),
+          },
         });
         const data = await response.json();
-        if(response.status === 200) setDBUser(data);
+        if (response.status === 200) {
+          setDBUser(data);
+        }
         setUser(currentUser);
       } else {
-        setUser(currentUser);
+        setUser(null); // Garante que o estado do user seja definido consistentemente
+        setDBUser(null); // Mesmo para o DBUser
       }
     });
 
     return () => unsubscribe();
   }, []);
+
   
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {
     await handleAction(async () => {

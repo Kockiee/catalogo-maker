@@ -11,13 +11,14 @@ export default function RootLayout({ children }) {
   const searchParams = useSearchParams();
   const mobileMode = searchParams.get("mobileMode");
 
-  if (user && user.emailVerified) {
-    return redirect(`/dashboard`)
-  } else if (user && !user.emailVerified) {
-    if (pathname != "/auth/verify-email" && pathname != "/auth/action") {
-      return redirect(`/auth/verify-email${mobileMode === "True" ? "?mobileMode=True" : ""}`)
+  if (user) {
+    if (user.emailVerified) {
+      return redirect(`/dashboard`);
+    } else if (pathname !== "/auth/verify-email" && pathname !== "/auth/action") {
+      return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
     }
   }
+  
   
   return (
     <>
