@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Main from "./components/Main";
 import { Suspense } from "react";
-import Script from "next/script";
+import AccessibilityWidget from "./components/Accessibility";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-br">
       <body className={`${inter.className}`}>
+        <AccessibilityWidget/>
         <Suspense>
           <Main>
             {children}

@@ -3,7 +3,7 @@ import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { HiChartPie,  HiMenu, HiShoppingBag, HiUser, HiViewBoards } from 'react-icons/hi';
 import { useAuth } from '../contexts/AuthContext';
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaSignOutAlt } from "react-icons/fa";
 import { BiSolidCrown } from "react-icons/bi";
 import Link from 'next/link';
 import { FaBoxesStacked } from 'react-icons/fa6';
@@ -82,7 +82,7 @@ export default function SideBar() {
           icon={<HiUser className='text-lightcyan/80 w-6 h-6'/>}
           />
           <SidebarItem
-          text="Assinatura"
+          text={<p className='flex items-center'>Assinatura <FaExternalLinkAlt className='ml-1 w-3 h-3 text-gray-400'/></p>}
           href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" 
           target="_blank"
           icon={<HiShoppingBag className='text-lightcyan/80 w-6 h-6'/>}
