@@ -1,54 +1,56 @@
 'use client'
-import { redirect, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Spinner } from "flowbite-react";
-import { ToolProvider } from '../contexts/ToolContext';
-import ToolContainer from '../components/ToolContainer';
-import { useEffect, useState } from 'react';
+import { ToolProvider } from "../contexts/ToolContext";
+import ToolContainer from "../components/ToolContainer";
 
 export default function DashboardLayout({ children }) {
   const { DBUser, user, mobileMode } = useAuth();
   const pathname = usePathname();
-  
-  // Estado para controlar o status de premium do usuário
+  const router = useRouter();
+
+  // Estado inicial definido como false para evitar re-renderizações inesperadas
   const [isPremiumUser, setIsPremiumUser] = useState(null);
 
-  // useEffect para definir se o usuário é premium
+  // Define se o usuário é premium com base no DBUser
   useEffect(() => {
     if (DBUser) {
-      setIsPremiumUser(DBUser.premium ? true : false);
+      setIsPremiumUser(DBUser.premium);
     }
   }, [DBUser]);
 
-  // useEffect para redirecionamento baseado no status de login e email verificado
+  // Redirecionamento baseado no status de login e verificação de email
   useEffect(() => {
     if (user === null) {
-      return redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
+      router.push(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
     } else if (user && !user.emailVerified) {
-      return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
+      router.push(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
     }
-  }, [user, mobileMode]);
+  }, [user, mobileMode, router]);
 
-  // useEffect para redirecionar para a página de plano se o usuário não for premium
+  // Redirecionamento se o usuário não for premium
   useEffect(() => {
     if (isPremiumUser === false && pathname !== "/dashboard/plan" && pathname !== "/dashboard/account") {
-      return redirect(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
+      router.push(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
     }
-  }, [pathname, isPremiumUser, mobileMode]);
+  }, [pathname, isPremiumUser, mobileMode, router]);
 
-  // Se o usuário ou o estado premium não estiverem definidos, mostra o carregando
-  if (user === null || isPremiumUser === null) {
+  // Exibir um spinner de carregamento enquanto os dados do usuário ainda não foram carregados
+  if (user === null || DBUser === null) {
     return (
       <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
         <Spinner className="text-lightcyan" size="xl" />
         <span>Carregando...</span>
       </div>
     );
+  } else {
+    return (
+      <ToolProvider user={user}>
+        <ToolContainer>{children}</ToolContainer>
+      </ToolProvider>
+    );
   }
-
-  return (
-    <ToolProvider user={user}>
-      <ToolContainer>{children}</ToolContainer>
-    </ToolProvider>
-  );
 }

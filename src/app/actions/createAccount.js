@@ -14,8 +14,8 @@ export async function createAccount(uid, username, email) {
             premium: false
         });
         const createdUser = (await getDoc(docRef)).data();
-        return { "success": true, "createdUser": createdUser }
+        return { "success": true, ...createdUser }
     } else {
-        return { "success": true, "createdUser": docSnap.data() }
+        return { "success": true, ...docSnap.data() }
     }
 };

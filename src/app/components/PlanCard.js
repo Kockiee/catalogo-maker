@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { MdDiscount } from "react-icons/md";
+import ButtonAPP from "./ButtonAPP";
 
 export default function PlanCard({ recurrenceType = 1, price = 25, disabled = false }) {
   const [paymentLink, setPaymentLink] = useState(null);
@@ -79,18 +80,14 @@ export default function PlanCard({ recurrenceType = 1, price = 25, disabled = fa
         </div>
       )}
       {paymentLink && (
-        <Link href={paymentLink} className="w-full">
-          <Button className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
-            {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
-          </Button>
-        </Link>
+        <ButtonAPP href={paymentLink} className="w-full">
+          {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
+        </ButtonAPP>
       )}
       {!paymentLink && disabled && (
-        <Link href="/dashboard/plan" className="w-full">
-          <Button className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue !mt-2 w-full">
-            {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
-          </Button>
-        </Link>
+        <ButtonAPP href="/dashboard/plan" className="w-full">
+          {recurrenceType === 1 ? "Iniciar avaliação" : "Assinar"}
+        </ButtonAPP>
       )}
       <p className="text-xs">Formas de pagamento aceitas:</p>
       <div className="flex space-x-2">

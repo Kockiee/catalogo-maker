@@ -21,7 +21,7 @@ import { createAccount } from "../actions/createAccount";
 import { auth } from "../utils/firebase";
 
 async function createUser(result) {
-  const data = await createAccount(result.user.uid, result.user.displayName, result.user.email);
+  const data = await createAccount(result.uid, result.displayName, result.email);
   return data;
 }
 
@@ -44,16 +44,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const handleAuthentication = useCallback(async(authAction) => {
-    localStorage.setItem("mobileMode", JSON.stringify(searchParams.get("mobileMode")));
+  const handleAuthentication = useCallback(async (authAction) => {
     await setPersistence(auth, browserLocalPersistence);
     await authAction();
-  }, []);
+  }, [searchParams]); // Inclua searchParams para evitar mudanças inesperadas  
 
   useEffect(() => {
-    const mode = localStorage.getItem("mobileMode");
-    setMobileMode(mode === "True"); // Certificando-se de que o valor seja um booleano
-  }, []);  
+    if (typeof window !== "undefined") {  // Garante que é no cliente
+      const modeSearchParams = searchParams.get("mobileMode") === "True" ? true : false;
+      const mode = JSON.parse(localStorage.getItem("mobileMode"));
+      if(mode === null || mode === undefined) {
+        localStorage.setItem("mobileMode", 
+          JSON.stringify(modeSearchParams)
+        );
+        setMobileMode(modeSearchParams);
+      } else {
+        setMobileMode(mode)
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -66,26 +75,28 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         if (response.status === 200) {
           setDBUser(data);
+        } else if (response.status === 404) {
+          const createdUser = await createUser(currentUser);
+          setDBUser(createdUser);
         }
         setUser(currentUser);
       } else {
-        setUser(null); // Garante que o estado do user seja definido consistentemente
-        setDBUser(null); // Mesmo para o DBUser
+        setUser(null);
+        setDBUser(null);
       }
     });
-
+  
     return () => unsubscribe();
-  }, []);
+  }, [createUser]); // Adiciona a dependência corretamente  
+
 
   
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {
     await handleAction(async () => {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(auth.currentUser, {
         displayName: username,
       });
-
-      await createUser(result)
     });
   }, [handleAction]);
 
@@ -107,9 +118,7 @@ export const AuthProvider = ({ children }) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
         const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider); // Realiza o login com o popup
-        const data = await createUser(result); // Cria o usuário no banco de dados
-        setDBUser(data.createdUser); // Atualiza o estado com os dados do usuário do banco
+        await signInWithPopup(auth, provider); // Realiza o login com o popup
       });
     });
   }, [handleAction, handleAuthentication]);

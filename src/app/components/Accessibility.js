@@ -57,7 +57,7 @@ export default function AccessibilityWidget() {
       </button>
       {isOpen && (
         <div className="mt-3 p-3 bg-white shadow-lg rounded-xl flex flex-col space-y-2 max-w-xs"
-          style={{ position: "fixed", bottom: "80px", left: "20px" }}>
+          style={{ position: "fixed", bottom: "80px", right: "20px" }}>
           <ButtonAPP onClick={() => setFontScale((scale) => Math.min(2, scale + 0.1))}>
             <FaPlus className="mr-2" /> Aumentar Fonte
           </ButtonAPP>

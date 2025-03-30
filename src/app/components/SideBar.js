@@ -36,6 +36,8 @@ export default function SideBar() {
     await logout();
   };
 
+  console.log(DBUser)
+
   return (
     <>
     <div className='max-md:px-4 max-md:fixed z-10 top-0 left-0 max-md:w-full'>
