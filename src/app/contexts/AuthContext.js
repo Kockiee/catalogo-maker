@@ -63,15 +63,14 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, []);
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
           headers: {
-            'authorization': await currentUser.getIdToken()
-          }
+            'authorization': await currentUser.getIdToken(),
+          },
         });
         const data = await response.json();
         if (response.status === 200) {
@@ -89,6 +88,7 @@ export const AuthProvider = ({ children }) => {
   
     return () => unsubscribe();
   }, [createUser]); // Adiciona a dependência corretamente  
+
 
   
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {

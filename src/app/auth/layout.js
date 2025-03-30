@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       }
     }
   }, [user, DBUser, pathname, mobileMode, router]);
-
+  
   return (
     <>
       <div className="max-w-4xl w-full">
