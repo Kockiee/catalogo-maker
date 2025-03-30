@@ -1,44 +1,56 @@
 'use client'
-import { redirect, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Spinner } from "flowbite-react";
-import { ToolProvider } from '../contexts/ToolContext';
-import ToolContainer from '../components/ToolContainer';
-import { useEffect } from 'react';
+import { ToolProvider } from "../contexts/ToolContext";
+import ToolContainer from "../components/ToolContainer";
 
-export default function DashboardLayout({children}) {
-    const { DBUser, user, mobileMode } = useAuth();
-    const pathname = usePathname();
+export default function DashboardLayout({ children }) {
+  const { DBUser, user, mobileMode } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
 
-    var isPremiumUser = DBUser === false ? null : (DBUser.premium ? true : false);
+  // Estado inicial definido como false para evitar re-renderizações inesperadas
+  const [isPremiumUser, setIsPremiumUser] = useState(null);
 
-    if (user === null) {
-      return redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
-    } else if (user && !user.emailVerified) {
-      return redirect(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
+  // Define se o usuário é premium com base no DBUser
+  useEffect(() => {
+    if (DBUser) {
+      setIsPremiumUser(DBUser.premium);
     }
-    
-    useEffect(() => {
-      if (isPremiumUser === false && pathname != "/dashboard/plan" && pathname != "/dashboard/account") {
-        return redirect(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
-      }
-    }, [pathname, isPremiumUser])
+  }, [DBUser]);
 
-    // MODIFICAR DELETAR USUÁRIO
+  // Redirecionamento baseado no status de login e verificação de email
+  useEffect(() => {
+    if (user === null) {
+      router.push(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`);
+    } else if (user && !user.emailVerified) {
+      router.push(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
+    }
+  }, [user, mobileMode, router]);
+
+  // Redirecionamento se o usuário não for premium
+  useEffect(() => {
+    if (isPremiumUser === false && pathname !== "/dashboard/plan" && pathname !== "/dashboard/account") {
+      router.push(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
+    }
+  }, [pathname, isPremiumUser, mobileMode, router]);
+
+  // Exibir um spinner de carregamento enquanto os dados do usuário ainda não foram carregados
+  if (user === null || DBUser === null) {
     return (
-        <div>
-          {user === false ? (
-            <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
-              <Spinner className="text-lightcyan" size="xl"/>
-              <span>Carregando...</span>
-            </div>
-          ) : (
-            <ToolProvider user={user}>
-              <ToolContainer>
-                {children}
-              </ToolContainer>
-            </ToolProvider>
-          )}
-        </div>
-    )
+      <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
+        <Spinner className="text-lightcyan" size="xl" />
+        <span>Carregando...</span>
+      </div>
+    );
+  } else {
+    return (
+      <ToolProvider user={user}>
+        <ToolContainer>{children}</ToolContainer>
+      </ToolProvider>
+    );
+  }
 }
