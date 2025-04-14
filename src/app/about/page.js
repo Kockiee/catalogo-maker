@@ -19,7 +19,7 @@ export default function PAGE() {
                 </p>
                 <p className="my-2 font-semibold">
                     "Nascemos não como sonho de empresário mas como sonho de cada um
-                    dos lojistas e vendedores brasileiros." - Miguel E. (Fundador da Catalogo Maker)
+                    dos lojistas e vendedores brasileiros." - Catálogo Maker
                 </p>
                 <h2 className="font-bold text-xl">Nossa História</h2>
                 <p>

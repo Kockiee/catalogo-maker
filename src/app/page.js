@@ -120,7 +120,7 @@ export default function Home({searchParams}) {
             </div>
             <PricesGrid/>
             <p className="font-normal text-xl">
-              "Ter um catálogo bom é necessidade de todo vendedor; entregar-lhe um catálogo mais do que bom é o nosso objetivo." - Catálogo Maker CEO
+              "Ter um catálogo bom é necessidade de todo vendedor; entregar-lhe um catálogo mais do que bom é o nosso objetivo." - Catálogo Maker
             </p>
           </div>
         </main>
