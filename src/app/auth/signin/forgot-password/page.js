@@ -9,7 +9,7 @@ export default function forgotpassword() {
     const [email, setEmail] = useState("")
     const [emailInvited, setEmailInvited] = useState(false)
     const { sendForgotPasswordEmail, authLoading } = useAuth()
-    const [error, setError] = useState()
+    const [error, setError] = useState("")
 
 
     const handleFormSubmit = async(e) => {
