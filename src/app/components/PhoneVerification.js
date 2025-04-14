@@ -15,11 +15,11 @@ export default function PhoneVerification({catalogId}) {
     return (
         <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
             <div className="w-full space-y-2">
-                <h1 className="text-lg font-bold mb-2">Opa, falta só mais uma informação !</h1>
+                <h1 className="text-lg font-bold mb-2">Opa, falta só mais uma informação!</h1>
                 <Label
                 className="text-lg"
                 htmlFor="ordering-form"
-                value="Como deseja receber pedidos neste catálogo ?"
+                value="Como deseja receber pedidos neste catálogo?"
                 />
                 <fieldset className="flex flex-col gap-4">
                     <div className="inline-flex items-center space-x-2">
