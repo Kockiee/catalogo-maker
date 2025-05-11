@@ -100,7 +100,7 @@ export default function Home({searchParams}) {
                 </p>
               </div>
             </div>
-            <div className="flex flex-row max-md:flex-col items-center">
+            {/* <div className="flex flex-row max-md:flex-col items-center">
               <FiSmartphone className="text-neonblue w-32 h-32"/>
               <div className="flex flex-col pl-6 max-md:pl-0 max-w-[780px]">
                 <h1 className="text-gray-800 text-2xl">
@@ -117,7 +117,7 @@ export default function Home({searchParams}) {
                   </Button>
                 </a>
               </div>
-            </div>
+            </div> */}
             <PricesGrid/>
             <p className="font-normal text-xl">
               "Ter um catálogo bom é necessidade de todo vendedor; entregar-lhe um catálogo mais do que bom é o nosso objetivo." - Catálogo Maker
