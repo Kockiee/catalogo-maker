@@ -1,22 +1,7 @@
 'use server'
 
+import { WhatsappAdapter } from "../lib/WhatsappAdapter";
+
 export async function createWhatsappSession(sessionId) {
-    const session = async() => {return await fetch(`${process.env.WHATSAPP_API_URL}/session/qr/${sessionId}`, {
-        headers: {
-            'Content-Type': 'application/json', 
-            'x-api-key': process.env.WHATSAPP_API_KEY
-        }
-    }).then(response => response.json())};
-
-    const sessionExistent = await session();
-
-    if (sessionExistent.message === "session_not_found") {
-        await fetch(`${process.env.WHATSAPP_API_URL}/session/start/${sessionId}`, {
-            headers: {'Content-Type': 'application/json', 'x-api-key': process.env.WHATSAPP_API_KEY}
-        });
-
-        return await session();
-    } else {
-        return sessionExistent;
-    }
+    return await WhatsappAdapter.createSession(sessionId);
 }

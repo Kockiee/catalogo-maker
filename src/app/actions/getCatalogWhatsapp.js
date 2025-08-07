@@ -1,10 +1,7 @@
 'use server'
 
-export async function getCatalogWhatsapp(sessionId) {
-    const response = await fetch(`${process.env.WHATSAPP_API_URL}/session/status/${sessionId}`, {
-        headers: {'Content-Type': 'application/json', 'x-api-key': process.env.WHATSAPP_API_KEY}
-    });
-    const data = await response.json();
+import { WhatsappAdapter } from "../lib/WhatsappAdapter";
 
-    return data;
+export async function getCatalogWhatsapp(sessionId, sessionToken) {
+    return await WhatsappAdapter.getSessionStatus(sessionId, sessionToken);
 }

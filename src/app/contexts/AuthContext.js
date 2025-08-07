@@ -15,6 +15,7 @@ import {
   browserLocalPersistence,
   deleteUser,
   signInWithPopup,
+  signInWithRedirect
 } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createAccount } from "../actions/createAccount";
@@ -67,9 +68,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        const token = await currentUser.getIdToken();
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
           headers: {
-            'authorization': await currentUser.getIdToken(),
+            'authorization': token,
           },
         });
         const data = await response.json();
@@ -89,7 +91,19 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, [createUser]); // Adiciona a dependência corretamente  
 
-
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result?.user) {
+        // Usuário autenticado — estado será atualizado pelo onAuthStateChanged
+        }
+      } catch (error) {
+        console.error("Erro ao processar redirecionamento do login:", error);
+      }
+    };
+    handleRedirectResult();
+  }, []);
   
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {
     await handleAction(async () => {
@@ -118,7 +132,12 @@ export const AuthProvider = ({ children }) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider); // Realiza o login com o popup
+        const mode = JSON.parse(localStorage.getItem("mobileMode"));
+        if (mode) {
+          await signInWithRedirect(auth, provider); // para WebView/mobile
+        } else {
+          await signInWithPopup(auth, provider); // para desktop
+        }
       });
     });
   }, [handleAction, handleAuthentication]);

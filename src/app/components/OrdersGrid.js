@@ -38,9 +38,9 @@ export default function OrdersGrid() {
     };
 
     const renderOrders = () => {
-        console.log(orders[0].buyer_phone)
-        return orders.map((order, index) => (
-            <div key={index} className="text-sm rounded border-lightcyan border-4 bg-white m-2 flex flex-wrap w-full">
+        return orders.map((order, index) => {
+            const catalogData = catalogs.find(catalog => catalog.id === order.catalog_id);
+            return <div key={index} className="text-sm rounded border-lightcyan border-4 bg-white m-2 flex flex-wrap w-full">
                 {showCancelationForm && (
                     <div className='fixed z-20 w-full bg-periwinkle h-full top-16 max-md:px-4 right-0 flex flex-col items-center'>
                         <div className='bg-white !border-4 !border-lightcyan p-4 rounded max-w-lg max-md:max-w-full w-full shadow relative'>
@@ -54,7 +54,10 @@ export default function OrdersGrid() {
                                 setShowCancelationForm(false);
                                 await updateOrders();
                             }}
-                            action={async(formdata) => cancelOrder(formdata, order, catalogs.find(catalog => catalog.id === order.catalog_id).whatsapp_session)}>
+                            action={async(formdata) => cancelOrder(formdata, order, {
+                                id: catalogData.whatsapp_session, 
+                                token: catalogData.whatsapp_session_token
+                                })}>
                                 <h1 className='text-lg font-bold mt-4'>Cancelamento do pedido <span className='break-all'>{order.id}</span></h1>
                                 <Label
                                 htmlFor="reason"
@@ -137,7 +140,10 @@ export default function OrdersGrid() {
                             </Button>
                             <Button
                             onClick={async() => {
-                                await acceptOrder(order, catalogs.find(catalog => catalog.id === order.catalog_id).whatsapp_session)
+                                await acceptOrder(order, {
+                                    id: catalogData.whatsapp_session, 
+                                    token: catalogData.whatsapp_session_token
+                                });
                                 updateOrders()
                             }}
                             size='md' 

@@ -49,7 +49,7 @@ export default function PhoneVerification({catalogId}) {
                     <ScanQrCode catalogId={catalogId} userId={user.uid} />
                 )}
                 <Button onClick={async() => {
-                    await setCatalogWhatsapp('catalog-maker', catalogId)
+                    await setCatalogWhatsapp(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogId)
                     updateCatalogs()
                 }} disabled={orderForm === 2} size="md" className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full">Continuar</Button>
             </div>
