@@ -36,8 +36,6 @@ export default function SideBar() {
     await logout();
   };
 
-  console.log(DBUser)
-
   return (
     <>
     <div className='max-md:px-4 max-md:fixed z-10 top-0 left-0 max-md:w-full'>
@@ -65,7 +63,7 @@ export default function SideBar() {
         <Sidebar.ItemGroup>
           <SidebarItem
           text="Dashboard"
-          href="/dashboard" 
+          href="/dashboard"
           icon={<HiChartPie className='text-lightcyan/80 w-6 h-6'/>}
           />
           <SidebarItem

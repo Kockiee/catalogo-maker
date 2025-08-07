@@ -13,16 +13,18 @@ export default function ScanQrCode({catalogId, userId}) {
     const { updateCatalogs } = useTool();
 
     useEffect(() => {
+        var sessionToken = ""
         const loadQRCode = async() => {
             const data = await createWhatsappSession(`${catalogId}-${userId}`);
             setQR(data.qr);
+            sessionToken = data.token;
         }
 
         const generateQRIntervalId = setInterval(loadQRCode, 50000);
         const verifyQRCodeScan = setInterval(async () => {
-            const waSession = await getCatalogWhatsapp(`${catalogId}-${userId}`);
-            if (waSession.state === "CONNECTED") {
-                await setCatalogWhatsapp(`${catalogId}-${userId}`, catalogId);
+            const waSession = await getCatalogWhatsapp(`${catalogId}-${userId}`, sessionToken);
+            if (waSession.status === "CONNECTED") {
+                await setCatalogWhatsapp(`${catalogId}-${userId}`, token, catalogId);
                 await updateCatalogs();
             }
         }, 5000);
