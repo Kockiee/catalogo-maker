@@ -1,16 +1,36 @@
 'use client'
 import { Button, Label, Radio } from "flowbite-react";
 import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import ScanQrCode from "../../components/ScanQrCode";
-import { setCatalogWhatsapp } from "../../actions/setCatalogWhatsapp";
-import { useTool } from "../../contexts/ToolContext";
-
+import { useAuth } from "@/app/contexts/AuthContext";
+import ScanQrCode from "./ScanQrCode";
+import { useTool } from "@/app/contexts/ToolContext";
+import { useNotifications } from "@/app/hooks/useNotifications";
+import { useWhatsappSessionManager } from "@/app/hooks/useWhatsappSessionManager";
 
 export default function PhoneVerification({catalogId}) {
     const [orderForm, setOrderForm] = useState(1);
+    const { notify } = useNotifications()
     const { user } = useAuth()
     const { updateCatalogs } = useTool()
+    const { connectWhatsappSession, isProcessing } = useWhatsappSessionManager()
+
+    const handleSetCatalogWhatsapp = async() => {
+        const defaultSession = process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION
+        const defaultSessionToken = process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN
+
+        await connectWhatsappSession(
+            defaultSession, 
+            defaultSessionToken, 
+            catalogId,
+            (message) => {
+                notify.success(message)
+                updateCatalogs()
+            },
+            (message) => {
+                notify.error(message)
+            }
+        )
+    }
 
     return (
         <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
@@ -48,10 +68,14 @@ export default function PhoneVerification({catalogId}) {
                 {orderForm === 2 && (
                     <ScanQrCode catalogId={catalogId} userId={user.uid} />
                 )}
-                <Button onClick={async() => {
-                    await setCatalogWhatsapp(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogId)
-                    updateCatalogs()
-                }} disabled={orderForm === 2} size="md" className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full">Continuar</Button>
+                <Button 
+                    onClick={handleSetCatalogWhatsapp} 
+                    disabled={orderForm === 2 || isProcessing} 
+                    size="md" 
+                    className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full"
+                >
+                    {isProcessing ? "Conectando..." : "Continuar"}
+                </Button>
             </div>
         </div>
     )

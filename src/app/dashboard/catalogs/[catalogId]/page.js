@@ -1,6 +1,6 @@
 'use client'
 import EditCatalogContainer from "@/app/dashboard/catalogs/components/EditCatalogContainer";
-import PhoneVerification from "@/app/auth/components/PhoneVerification";
+import PhoneVerification from "@/app/dashboard/catalogs/components/PhoneVerification";
 import ProductsTable from "@/app/dashboard/catalogs/components/ProductsTable";
 import { useTool } from "@/app/contexts/ToolContext"
 import { Tooltip } from "flowbite-react";

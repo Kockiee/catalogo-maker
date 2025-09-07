@@ -52,9 +52,9 @@ async function deleteSession(sessionId, sessionToken) {
     return { message: data.response === 'Session closed' ? 'session_terminated' : data.message || data.response };
 }
 
-async function createSession(sessionId, sessionToken) {
+async function startSession(sessionId, sessionToken) {
     let token = sessionToken;
-    console.log("createSession called with sessionId:", sessionId, "and sessionToken:", sessionToken);
+    console.log("startSession called with sessionId:", sessionId, "and sessionToken:", sessionToken);
 
     if (sessionToken === "" || !sessionToken || sessionToken === null) {
         const generateSessionToken = await fetch(`${API_URL}/api/${sessionId}/${API_KEY}/generate-token`, {method: 'POST'});
@@ -129,7 +129,7 @@ async function getChatId(sessionId, sessionToken) {
 export const WhatsappAdapter = {
     sendMessage,
     deleteSession,
-    createSession,
+    startSession,
     getSessionStatus,
     getChatId
 };
