@@ -1,6 +1,6 @@
 'use client'
 import { HiMinus, HiPlus, HiShoppingBag, HiX } from "react-icons/hi";
-import { useCatalog } from "../contexts/CatalogContext"
+import { useCatalog } from "../../contexts/CatalogContext"
 import { useEffect } from "react";
 import Link from "next/link"
 

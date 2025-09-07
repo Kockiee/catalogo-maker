@@ -1,7 +1,7 @@
 'use client'
-import EditCatalogContainer from "@/app/components/EditCatalogContainer";
-import PhoneVerification from "@/app/components/PhoneVerification";
-import ProductsTable from "@/app/components/ProductsTable";
+import EditCatalogContainer from "@/app/dashboard/catalogs/components/EditCatalogContainer";
+import PhoneVerification from "@/app/auth/components/PhoneVerification";
+import ProductsTable from "@/app/dashboard/catalogs/components/ProductsTable";
 import { useTool } from "@/app/contexts/ToolContext"
 import { Tooltip } from "flowbite-react";
 import { notFound } from 'next/navigation'

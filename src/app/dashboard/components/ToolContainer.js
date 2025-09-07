@@ -1,5 +1,5 @@
 'use client'
-import { useTool } from "../contexts/ToolContext";
+import { useTool } from "../../contexts/ToolContext";
 import { Spinner } from "flowbite-react"
 import SideBar from "./SideBar";
 import BackButton from "./BackButton";

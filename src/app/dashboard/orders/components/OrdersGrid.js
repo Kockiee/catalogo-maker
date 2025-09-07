@@ -1,14 +1,14 @@
 'use client'
 import { useState } from 'react';
 import { HiChevronDown, HiChevronUp, HiX } from "react-icons/hi";
-import { useTool } from "../contexts/ToolContext";
+import { useTool } from "@/app/contexts/ToolContext";
 import { Button, Label, Textarea, Tooltip } from 'flowbite-react';
 import { CiMenuKebab } from 'react-icons/ci';
-import { acceptOrder } from '../actions/acceptOrder';
-import { cancelOrder } from '../actions/cancelOrder';
-import { refuseOrder } from '../actions/refuseOrder';
-import { formatPhoneNumber } from '../utils/functions';
-import Notification from './Notification';
+import { acceptOrder } from '@/app/actions/acceptOrder';
+import { cancelOrder } from '@/app/actions/cancelOrder';
+import { refuseOrder } from '@/app/actions/refuseOrder';
+import { formatPhoneNumber } from '@/app/utils/functions';
+import Notification from '@/app/components/Notification';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
 

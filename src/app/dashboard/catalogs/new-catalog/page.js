@@ -1,4 +1,4 @@
-import CreateCatalogContainer from "@/app/components/CreateCatalogContainer";
+import CreateCatalogContainer from "@/app/dashboard/components/CreateCatalogContainer";
 
 export default function PAGE() {
     return (

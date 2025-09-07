@@ -1,11 +1,9 @@
 'use client'
-import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/app/contexts/AuthContext";
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { MdDiscount } from "react-icons/md";
-import ButtonAPP from "./ButtonAPP";
+import ButtonAPP from "@/app/components/ButtonAPP";
 
 export default function PlanCard({ recurrenceType = 1, price = 25, disabled = false }) {
   const [paymentLink, setPaymentLink] = useState(null);

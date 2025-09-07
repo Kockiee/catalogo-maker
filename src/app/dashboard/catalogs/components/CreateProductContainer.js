@@ -1,17 +1,17 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useTool } from "../contexts/ToolContext";
+import { useTool } from "../../../contexts/ToolContext";
 import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react";
 import Image from 'next/image'
 import { HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
-import { createProduct } from "../actions/createProduct";
-import { useAuth } from "../contexts/AuthContext";
+import { createProduct } from "../../../actions/createProduct";
+import { useAuth } from "../../../contexts/AuthContext";
 import { redirect } from "next/navigation"
-import ErrorCard from "./ErrorCard";
-import Notification from "./Notification";
+import ErrorCard from "../../../auth/components/ErrorCard";
+import Notification from "../../../components/Notification";
 
 export default function CreateProductContainer({catalogId}) {
     const { catalogs } = useTool();

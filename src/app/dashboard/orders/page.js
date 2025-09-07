@@ -1,4 +1,4 @@
-import OrdersGrid from "@/app/components/OrdersGrid";
+import OrdersGrid from "@/app/dashboard/orders/components/OrdersGrid";
 
 export default function PAGE () {
   return (

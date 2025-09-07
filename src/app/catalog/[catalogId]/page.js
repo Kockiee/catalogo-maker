@@ -1,4 +1,4 @@
-import CatalogProductsGrid from "@/app/components/CatalogProductsGrid";
+import CatalogProductsGrid from "@/app/catalog/components/CatalogProductsGrid";
 
 export default async function PAGE({params}) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/catalogs/get-catalog/${params.catalogId}`);

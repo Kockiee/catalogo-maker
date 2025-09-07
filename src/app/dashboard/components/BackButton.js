@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation"
 import { HiArrowLeft } from "react-icons/hi"
-import ButtonAPP from "./ButtonAPP";
+import ButtonAPP from "../../components/ButtonAPP";
 
 export default function BackButton() {
     const router = useRouter();

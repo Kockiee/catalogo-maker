@@ -1,5 +1,5 @@
 import { MdVerified } from "react-icons/md";
-import PlanCard from "../components/PlanCard";
+import PlanCard from "@/app/dashboard/plan/components/PlanCard";
 
 export default function PricesGrid() {
     return (

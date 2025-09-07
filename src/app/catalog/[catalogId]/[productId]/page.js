@@ -1,4 +1,4 @@
-import CatalogProductPage from "@/app/components/CatalogProductPage";
+import CatalogProductPage from "@/app/catalog/components/CatalogProductPage";
 
 export async function generateMetadata({ params }) {
   const id = params.catalogId;

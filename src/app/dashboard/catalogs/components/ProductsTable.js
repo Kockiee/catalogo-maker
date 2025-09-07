@@ -6,9 +6,9 @@ import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell
 import Link from 'next/link';
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
-import { deleteProducts } from "../actions/deleteProducts";
-import Notification from "./Notification";
-import ButtonAPP from "./ButtonAPP";
+import { deleteProducts } from "../../../actions/deleteProducts";
+import Notification from "../../../components/Notification";
+import ButtonAPP from "../../../components/ButtonAPP";
 
 export default function ProductsTable({ catalogId }) {
     const { catalogs, updateCatalogs } = useTool();

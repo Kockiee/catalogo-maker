@@ -1,11 +1,11 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spinner } from "flowbite-react";
-import { ToolProvider } from "../contexts/ToolContext";
-import ToolContainer from "../components/ToolContainer";
+import { ToolProvider } from "../../contexts/ToolContext";
+import ToolContainer from "./ToolContainer";
 
 export default function DashboardLayout({ children }) {
   const { DBUser, user, mobileMode } = useAuth();

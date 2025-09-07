@@ -1,5 +1,5 @@
 import { FaWhatsapp } from "react-icons/fa6";
-import BackButton from "../components/BackButton";
+import BackButton from "../dashboard/components/BackButton";
 
 export const metadata = {
     title: 'Política de Privacidade',

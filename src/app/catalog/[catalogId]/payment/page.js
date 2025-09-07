@@ -1,4 +1,4 @@
-import CatalogPaymentPage from "@/app/components/CatalogPaymentPage";
+import CatalogPaymentPage from "@/app/catalog/components/CatalogPaymentPage";
 
 export const metadata = {
   title: "Pagamento",

@@ -1,9 +1,9 @@
 'use client'
 import { useTool } from "../contexts/ToolContext"
-import CreateCatalogContainer from "../components/CreateCatalogContainer"
-import CatalogsTable from "../components/CatalogsTable"
+import CreateCatalogContainer from "./components/CreateCatalogContainer"
+import CatalogsTable from "./components/CatalogsTable"
 import { passedSevenDaysOrMore } from "../utils/functions"
-import UpdatesContainer from "../components/UpdatesContainer"
+import UpdatesContainer from "./components/UpdatesContainer"
 
 export default function PAGE() {
     const { catalogs, orders } = useTool()

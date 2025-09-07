@@ -2,7 +2,7 @@
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { HiChartPie,  HiMenu, HiShoppingBag, HiUser, HiViewBoards } from 'react-icons/hi';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { FaExternalLinkAlt, FaSignOutAlt } from "react-icons/fa";
 import { BiSolidCrown } from "react-icons/bi";
 import Link from 'next/link';

@@ -1,4 +1,4 @@
-import CatalogContainer from "@/app/components/CatalogContainer";
+import CatalogContainer from "@/app/catalog/components/CatalogContainer";
 import { CatalogProvider } from "../../contexts/CatalogContext";
 
 export const revalidate = 300;

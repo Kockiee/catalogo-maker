@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Button } from "flowbite-react";
 import { AiOutlineWhatsApp } from "react-icons/ai";
 import { HiCurrencyDollar, HiLightningBolt } from "react-icons/hi";
-import PricesGrid from "./components/PricesGrid";
+import PricesGrid from "@/app/components/PricesGrid";
 import Link from "next/link";
 import ScrollDownButton from "./components/ScrollDownButton";
 import { FiSmartphone } from "react-icons/fi";

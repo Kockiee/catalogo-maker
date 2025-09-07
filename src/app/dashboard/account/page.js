@@ -1,9 +1,9 @@
 'use client'
-import DeleteAccountButton from "@/app/components/DeleteAccountButton"
+import DeleteAccountButton from "@/app/dashboard/account/components/DeleteAccountButton"
 import { useAuth } from "@/app/contexts/AuthContext"
 import moment from "moment-timezone"
 import { Button } from "flowbite-react"
-import CopyButton from "@/app/components/CopyButton"
+import CopyButton from "@/app/dashboard/account/components/CopyButton"
 
 export default function PAGE() {
   const { user, logout, DBUser } = useAuth()
