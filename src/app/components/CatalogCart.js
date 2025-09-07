@@ -59,6 +59,7 @@ export default function CatalogCart({catalog}) {
     return (
         <div className={`max-w-sm w-full fixed top-0 right-0 z-20 transition-transform duration-300 ease-in-out transform ${viewingCart ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="p-6 space-y-2 w-full h-full min-h-screen" style={{backgroundColor: catalog.tertiary_color}}>
+            {/* <div className="p-6 space-y-2 w-full h-full min-h-screen" style={{backgroundColor: catalog.tertiary_color}}> */}
                 <div className="flex justify-between mb-4">
                     <h1 className="text-lg font-bold inline-flex items-center">Seu carrinho <HiShoppingBag className="w-6 h-6 ml-1"/></h1>
                     <button onClick={() => setViewingCart(!viewingCart)} className="p-2">

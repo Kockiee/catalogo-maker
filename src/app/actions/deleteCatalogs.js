@@ -6,7 +6,6 @@ import { deleteWhatsappSession } from "./deleteWhatsappSession";
 import { deleteStorageDirectory } from "./deleteStorageDirectory";
 
 export async function deleteCatalogs(catalogs, userId) {
-    console.log(catalogs)
     for (const catalog of catalogs) {
         const catalogId = catalog.id
         

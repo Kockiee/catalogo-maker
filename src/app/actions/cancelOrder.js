@@ -27,23 +27,23 @@ export async function cancelOrder(formdata, order, waSession) {
         const catalogOwnerChatId = await getChatId(waSession.id, waSession.token);
 
         await sendMessage(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogOwnerChatId, `
-            *Pedido Cancelado*
+*Pedido Cancelado*
 
-            *Pedido:* ${order.id}
-            *Loja*: ${order.store_name}
-            *Cliente/Comprador:* ${order.buyer_name}
-            *Catálogo:* ${order.catalog_id}
-            *Número do Cliente:* ${order.buyer_phone}
-            *Motivo:* ${reason}
+*Pedido:* ${order.id}
+*Loja*: ${order.store_name}
+*Cliente/Comprador:* ${order.buyer_name}
+*Catálogo:* ${order.catalog_id}
+*Número do Cliente:* ${order.buyer_phone}
+*Motivo:* ${reason}
 
-            *PRODUTOS*
-            ${order.content.map((item) => `❌ ${item.quantity} x ${item.name}
-                ${item.variations.map((variation) => `${variation.name}: ${variation.variants}`)}
-            `).join('\n')}
-            *TOTAIS*
-            *Produtos*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-            ---------------------------------
-            *Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+*PRODUTOS*
+${order.content.map((item) => `❌ ${item.quantity} x ${item.name}
+    ${item.variations.map((variation) => `${variation.name}: ${variation.variants}`)}
+`).join('\n')}
+*TOTAIS*
+*Produtos*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+---------------------------------
+*Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
         `)
     }
 }
