@@ -170,7 +170,7 @@ export default function OrdersGrid() {
                     {expandedOrders.includes(index) ? <HiChevronUp className="w-6 h-6"/> : <HiChevronDown className="w-6 h-6"/>}
                 </button>
             </div>
-        ));
+        });
     }
 
     return (
