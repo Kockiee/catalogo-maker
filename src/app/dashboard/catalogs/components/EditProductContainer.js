@@ -9,11 +9,12 @@ import { HiInformationCircle, HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
 import { updateProduct } from "../../../actions/updateProduct";
-import Notification from "../../../components/Notification";
+import { useNotifications } from "../../../hooks/useNotifications";
 import ErrorCard from "../../../auth/components/ErrorCard";
 
 export default function EditProductContainer({catalogId, productId}) { 
     const { catalogs } = useTool();
+    const { notify } = useNotifications();
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
     const product = catalog.products.find(product => product.id === productId);
     const [loading, setLoading] = useState(false);
@@ -25,11 +26,10 @@ export default function EditProductContainer({catalogId, productId}) {
     const [actualImagesURL, setActualImagesURL] = useState(product.images);
     const [toRemoveImages, setToRemoveImages] = useState([]);
     const [variations, setVariations] = useState(product.variations);
-    const [notification, setNotification] = useState(<></>)
 
     const [formState, formAction] = useFormState((state, formdata) => {
         setLoading(true);
-        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando produto...."/>);
+        notify.processing("Atualizando produto...");
         toAddImages.forEach(img => {
             formdata.append('imagesToCreate', img);
         });
@@ -44,7 +44,7 @@ export default function EditProductContainer({catalogId, productId}) {
         if (formState.message !== '') {
             setLoading(false);
             if (formState.message === 'product-updated') {
-                setNotification(<Notification setPattern={setNotification} type="success" message="Produto atualizado com sucesso."/>)
+                notify.productUpdated();
             } else if (formState.message === 'product-already-exists') {
                 setError("Você já tem um produto igual a este no catálogo selecionado.");
             } else if (formState.message === 'invalid-params') {
@@ -88,7 +88,7 @@ export default function EditProductContainer({catalogId, productId}) {
                 <div className="flex flex-col w-full">
                     <form
                     onSubmit={() => {
-                        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando produto..."/>)
+                        notify.processing("Atualizando produto...");
                         setLoading(true)
                     }}
                     action={(formdata) => formAction(formdata)}>
@@ -183,7 +183,6 @@ export default function EditProductContainer({catalogId, productId}) {
                             <ErrorCard error={error}/>
                             <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando produto..." : "Salvar alterações"}</Button>
                         </div>
-                        {notification}
                     </form>
                 </div>
             </div>

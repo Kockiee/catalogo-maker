@@ -3,6 +3,7 @@ import "./globals.css";
 import Main from "./components/Main";
 import { Suspense } from "react";
 import AccessibilityWidget from "./components/Accessibility";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +19,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-br">
       <body className={`${inter.className}`}>
-        <AccessibilityWidget/>
-        <Suspense>
-          <Main>
-            {children}
-          </Main>
-        </Suspense>
+        <NotificationProvider>
+          <AccessibilityWidget/>
+          <Suspense>
+            <Main>
+              {children}
+            </Main>
+          </Suspense>
+        </NotificationProvider>
       </body>
     </html>
   );

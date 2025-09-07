@@ -6,7 +6,7 @@ import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableR
 import Link from 'next/link';
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
-import Notification from "../../components/Notification";
+import { useNotifications } from "../../hooks/useNotifications";
 import { useAuth } from "../../contexts/AuthContext";
 import ButtonAPP from "../../components/ButtonAPP";
 
@@ -14,7 +14,7 @@ export default function CatalogsTable() {
     const { user } = useAuth();
     const { catalogs, updateCatalogs } = useTool();
     const [selectedCatalogs, setSelectedCatalogs] = useState([]);
-    const [notification, setNotification] = useState(null);
+    const { notify } = useNotifications();
 
     useEffect(() => {
       updateCatalogs();
@@ -33,9 +33,9 @@ export default function CatalogsTable() {
     };
 
     const handleDeleteCatalogs = async () => {
-      setNotification(<Notification setPattern={setNotification} type="warning" message="Excluíndo catálogos..."/>);
+      notify.processing("Excluindo catálogos...");
       await deleteCatalogs(selectedCatalogs, user.uid);
-      setNotification(<Notification setPattern={setNotification} type="success" message="Catálogos excluídos com sucesso"/>);
+      notify.catalogDeleted();
       setSelectedCatalogs([]);
       updateCatalogs();
     };
@@ -78,7 +78,6 @@ export default function CatalogsTable() {
           <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
             {selectedCatalogs.length > 0 && (
               <ButtonAPP
-                disabled={notification !== null}
                 onClick={handleDeleteCatalogs}
                 className="m-2 max-[344px]:px-6"
                 negative>
@@ -133,7 +132,6 @@ export default function CatalogsTable() {
             </TableBody>
           </Table>
         </div>
-        {notification}
       </>   
     );
 }

@@ -11,11 +11,12 @@ import { createProduct } from "../../../actions/createProduct";
 import { useAuth } from "../../../contexts/AuthContext";
 import { redirect } from "next/navigation"
 import ErrorCard from "../../../auth/components/ErrorCard";
-import Notification from "../../../components/Notification";
+import { useNotifications } from "../../../hooks/useNotifications";
 
 export default function CreateProductContainer({catalogId}) {
     const { catalogs } = useTool();
     const { user } = useAuth();
+    const { notify } = useNotifications();
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -25,7 +26,6 @@ export default function CreateProductContainer({catalogId}) {
     const [selectedImages, setSelectedImages] = useState([]);
     const [selectedImagesURL, setSelectedImagesURL] = useState([]);
     const [variations, setVariations] = useState([]);
-    const [notification, setNotification] = useState(<></>);
 
     const renderProductImages = () => {
         return selectedImagesURL.map((imageUrl, index) => (
@@ -50,14 +50,14 @@ export default function CreateProductContainer({catalogId}) {
 
     const [formState, formAction] = useFormState((state, formdata) => {
         if (selectedImages.length > 0) {
-            setNotification(<Notification setPattern={setNotification} type="warning" message="Criando produto..."/>);
+            notify.processing("Criando produto...");
             selectedImages.forEach(img => {
                 formdata.append('images', img);
             });
             formdata.set("price", productPrice);
             return createProduct(state, formdata, catalog.id, user.uid, variations);
         } else {
-            setError("Você precisa selecionar ao menos uma imagem para o produto.");
+            notify.imageRequired();
         }
     }, {message: ''});
 
@@ -65,7 +65,7 @@ export default function CreateProductContainer({catalogId}) {
         if (formState.message !== '') {
             setLoading(false);
             if (formState.message === 'product-created') {
-                setNotification(<Notification setPattern={setNotification} type="success" message="Produto criado com sucesso !"/>);
+                notify.productCreated();
                 redirect(`/dashboard/catalogs/${catalog.id}#products-table`);
             } else if (formState.message === 'product-already-exists') {
                 setError("Você já tem um produto igual a este no catálogo selecionado.");
@@ -186,7 +186,6 @@ export default function CreateProductContainer({catalogId}) {
                             <ErrorCard error={error}/>
                             <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando produto..." : "Criar produto"}</Button>
                         </div>
-                        {notification}
                     </form>
                 </div>
             </div>

@@ -8,7 +8,7 @@ import { acceptOrder } from '@/app/actions/acceptOrder';
 import { cancelOrder } from '@/app/actions/cancelOrder';
 import { refuseOrder } from '@/app/actions/refuseOrder';
 import { formatPhoneNumber } from '@/app/utils/functions';
-import Notification from '@/app/components/Notification';
+import { useNotifications } from '@/app/hooks/useNotifications';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -17,7 +17,7 @@ export default function OrdersGrid() {
     const [expandedOrders, setExpandedOrders] = useState([]);
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
     const [showCancelationForm, setShowCancelationForm] = useState(false);
-    const [notification, setNotification] = useState(<></>);
+    const { notify } = useNotifications();
 
     const toggleOrder = (index) => {
         setExpandedOrders(prevState => {
@@ -50,7 +50,7 @@ export default function OrdersGrid() {
                             <form
                             className='flex flex-col'
                             onSubmit={async() => {
-                                setNotification(<Notification setPattern={setNotification} type="error" message="Pedido cancelado com sucesso."/>)
+                                notify.success("Pedido cancelado com sucesso.");
                                 setShowCancelationForm(false);
                                 await updateOrders();
                             }}
@@ -176,7 +176,6 @@ export default function OrdersGrid() {
     return (
         <div className="flex flex-wrap">
             {orders ? renderOrders() : <p className="text-center w-full">*Você ainda não recebeu nenhum pedido*</p>}
-            {notification}
         </div>
     )
 }
