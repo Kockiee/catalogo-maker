@@ -1,4 +1,4 @@
-import CatalogsTable from "@/app/components/CatalogsTable";
+import CatalogsTable from "@/app/dashboard/components/CatalogsTable";
 
 export default function PAGE() {
   return (

@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams } from "next/navigation";
-import { useCatalog } from "../contexts/CatalogContext";
+import { useCatalog } from "../../contexts/CatalogContext";
 import { HiChevronDown, HiShoppingCart } from "react-icons/hi";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import { useState } from "react";

@@ -1,4 +1,4 @@
-import CreateProductContainer from "@/app/components/CreateProductContainer"
+import CreateProductContainer from "@/app/dashboard/catalogs/components/CreateProductContainer"
 
 export default function PAGE({params}) {
     return (

@@ -2,14 +2,14 @@
 import { Button, FileInput, Label, TextInput, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { createCatalog } from "../actions/createCatalog";
-import { useAuth } from "../contexts/AuthContext";
+import { createCatalog } from "../../actions/createCatalog";
+import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from 'react-dom';
-import { useTool } from "../contexts/ToolContext";
+import { useTool } from "../../contexts/ToolContext";
 import { HiInformationCircle } from "react-icons/hi";
-import Notification from "./Notification";
+import Notification from "../../components/Notification";
 import { redirect } from "next/navigation";
-import ErrorCard from "./ErrorCard";
+import ErrorCard from "../../auth/components/ErrorCard";
 
 
 export default function CreateCatalogContainer() {

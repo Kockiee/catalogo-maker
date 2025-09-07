@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
-import BackButton from '../components/BackButton';
+import BackButton from '../dashboard/components/BackButton';
 
 export default function RootLayout({ children }) {
   const { user, DBUser } = useAuth();

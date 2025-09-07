@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useTool } from "../contexts/ToolContext";
+import { useTool } from "../../../contexts/ToolContext";
 import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react";
 import Image from 'next/image'
 import { BiSearch } from "react-icons/bi";
 import { HiInformationCircle, HiTrash } from "react-icons/hi";
 import { useFormState } from 'react-dom';
 import CreateProductVariants from "./ProductVariantsContainer";
-import { updateProduct } from "../actions/updateProduct";
-import Notification from "./Notification";
-import ErrorCard from "./ErrorCard";
+import { updateProduct } from "../../../actions/updateProduct";
+import Notification from "../../../components/Notification";
+import ErrorCard from "../../../auth/components/ErrorCard";
 
 export default function EditProductContainer({catalogId, productId}) { 
     const { catalogs } = useTool();

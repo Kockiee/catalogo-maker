@@ -1,5 +1,5 @@
 'use client'
-import EditProductContainer from "@/app/components/EditProductContainer"
+import EditProductContainer from "@/app/dashboard/catalogs/components/EditProductContainer"
 import { useTool } from "@/app/contexts/ToolContext";
 
 export default function PAGE({params}) {

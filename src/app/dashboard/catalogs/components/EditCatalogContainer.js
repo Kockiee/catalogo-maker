@@ -1,13 +1,13 @@
 'use client'
 import { BiSearch } from "react-icons/bi"
-import { useTool } from "../contexts/ToolContext"
+import { useTool } from "../../../contexts/ToolContext"
 import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react"
 import { useEffect, useState } from "react";
-import { updateCatalog } from "../actions/updateCatalog";
+import { updateCatalog } from "../../../actions/updateCatalog";
 import { useFormState } from 'react-dom'
-import Notification from "./Notification";
+import Notification from "../../../components/Notification";
 import { HiInformationCircle } from "react-icons/hi";
-import ErrorCard from "./ErrorCard";
+import ErrorCard from "../../../auth/components/ErrorCard";
 
 export default function PAGE({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();

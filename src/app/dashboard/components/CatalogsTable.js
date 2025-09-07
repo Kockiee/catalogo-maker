@@ -6,9 +6,9 @@ import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableR
 import Link from 'next/link';
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
-import Notification from "./Notification";
-import { useAuth } from "../contexts/AuthContext";
-import ButtonAPP from "./ButtonAPP";
+import Notification from "../../components/Notification";
+import { useAuth } from "../../contexts/AuthContext";
+import ButtonAPP from "../../components/ButtonAPP";
 
 export default function CatalogsTable() {
     const { user } = useAuth();

@@ -1,6 +1,6 @@
 'use client'
 import { HiSearch, HiShoppingCart } from "react-icons/hi"
-import { useCatalog } from "../contexts/CatalogContext"
+import { useCatalog } from "../../contexts/CatalogContext"
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import Link from "next/link";

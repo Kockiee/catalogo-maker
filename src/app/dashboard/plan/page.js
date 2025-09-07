@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from "react";
-import PlanCard from "@/app/components/PlanCard";
+import PlanCard from "@/app/dashboard/plan/components/PlanCard";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { MdVerified } from "react-icons/md";

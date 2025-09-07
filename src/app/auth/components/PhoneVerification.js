@@ -1,10 +1,10 @@
 'use client'
 import { Button, Label, Radio } from "flowbite-react";
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import ScanQrCode from "./ScanQrCode";
-import { setCatalogWhatsapp } from "../actions/setCatalogWhatsapp";
-import { useTool } from "../contexts/ToolContext";
+import { useAuth } from "../../contexts/AuthContext";
+import ScanQrCode from "../../components/ScanQrCode";
+import { setCatalogWhatsapp } from "../../actions/setCatalogWhatsapp";
+import { useTool } from "../../contexts/ToolContext";
 
 
 export default function PhoneVerification({catalogId}) {
