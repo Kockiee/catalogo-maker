@@ -7,14 +7,14 @@ import Link from 'next/link';
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
 import { deleteProducts } from "../../../actions/deleteProducts";
-import Notification from "../../../components/Notification";
+import { useNotifications } from "../../../hooks/useNotifications";
 import ButtonAPP from "../../../components/ButtonAPP";
 
 export default function ProductsTable({ catalogId }) {
     const { catalogs, updateCatalogs } = useTool();
+    const { notify } = useNotifications();
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
     const [selectedProducts, setSelectedProducts] = useState([]);
-    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
       updateCatalogs();
@@ -29,11 +29,15 @@ export default function ProductsTable({ catalogId }) {
     };
 
     const handleDeleteProducts = async () => {
-      setNotification(<Notification setPattern={setNotification} type="warning" message="Excluindo produtos..."/>);
-      await deleteProducts(selectedProducts);
-      setNotification(<Notification setPattern={setNotification} type="success" message="Produtos excluídos com sucesso"/>);
-      setSelectedProducts([]);
-      updateCatalogs();
+      notify.processing("Excluindo produtos...");
+      try {
+        await deleteProducts(selectedProducts);
+        notify.productDeleted();
+        setSelectedProducts([]);
+        updateCatalogs();
+      } catch (error) {
+        notify.productDeletionFailed();
+      }
     };
 
     const renderProducts = () => {
@@ -74,7 +78,6 @@ export default function ProductsTable({ catalogId }) {
           <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
             {selectedProducts.length > 0 && (
               <ButtonAPP
-                disabled={notification !== null}
                 onClick={handleDeleteProducts}
                 className="m-2 max-[344px]:px-6"
                 negative>
@@ -129,7 +132,6 @@ export default function ProductsTable({ catalogId }) {
             </TableBody>
           </Table>
         </div>
-        {notification}
-      </>
+      </>   
     );
 }

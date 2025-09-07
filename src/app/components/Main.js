@@ -4,11 +4,14 @@ import { usePathname, useSearchParams } from "next/navigation"
 import Providers from "./Providers"
 import NavBar from "./NavBar"
 import CMFooter from "./Footer"
+import { NotificationContainer } from "./Notification"
+import { useNotification } from "../contexts/NotificationContext"
 
 export default function Main({children}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const mobileMode = searchParams.get("mobileMode");
+  const { notifications, removeNotification } = useNotification();
   
   return (
     <>
@@ -33,6 +36,10 @@ export default function Main({children}) {
         {children}
       </div>
     )}
+    <NotificationContainer 
+      notifications={notifications} 
+      onDismiss={removeNotification} 
+    />
     </>
   );
 }

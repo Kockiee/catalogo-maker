@@ -4,18 +4,28 @@ import { useState } from "react"
 import { HiArrowRight } from "react-icons/hi"
 import { useAuth } from "@/app/contexts/AuthContext"
 import ErrorCard from "@/app/auth/components/ErrorCard"
+import { useNotifications } from "../../../hooks/useNotifications"
 
 export default function DeleteAccountButton() {
   const [showingConfirmation, setShowingConfirmation] = useState(false)
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
   const { deleteAccount } = useAuth()
+  const { notify } = useNotifications()
 
   const handleDeleteAccount = async() => {
+    setLoading(true)
+    notify.processing("Excluindo conta...")
+    
     try {
-      await deleteAccount()      
+      await deleteAccount()
+      notify.accountDeleted()
     } catch (err) {
+      setLoading(false)
       if (err.code === "auth/requires-recent-login") {
         setError("Erro: Você precisa ter feito login recentemente para excluir esta conta !")
+      } else {
+        notify.accountDeletionFailed()
       }
     }
   }
@@ -35,8 +45,13 @@ export default function DeleteAccountButton() {
           </p>
           <ErrorCard error={error}/>
           <div className="flex flex-row max-sm:flex-col space-x-2 max-sm:space-x-0 max-sm:space-y-2">
-          <Button onClick={handleDeleteAccount} className="duration-200 !border-4 !border-jordyblue focus:!ring-0 hover:!bg-jordyblue !text-prussianblue w-full" color="">
-            Sim
+          <Button 
+            onClick={handleDeleteAccount} 
+            disabled={loading}
+            className="duration-200 !border-4 !border-jordyblue focus:!ring-0 hover:!bg-jordyblue !text-prussianblue w-full" 
+            color=""
+          >
+            {loading ? "Excluindo..." : "Sim"}
           </Button>
           <Button onClick={() => setShowingConfirmation(false)} className="duration-200 !bg-cornflowerblue !text-lightcyan hover:!bg-jordyblue focus:!ring-cornflowerblue w-full">
             Não
