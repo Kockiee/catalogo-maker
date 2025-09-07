@@ -5,7 +5,7 @@ import { Label, Button, TextInput, Textarea, FileInput } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { updateCatalog } from "../../../actions/updateCatalog";
 import { useFormState } from 'react-dom'
-import Notification from "../../../components/Notification";
+import { useNotifications } from "../../../hooks/useNotifications";
 import { HiInformationCircle } from "react-icons/hi";
 import ErrorCard from "../../../auth/components/ErrorCard";
 
@@ -22,11 +22,11 @@ export default function EditCatalogContainer({catalogId}) {
     const [bannerImage, setBannerImage] = useState(catalog.banner_url);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [notification, setNotification] = useState(<></>);
+    const { notify } = useNotifications();
 
     const [formState, formAction] = useFormState(async(state, formdata) => {
         setLoading(true);
-        setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando catálogo."/>);
+        notify.processing("Atualizando catálogo...");
         return updateCatalog(state, formdata, catalog.id);
     }, {message: ''});
 
@@ -34,7 +34,7 @@ export default function EditCatalogContainer({catalogId}) {
         if (formState.message !== '') {
             setLoading(false);
             if (formState.message === 'catalog-updated') {
-                setNotification(<Notification setPattern={setNotification} type="success" message="Catalogo atualizado com sucesso."/>);
+                notify.catalogUpdated();
                 updateCatalogs();
             } else if (formState.message === 'invalid-params') {
                 setError("Informações de catálogo inválidas.");
@@ -47,7 +47,7 @@ export default function EditCatalogContainer({catalogId}) {
             <div className="flex flex-col w-1/2 max-xl:w-full">
                 <form 
                 onSubmit={() => {
-                    setNotification(<Notification setPattern={setNotification} type="warning" message="Atualizando catálogo..."/>)
+                    notify.processing("Atualizando catálogo...");
                     setLoading(true)
                 }}
                 action={(formdata) => formAction(formdata)}>
@@ -178,7 +178,6 @@ export default function EditCatalogContainer({catalogId}) {
                         <ErrorCard error={error}/>
                         <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Salvando..." : "Salvar alterações"}</Button>
                     </div>
-                    {notification}
                 </form>
             </div>
             <div className="w-1/2 max-xl:w-full max-xl:mt-6 max-xl:pl-0 pl-8">

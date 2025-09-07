@@ -37,8 +37,8 @@ export const useNotifications = () => {
     unauthorized: () => error('Acesso negado. Faça login novamente.'),
 
     // Aviso
-    loading: (message = 'Carregando...') => warning(message, { duration: 0 }),
-    processing: (message = 'Processando...') => warning(message, { duration: 0 }),
+    loading: (message = 'Carregando...') => warning(message),
+    processing: (message = 'Processando...') => warning(message),
     noProductsSelected: () => warning('Selecione pelo menos um produto.'),
     noCatalogsSelected: () => warning('Selecione pelo menos um catálogo.'),
     imageRequired: () => warning('É necessário selecionar uma imagem.'),

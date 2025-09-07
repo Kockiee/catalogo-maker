@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useFormState } from 'react-dom';
 import { useTool } from "../../contexts/ToolContext";
 import { HiInformationCircle } from "react-icons/hi";
-import Notification from "../../components/Notification";
+import { useNotifications } from "../../hooks/useNotifications";
 import { redirect } from "next/navigation";
 import ErrorCard from "../../auth/components/ErrorCard";
 
@@ -24,12 +24,12 @@ export default function CreateCatalogContainer() {
     const { updateCatalogs } = useTool();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [notification, setNotification] = useState(<></>);
+    const { notify } = useNotifications();
 
 
     const [formState, formAction] = useFormState((state, formdata) => {
         if (bannerImage) {
-            setNotification(<Notification setPattern={setNotification} type="warning" message="Criando catálogo..."/>);
+            notify.processing("Criando catálogo...");
             return createCatalog(state, formdata, user.uid);
         } else {
             setError("Você precisa selecionar uma imagem para ser o banner do catálogo")
@@ -39,7 +39,7 @@ export default function CreateCatalogContainer() {
     useEffect(() => {
         if (formState.message !== '') {
             if (formState.message === 'catalog-created') {
-                setNotification(<Notification setPattern={setNotification} type="success" message="Catálogo criado com sucesso !"/>);
+                notify.catalogCreated();
                 updateCatalogs();
                 redirect(`/dashboard/catalogs`);
             } else if (formState.message === 'catalog-already-exists') {
@@ -177,7 +177,6 @@ export default function CreateCatalogContainer() {
                                 <ErrorCard error={error}/>
                                 <Button aria-disabled={loading} type="submit" className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" size="lg">{loading ? "Criando catálogo..." : "Criar catálogo"}</Button>
                             </div>
-                            {notification}
                         </div>
                     </form>
                 </div>
