@@ -15,7 +15,8 @@ import {
   browserLocalPersistence,
   deleteUser,
   signInWithPopup,
-  signInWithRedirect
+  signInWithRedirect,
+  getRedirectResult
 } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createAccount } from "../actions/createAccount";

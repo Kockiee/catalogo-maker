@@ -5,8 +5,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { sendMessage } from "./sendMessage";
 import { getChatId } from "./getChatId";
 
-export async function acceptOrder(order, WhatsappSession) {
-    const response = await sendMessage(WhatsappSession.id, `${order.buyer_phone}@c.us`, 
+export async function acceptOrder(order, waSession) {
+    const response = await sendMessage(waSession.id, waSession.token, `${order.buyer_phone}@c.us`, 
 `*Seu Pedido em ${order.store_name} foi Aceito*
 
 *Pedido:* ${order.id}
@@ -24,10 +24,10 @@ ${order.content.map((item) => `✅ ${item.quantity} x ${item.name}
 ---------------------------------
 *Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
 
-    if(response.status === 200 && WhatsappSession.id !== "catalog-maker") {
-        const catalogOwnerChatId = await getChatId(WhatsappSession.id);
+    if((response.status === 200 || response.status === 201) && waSession.id !== "catalog-maker") {
+        const catalogOwnerChatId = await getChatId(waSession.id, waSession.token);
 
-        await sendMessage(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, catalogOwnerChatId, 
+        await sendMessage(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogOwnerChatId, 
 `*Você Aceitou um Novo Pedido*
 
 *Pedido:* ${order.id}

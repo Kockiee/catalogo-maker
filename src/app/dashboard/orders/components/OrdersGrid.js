@@ -105,7 +105,7 @@ export default function OrdersGrid() {
                                 <p className='p-1 w-full'>Telefone do comprador: 
                                     <a 
                                     className='underline underline-offset-2 decoration-2 decoration-jordyblue hover:decoration-neonblue decoration-dashed' 
-                                    href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Ei, tenho informações sobre a sua venda&type=phone_number&app_absent=0`} 
+                                    href={`https://api.whatsapp.com/send/?phone=${order.buyer_phone}&text=Olá, tenho informações sobre a sua venda&type=phone_number&app_absent=0`} 
                                     target='_blank'>
                                         {formatPhoneNumber(order.buyer_phone)}
                                     </a>
@@ -144,7 +144,7 @@ export default function OrdersGrid() {
                                     id: catalogData.whatsapp_session, 
                                     token: catalogData.whatsapp_session_token
                                 });
-                                updateOrders()
+                                await updateOrders()
                             }}
                             size='md' 
                             className='duration-200 focus:!ring-jordyblue w-[49%] max-lg:w-full bg-neonblue hover:!bg-neonblue/80 text-white'>

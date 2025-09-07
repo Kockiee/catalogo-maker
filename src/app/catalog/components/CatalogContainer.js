@@ -1,11 +1,10 @@
 import CatalogNavbar from "./CatalogNavbar";
 import CatalogCart from "./CatalogCart";
-import { cloneElement } from "react";
 
 export default async function CatalogContainer({children, catalogId}) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/catalogs/get-catalog/${catalogId}`);
     const catalog = await response.json();
-
+    
     return (
         <>
             <CatalogNavbar catalog={catalog}/>

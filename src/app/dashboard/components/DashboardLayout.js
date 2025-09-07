@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }) {
   }, [pathname, isPremiumUser, mobileMode, router]);
 
   // Exibir um spinner de carregamento enquanto os dados do usuário ainda não foram carregados
-  if (user === null || DBUser === null) {
+  if (user === false || user === null || DBUser === false || DBUser === null) {
     return (
       <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
         <Spinner className="text-lightcyan" size="xl" />

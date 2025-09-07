@@ -9,7 +9,7 @@ import Notification from "../../../components/Notification";
 import { HiInformationCircle } from "react-icons/hi";
 import ErrorCard from "../../../auth/components/ErrorCard";
 
-export default function PAGE({catalogId}) {
+export default function EditCatalogContainer({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
     const [identificationName, setIdentificationName] = useState(catalog.name);
