@@ -36,7 +36,7 @@ async function sendMessage(sessionId, sessionToken, chatId, message) {
 }
 
 async function deleteSession(sessionId, sessionToken) {
-    const url = `${API_URL}/api/${sessionId}/logout`;
+    const url = `${API_URL}/api/${sessionId}/logout-session`;
 
     const headers = {
         'Content-Type': 'application/json',
@@ -47,9 +47,9 @@ async function deleteSession(sessionId, sessionToken) {
         method: 'POST',
         headers
     });
-
+ 
     const data = await response.json();
-    return { message: data.response === 'Session closed' ? 'session_terminated' : data.message || data.response };
+    return { status: data.status, message: data.message };
 }
 
 async function startSession(sessionId, sessionToken) {

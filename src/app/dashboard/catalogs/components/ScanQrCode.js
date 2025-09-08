@@ -8,19 +8,28 @@ import { useQrSessionManager } from "@/app/hooks/useQrSessionManager";
 import { useNotifications } from "@/app/hooks/useNotifications";
 
 export default function ScanQrCode({ catalogId, userId }) {
-    const { updateCatalogs } = useTool();
+    const { updateCatalogs, catalogs } = useTool();
     const { notify } = useNotifications();
     const { 
         qrCode, 
         isLoading, 
         isConnected, 
         error, 
-        startSession 
+        startSession,
+        stopSession
     } = useQrSessionManager(catalogId, userId);
 
+    const catalog = catalogs.find(catalog => catalog.id === catalogId);
+
     useEffect(() => {
-        startSession();
-    }, [startSession]);
+        // Só inicia a sessão se o catálogo não tiver whatsapp_session
+        if (!catalog?.whatsapp_session) {
+            startSession();
+        } else {
+            // Se já tem sessão, para qualquer polling ativo
+            stopSession();
+        }
+    }, [startSession, stopSession, catalog?.whatsapp_session]);
 
     useEffect(() => {
         if (isConnected) {
@@ -34,6 +43,11 @@ export default function ScanQrCode({ catalogId, userId }) {
             notify.error(error);
         }
     }, [error, notify]);
+
+    // Se o catálogo já tem whatsapp_session, não renderiza o QR
+    if (catalog?.whatsapp_session) {
+        return null;
+    }
 
     if (isConnected) {
         return (
