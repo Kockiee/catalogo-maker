@@ -1,8 +1,9 @@
 'use client'
 import { useTool } from "../../../contexts/ToolContext"
-import { Button } from "flowbite-react"
+import { Button, Tooltip } from "flowbite-react"
 import { useEffect, useState } from "react";
 import { updateCatalog } from "../../../actions/updateCatalog";
+import { disconnectCatalogWhatsapp } from "../../../actions/disconnectCatalogWhatsapp";
 import { useFormState } from 'react-dom'
 import { useNotifications } from "../../../hooks/useNotifications";
 import ErrorCard from "../../../auth/components/ErrorCard";
@@ -10,6 +11,8 @@ import FormField from "../../../components/FormField";
 import ImageUpload from "../../../components/ImageUpload";
 import ColorPickerGroup from "../../../components/ColorPickerGroup";
 import CatalogPreview from "../../../components/CatalogPreview";
+import { HiExclamationCircle, HiLogout } from "react-icons/hi";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function EditCatalogContainer({catalogId}) {
     const { catalogs, updateCatalogs } = useTool();
@@ -26,10 +29,41 @@ export default function EditCatalogContainer({catalogId}) {
     const [bannerImage, setBannerImage] = useState(catalog.banner_url);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [isDisconnecting, setIsDisconnecting] = useState(false);
+    const [showDisconnectModal, setShowDisconnectModal] = useState(false);
     const { notify } = useNotifications();
 
     const handleColorChange = (colorKey, value) => {
         setColors(prev => ({ ...prev, [colorKey]: value }));
+    };
+
+    const handleDisconnectWhatsapp = async () => {
+        if (!catalog.whatsapp_session) return;
+        
+        setIsDisconnecting(true);
+        setShowDisconnectModal(false);
+        notify.processing("Desconectando sessão do WhatsApp...");
+        
+        try {
+            const result = await disconnectCatalogWhatsapp(catalogId, catalog.whatsapp_session, catalog.whatsapp_session_token);
+            
+            if (result.success) {
+                notify.success(result.message);
+                // Atualizar a lista de catálogos para refletir a mudança
+                await updateCatalogs();
+            } else {
+                notify.error(result.message);
+            }
+        } catch (error) {
+            console.error("Erro ao desconectar WhatsApp:", error);
+            notify.error("Erro ao desconectar sessão do WhatsApp");
+        } finally {
+            setIsDisconnecting(false);
+        }
+    };
+
+    const openDisconnectModal = () => {
+        setShowDisconnectModal(true);
     };
 
     const [formState, formAction] = useFormState(async(state, formdata) => {
@@ -51,6 +85,7 @@ export default function EditCatalogContainer({catalogId}) {
     }, [formState]);
 
     return (
+        <>
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
             <div className="flex flex-col w-1/2 max-xl:w-full">
                 <form 
@@ -142,6 +177,22 @@ export default function EditCatalogContainer({catalogId}) {
                             {loading ? "Salvando..." : "Salvar alterações"}
                         </Button>
                     </div>
+
+                    {/* Botão para trocar WhatsApp */}
+                    <div className="py-2 w-full">
+                        <Tooltip content="Trocar WhatsApp do catálogo" placement="top" arrow={false} trigger="hover">
+                            <Button
+                                color="success"
+                                size="lg"
+                                disabled={isDisconnecting || loading}
+                                onClick={openDisconnectModal}
+                                className="w-full flex items-center justify-center gap-2"
+                            >
+                                <FaWhatsapp className="w-5 h-5 mr-1" />
+                                Trocar WhatsApp do catálogo
+                            </Button>
+                        </Tooltip>
+                    </div>
                 </form>
             </div>
             <CatalogPreview
@@ -154,5 +205,70 @@ export default function EditCatalogContainer({catalogId}) {
                 bannerImage={bannerImage}
             />
         </div>
+
+        {/* Modal de confirmação para desconectar WhatsApp */}
+        {showDisconnectModal && (
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <div className="mt-3">
+                        {/* Header */}
+                        <div className="flex items-center gap-2 mb-4">
+                            <HiExclamationCircle className="w-6 h-6 text-yellow-500" />
+                            <h3 className="text-lg font-medium text-gray-900">Alterar configuração do WhatsApp</h3>
+                        </div>
+                        
+                        {/* Body */}
+                        <div className="space-y-4">
+                            <p className="text-gray-700">
+                                Você está prestes a desconectar a sessão atual do WhatsApp deste catálogo.
+                            </p>
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <h4 className="font-semibold text-yellow-800 mb-2">O que acontecerá:</h4>
+                                <ul className="text-sm text-yellow-700 space-y-1">
+                                    <li>• A sessão atual do WhatsApp será desconectada</li>
+                                    <li>• Você precisará configurar uma nova sessão</li>
+                                    <li>• O catálogo ficará temporariamente indisponível para pedidos</li>
+                                    <li>• Você poderá usar o mesmo ou um novo número do WhatsApp</li>
+                                </ul>
+                            </div>
+                            <p className="text-gray-600 text-sm">
+                                <strong>Tem certeza que deseja continuar?</strong>
+                            </p>
+                        </div>
+                        
+                        {/* Footer */}
+                        <div className="flex gap-3 mt-6">
+                            <Button
+                                color="gray"
+                                onClick={() => setShowDisconnectModal(false)}
+                                disabled={isDisconnecting}
+                                className="flex-1"
+                            >
+                                Cancelar
+                            </Button>
+                            <Button
+                                color="warning"
+                                onClick={handleDisconnectWhatsapp}
+                                disabled={isDisconnecting}
+                                className="flex-1 flex items-center justify-center gap-2"
+                            >
+                                {isDisconnecting ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                        Desconectando...
+                                    </>
+                                ) : (
+                                    <>
+                                        <HiLogout className="w-4 h-4" />
+                                        Sim, alterar configuração
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     )
 }

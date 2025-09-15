@@ -11,6 +11,8 @@ export async function createProduct(prevState, formData, catalogId, uid, variant
     const description = formData.get('description');
     const soldInCatalog = formData.get('soldInCatalog');
 
+    console.log("createProduct called with name:", name, "description:", description, "price:", price, "uid:", uid, "images:", images, "variants:", variants);
+
     if (name && description && price && uid && images) {
         const colRef = collection(db, "products");
         const q = query(colRef, where("name", "==", name), where("catalog", "==", catalogId));

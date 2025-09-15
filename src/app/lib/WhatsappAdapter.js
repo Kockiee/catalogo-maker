@@ -36,31 +36,43 @@ async function sendMessage(sessionId, sessionToken, chatId, message) {
 }
 
 async function deleteSession(sessionId, sessionToken) {
-    const url = `${API_URL}/api/${sessionId}/logout-session`;
+    const closeSessionUrl = `${API_URL}/api/${sessionId}/close-session`;
+    const clearSessionDataUrl = `${API_URL}/api/${sessionId}/${API_KEY}/clear-session-data`;
 
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${sessionToken}`
     };
 
-    const response = await fetch(url, {
+    // Fecha a sessão
+    const closeSessionResponse = await fetch(closeSessionUrl, {
         method: 'POST',
         headers
     });
- 
-    const data = await response.json();
-    return { status: data.status, message: data.message };
+    const closeSessionData = await closeSessionResponse.json();
+
+    // Limpa os dados da sessão
+    const clearSessionDataResponse = await fetch(clearSessionDataUrl, {
+        method: 'POST',
+        headers
+    });
+    const clearSessionDataData = await clearSessionDataResponse.json();
+
+
+    if (closeSessionData.status && clearSessionDataData.success) {
+        return { status: "SUCCESS", message: "Sessão do WhatsApp deletada com sucesso" };
+    } else {
+        return { status: "ERROR", message: "Erro ao deletar sessão do WhatsApp" };
+    }
 }
 
 async function startSession(sessionId, sessionToken) {
     let token = sessionToken;
-    console.log("startSession called with sessionId:", sessionId, "and sessionToken:", sessionToken);
 
     if (sessionToken === "" || !sessionToken || sessionToken === null) {
         const generateSessionToken = await fetch(`${API_URL}/api/${sessionId}/${API_KEY}/generate-token`, {method: 'POST'});
         const sessionTokenData = await generateSessionToken.json();
         token = sessionTokenData.token
-        console.log("Generated new session token:", token);
     }
 
     const headers = {
@@ -97,7 +109,6 @@ async function getSessionStatus(sessionId, sessionToken) {
     const checkStatus = async () => {
         const response = await fetch(`${API_URL}/api/${sessionId}/status-session`, { headers });
         const data = await response.json();
-        console.log("getSessionStatus:\n", data)
         return data;
     };
 
@@ -106,7 +117,7 @@ async function getSessionStatus(sessionId, sessionToken) {
     
     while (data.status === "CLOSED" && attempts < 2) {
         attempts++;
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         data = await checkStatus();
     }
 
@@ -121,7 +132,6 @@ async function getChatId(sessionId, sessionToken) {
 
     const response = await fetch(`${API_URL}/api/${sessionId}/get-phone-number`, { headers });
     const data = await response.json();
-    console.log("getChatId:\n" + data)
     return data.response;
 }
 

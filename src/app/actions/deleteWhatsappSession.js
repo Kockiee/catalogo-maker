@@ -2,6 +2,6 @@
 
 import { WhatsappAdapter } from "../lib/WhatsappAdapter";
 
-export async function deleteWhatsappSession(sessionId) {
-    return await WhatsappAdapter.deleteSession(sessionId);
+export async function deleteWhatsappSession(sessionId, sessionToken) {
+    return await WhatsappAdapter.deleteSession(sessionId, sessionToken);
 }
