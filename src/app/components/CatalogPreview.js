@@ -37,7 +37,7 @@ export default function CatalogPreview({
                             backgroundColor: tertiaryColor, 
                             backgroundImage: bannerImage ? `url(${bannerImage})` : 'none'
                         }}
-                    />
+                    ></div>
                     <div 
                         className="p-2 rounded-lg flex flex-col m-2" 
                         style={{

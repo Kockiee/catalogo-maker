@@ -24,7 +24,7 @@ export default function ProductForm({
     children // Para componentes adicionais como ProductVariants
 }) {
     return (
-        <form onSubmit={onSubmit}>
+        <div>
             <FormField
                 label="Nome do produto"
                 name="name"
@@ -79,14 +79,14 @@ export default function ProductForm({
             <div className="py-2 w-full">
                 <ErrorCard error={error}/>
                 <Button 
-                    aria-disabled={loading} 
+                    disabled={loading}
                     type="submit" 
                     className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" 
                     size="lg"
                 >
-                    {loading ? "Processando..." : submitText}
+                    {loading ? "Criando produto..." : submitText}
                 </Button>
             </div>
-        </form>
+        </div>
     );
 }

@@ -5,7 +5,7 @@ import { Button, Label } from "flowbite-react";
 
 export default function CreateProductVariants({variations, setVariations}) {
     const [newVariationName, setNewVariationName] = useState('');
-    const [newVariantName, setNewVariantName] = useState('');
+    const [variantInputs, setVariantInputs] = useState({});
   
     const addVariation = () => {
       if (newVariationName.trim() === '') return;
@@ -18,17 +18,28 @@ export default function CreateProductVariants({variations, setVariations}) {
     };
   
     const addVariant = (index) => {
-      if (newVariantName.trim() === '') return;
+      const variantName = variantInputs[index] || '';
+      if (variantName.trim() === '') return;
       const updatedVariations = [...variations];
-      updatedVariations[index].variants.push(newVariantName.trim());
+      updatedVariations[index].variants.push(variantName.trim());
       setVariations(updatedVariations);
-      setNewVariantName('');
+      setVariantInputs(prev => {
+        const newInputs = {...prev};
+        delete newInputs[index];
+        return newInputs;
+      });
     };
 
     const deleteVariation = (index) => {
       const updatedVariations = [...variations];
       updatedVariations.splice(index, 1);
       setVariations(updatedVariations);
+      // Limpar o input correspondente
+      setVariantInputs(prev => {
+        const newInputs = {...prev};
+        delete newInputs[index];
+        return newInputs;
+      });
     };
 
     const deleteVariant = (vIndex, index) => {
@@ -66,8 +77,11 @@ export default function CreateProductVariants({variations, setVariations}) {
               <input
                 type="text"
                 placeholder="Exemplo: Preto/Branco"
-                value={newVariantName}
-                onChange={(e) => setNewVariantName(e.target.value)}
+                value={variantInputs[index] || ''}
+                onChange={(e) => setVariantInputs(prev => ({
+                  ...prev,
+                  [index]: e.target.value
+                }))}
                 className="border border-gray-300 px-3 py-2 w-full rounded-md mr-2 text-sm"
               />
               <Button
