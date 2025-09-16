@@ -38,7 +38,7 @@ export default function PriceInput({
                 value={label} 
             />
             <TextInput
-                color="blue"
+                color="light"
                 name={name}
                 id={id}
                 type="text"
@@ -46,6 +46,7 @@ export default function PriceInput({
                 aria-disabled={disabled}
                 required={required}
                 onChange={handlePriceChange}
+                className="focus:ring-primary-200 focus:border-primary-300"
                 defaultValue={value ? value.toLocaleString('pt-BR', { 
                     style: 'currency', 
                     currency: 'BRL' 

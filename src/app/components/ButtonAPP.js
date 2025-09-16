@@ -9,7 +9,7 @@ export default function ButtonAPP({children, negative=false, onClick=() => {}, h
                 <Link href={href} target={target} className={className}>
                     <Button
                     disabled={disabled}
-                    className={`w-full h-full flex items-center duration-200 !border-b-4 ${negative ? '!bg-red-500 hover:!bg-red-600 focus:!ring-red-400' : '!bg-neonblue hover:!bg-neonblue/90 focus:!ring-periwinkle'}`} 
+                    className={`w-full h-full flex items-center duration-200 !border-b-4 ${negative ? '!bg-error hover:!bg-error/90 focus:!ring-error/50' : '!bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200'}`} 
                     onClick={onClick}>
                         {children}
                     </Button>
@@ -18,7 +18,7 @@ export default function ButtonAPP({children, negative=false, onClick=() => {}, h
                 <Button 
                 disabled={disabled}
                 type={type} 
-                className={`${className} flex items-center duration-200 !border-b-4 ${negative ? '!bg-red-500 hover:!bg-red-600 focus:!ring-red-400' : '!bg-neonblue hover:!bg-neonblue/90 focus:!ring-periwinkle'}`} 
+                className={`${className} flex items-center duration-200 !border-b-4 ${negative ? '!bg-error hover:!bg-error/90 focus:!ring-error/50' : '!bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200'}`} 
                 onClick={onClick}
                 >
                     {children}

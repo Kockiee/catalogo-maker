@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from "react";
 import QRCodeComponent from "@/app/components/QrCodeComponent";
-import { Spinner } from "flowbite-react";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 import { CiMenuKebab } from "react-icons/ci";
 import { useTool } from "@/app/contexts/ToolContext";
 import { useQrSessionManager } from "@/app/hooks/useQrSessionManager";
@@ -72,7 +72,7 @@ export default function ScanQrCode({ catalogId, userId }) {
                 <QRCodeComponent data={qrCode} />
             ) : (
                 <div className="flex justify-center items-center w-[225px] h-[225px]">
-                    <Spinner className="text-lightcyan" size={'xl'} />
+                    <LoadingSpinner size="lg" showMessage={false} />
                 </div>
             )}
             <div className="p-4 pl-6 text-sm">

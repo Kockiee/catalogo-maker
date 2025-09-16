@@ -59,13 +59,15 @@ export default function CreateCatalogContainer() {
     }, [formState]);
 
     return (
-        <div>
-            <h1 className="text-3xl font-black mb-2">Crie um catálogo agora.</h1>
-            <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
-                <div className="flex flex-col w-1/2 max-xl:w-full">
+        <div className="w-full">
+            <h1 className="text-3xl font-black mb-6 text-primary-800">Crie um catálogo agora.</h1>
+            <div className="bg-white p-6 lg:p-8 rounded-lg shadow-md">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
+                    <div className="flex flex-col">
                     <form 
                     onSubmit={() => setLoading(true)}
-                    action={(formdata) => formAction(formdata)}>
+                    action={(formdata) => formAction(formdata)}
+                    className="space-y-6">
                         <FormField
                             label="Nome de identificação"
                             name="identificationName"
@@ -150,16 +152,22 @@ export default function CreateCatalogContainer() {
                             </Button>
                         </div>
                     </form>
+                    </div>
+                    <div className="flex flex-col">
+                        <h2 className="text-xl font-semibold mb-4 text-primary-800">Pré-visualização</h2>
+                        <div className="sticky top-4">
+                            <CatalogPreview
+                                storeName={storeName}
+                                storeDescription={storeDescription}
+                                primaryColor={colors.primaryColor}
+                                secondaryColor={colors.secondaryColor}
+                                tertiaryColor={colors.tertiaryColor}
+                                textColor={colors.textColor}
+                                bannerImage={bannerImage}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <CatalogPreview
-                    storeName={storeName}
-                    storeDescription={storeDescription}
-                    primaryColor={colors.primaryColor}
-                    secondaryColor={colors.secondaryColor}
-                    tertiaryColor={colors.tertiaryColor}
-                    textColor={colors.textColor}
-                    bannerImage={bannerImage}
-                />
             </div>
         </div>
     );

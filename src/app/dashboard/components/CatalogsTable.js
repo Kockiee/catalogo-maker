@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react";
 import { deleteCatalogs } from "@/app/actions/deleteCatalogs";
 import { useTool } from "@/app/contexts/ToolContext";
-import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow} from 'flowbite-react';
 import Link from 'next/link';
-import { BiEdit } from "react-icons/bi";
-import { HiPlus, HiTrash } from "react-icons/hi";
 import { useNotifications } from "../../hooks/useNotifications";
 import { useAuth } from "../../contexts/AuthContext";
-import ButtonAPP from "../../components/ButtonAPP";
+import ResponsiveTable from "../../components/ResponsiveTable";
+import ActionButtons from "../../components/ActionButtons";
+import { TableCell } from "flowbite-react";
 
 export default function CatalogsTable() {
     const { user } = useAuth();
@@ -20,15 +19,23 @@ export default function CatalogsTable() {
       updateCatalogs();
     }, []);
 
-    const toggleCatalogSelection = (catalogId, whatsappSession) => {
-      console.log(selectedCatalogs)
-      const selectedIndex = selectedCatalogs.findIndex(cat => cat.id === catalogId && cat.whatsapp_session === whatsappSession);
+    const toggleCatalogSelection = (catalogId) => {
+      const selectedIndex = selectedCatalogs.findIndex(cat => cat.id === catalogId);
       if (selectedIndex !== -1) {
         const updatedSelectedCatalogs = [...selectedCatalogs];
         updatedSelectedCatalogs.splice(selectedIndex, 1);
         setSelectedCatalogs(updatedSelectedCatalogs);
       } else {
-        setSelectedCatalogs(prevState => [...prevState, { id: catalogId, whatsapp_session: whatsappSession }]);
+        const catalog = catalogs.find(cat => cat.id === catalogId);
+        setSelectedCatalogs(prevState => [...prevState, { id: catalogId, whatsapp_session: catalog.whatsapp_session }]);
+      }
+    };
+
+    const handleSelectAll = () => {
+      if (selectedCatalogs.length === catalogs.length) {
+        setSelectedCatalogs([]);
+      } else {
+        setSelectedCatalogs(catalogs.map(catalog => ({ id: catalog.id, whatsapp_session: catalog.whatsapp_session })));
       }
     };
 
@@ -40,98 +47,90 @@ export default function CatalogsTable() {
       updateCatalogs();
     };
 
-    const renderCatalogs = () => {
-      return catalogs?.map((catalog, index) => (
-        <TableRow key={index} className="bg-lightcyan text-prussianblue">
-          <TableCell>
-            <Checkbox
-              checked={selectedCatalogs.some(cat => cat.id === catalog.id && cat.whatsapp_session === catalog.whatsapp_session)}
-              onChange={() => toggleCatalogSelection(catalog.id, catalog.whatsapp_session)}
-              className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-          </TableCell>
-          <TableCell className="whitespace-nowrap font-bold">
-            <Link className="py-4 hover:underline" href={`/dashboard/catalogs/${catalog.id}`}>
-              {catalog.name}
-            </Link>
-          </TableCell>
-          <TableCell>
-            {catalog.store_name}
-          </TableCell>
-          <TableCell>
-            {catalog.products.length}
-          </TableCell>
-          <TableCell>
-            {new Date(catalog.created_at.seconds * 1000).toLocaleString()}
-          </TableCell>
-          <TableCell>
-            <Link href={`/dashboard/catalogs/${catalog.id}`} className="font-bold text-neonblue hover:underline">
-              Editar
-            </Link>
-          </TableCell>
-        </TableRow>
-      ));
-    };
+    const renderCatalogRow = (catalog, index) => (
+      <>
+        <TableCell className="whitespace-nowrap font-bold">
+          <Link className="py-4 hover:underline text-primary-600" href={`/dashboard/catalogs/${catalog.id}`}>
+            {catalog.name}
+          </Link>
+        </TableCell>
+        <TableCell>
+          {catalog.store_name}
+        </TableCell>
+        <TableCell>
+          {catalog.products.length}
+        </TableCell>
+        <TableCell>
+          {new Date(catalog.created_at.seconds * 1000).toLocaleString()}
+        </TableCell>
+        <TableCell>
+          <Link href={`/dashboard/catalogs/${catalog.id}`} className="font-bold text-primary-400 hover:underline">
+            Editar
+          </Link>
+        </TableCell>
+      </>
+    );
+
+    const renderCatalogCard = (catalog, index) => (
+      <div className="space-y-3">
+        <div className="flex justify-between items-start">
+          <Link className="text-lg font-bold text-primary-600 hover:underline" href={`/dashboard/catalogs/${catalog.id}`}>
+            {catalog.name}
+          </Link>
+          <Link href={`/dashboard/catalogs/${catalog.id}`} className="text-sm font-bold text-primary-400 hover:underline">
+            Editar
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="font-medium text-gray-600">Loja:</span>
+            <p className="text-gray-800">{catalog.store_name}</p>
+          </div>
+          <div>
+            <span className="font-medium text-gray-600">Produtos:</span>
+            <p className="text-gray-800">{catalog.products.length}</p>
+          </div>
+        </div>
+        
+        <div className="text-sm">
+          <span className="font-medium text-gray-600">Criado em:</span>
+          <p className="text-gray-800">{new Date(catalog.created_at.seconds * 1000).toLocaleString()}</p>
+        </div>
+      </div>
+    );
+
+    const columns = [
+      { label: "Nome" },
+      { label: "Loja" },
+      { label: "Qtd. de Produtos" },
+      { label: "Data de criação" },
+      { label: "Ações" }
+    ];
 
     return (
       <>
-        <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
-          <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
-            {selectedCatalogs.length > 0 && (
-              <ButtonAPP
-                onClick={handleDeleteCatalogs}
-                className="m-2 max-[344px]:px-6"
-                negative>
-                <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
-              </ButtonAPP>
-            )}
-            <Link href="/dashboard/catalogs/new-catalog">
-              <ButtonAPP
-                className="m-2 max-[344px]:px-6"
-              >
-                <HiPlus className="w-5 h-5 mr-1"/> Criar
-              </ButtonAPP>
-            </Link>
-            {selectedCatalogs.length === 1 && (
-              <ButtonAPP href={`/dashboard/catalogs/${selectedCatalogs[0].id}`} className="m-2 max-[344px]:px-6">
-                <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
-              </ButtonAPP>
-            )}
-          </div>
-        </div>
-        <div className="overflow-x-auto shadow-md rounded-lg">
-          <Table>
-            <TableHead>
-              <TableHeadCell className="p-4 bg-cornflowerblue">
-                {catalogs !== null && (
-                  <Checkbox
-                    checked={selectedCatalogs.length === catalogs.length}
-                    onChange={() => {
-                      if (selectedCatalogs.length === catalogs.length) {
-                        setSelectedCatalogs([]);
-                      } else {
-                        setSelectedCatalogs(catalogs.map(catalog => ({ id: catalog.id, whatsapp_session: catalog.whatsapp_session })));
-                      }
-                    }}
-                    className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-                )}
-              </TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Nome</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Loja</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Qtd. de Produtos</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Data de criação</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">
-                <span className="sr-only">Editar</span>
-              </TableHeadCell>
-            </TableHead>
-            <TableBody className="divide-y !w-full">
-              {catalogs === null ? (
-                <TableRow className="bg-jordyblue text-white">
-                  <TableCell colSpan={6}>Você ainda não criou um catálogo.</TableCell>
-                </TableRow>
-              ) : renderCatalogs()}
-            </TableBody>
-          </Table>
-        </div>
+        <ActionButtons
+          selectedCount={selectedCatalogs.length}
+          onDelete={handleDeleteCatalogs}
+          onCreateHref="/dashboard/catalogs/new-catalog"
+          onEditHref={selectedCatalogs.length === 1 ? `/dashboard/catalogs/${selectedCatalogs[0].id}` : "#"}
+          createLabel="Criar Catálogo"
+          editLabel="Editar Catálogo"
+          deleteLabel="Deletar Catálogos"
+        />
+        
+        <ResponsiveTable
+          columns={columns}
+          data={catalogs || []}
+          renderRow={renderCatalogRow}
+          renderMobileCard={renderCatalogCard}
+          onSelectAll={handleSelectAll}
+          onSelectItem={toggleCatalogSelection}
+          selectedItems={selectedCatalogs.map(cat => cat.id)}
+          selectable={true}
+          emptyMessage="Você ainda não criou um catálogo."
+        />
       </>   
     );
 }

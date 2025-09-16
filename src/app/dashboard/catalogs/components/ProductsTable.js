@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useTool } from "@/app/contexts/ToolContext";
-import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import Link from 'next/link';
-import { BiEdit } from "react-icons/bi";
-import { HiPlus, HiTrash } from "react-icons/hi";
 import { deleteProducts } from "../../../actions/deleteProducts";
 import { useNotifications } from "../../../hooks/useNotifications";
-import ButtonAPP from "../../../components/ButtonAPP";
+import ResponsiveTable from "../../../components/ResponsiveTable";
+import ActionButtons from "../../../components/ActionButtons";
+import { TableCell } from "flowbite-react";
 
 export default function ProductsTable({ catalogId }) {
     const { catalogs, updateCatalogs } = useTool();
@@ -28,6 +27,14 @@ export default function ProductsTable({ catalogId }) {
       }
     };
 
+    const handleSelectAll = () => {
+      if (selectedProducts.length === catalog.products.length) {
+        setSelectedProducts([]);
+      } else {
+        setSelectedProducts(catalog.products.map(product => product.id));
+      }
+    };
+
     const handleDeleteProducts = async () => {
       notify.processing("Excluindo produtos...");
       try {
@@ -40,98 +47,92 @@ export default function ProductsTable({ catalogId }) {
       }
     };
 
-    const renderProducts = () => {
-      return catalog.products.map((product, index) => (
-        <TableRow key={index} className="bg-lightcyan text-prussianblue">
-          <TableCell>
-            <Checkbox
-              checked={selectedProducts.includes(product.id)}
-              onChange={() => toggleProductSelection(product.id)}
-              className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-          </TableCell>
-          <TableCell className="whitespace-nowrap font-bold">
-            <Link className="py-4 hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
-              {product.name}
-            </Link>
-          </TableCell>
-          <TableCell>
-            {catalog.name}
-          </TableCell>
-          <TableCell>
-            {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-          </TableCell>
-          <TableCell>
-            {new Date(product.created_at.seconds * 1000).toLocaleString()}
-          </TableCell>
-          <TableCell>
-            <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="font-bold text-neonblue hover:underline">
-              Editar
-            </Link>
-          </TableCell>
-        </TableRow>
-      ));
-    };
+    const renderProductRow = (product, index) => (
+      <>
+        <TableCell className="whitespace-nowrap font-bold">
+          <Link className="py-4 hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
+            {product.name}
+          </Link>
+        </TableCell>
+        <TableCell>
+          {catalog.name}
+        </TableCell>
+        <TableCell>
+          {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        </TableCell>
+        <TableCell>
+          {new Date(product.created_at.seconds * 1000).toLocaleString()}
+        </TableCell>
+        <TableCell>
+          <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="font-bold text-neonblue hover:underline">
+            Editar
+          </Link>
+        </TableCell>
+      </>
+    );
+
+    const renderProductCard = (product, index) => (
+      <div className="space-y-3">
+        <div className="flex justify-between items-start">
+          <Link className="text-lg font-bold text-prussianblue hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
+            {product.name}
+          </Link>
+          <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="text-sm font-bold text-neonblue hover:underline">
+            Editar
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="font-medium text-gray-600">Catálogo:</span>
+            <p className="text-gray-800">{catalog.name}</p>
+          </div>
+          <div>
+            <span className="font-medium text-gray-600">Preço:</span>
+            <p className="text-gray-800 font-bold text-green-600">
+              {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </p>
+          </div>
+        </div>
+        
+        <div className="text-sm">
+          <span className="font-medium text-gray-600">Criado em:</span>
+          <p className="text-gray-800">{new Date(product.created_at.seconds * 1000).toLocaleString()}</p>
+        </div>
+      </div>
+    );
+
+    const columns = [
+      { label: "Nome" },
+      { label: "Catálogo" },
+      { label: "Preço" },
+      { label: "Data de criação" },
+      { label: "Ações" }
+    ];
 
     return (
       <>
-        <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
-          <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
-            {selectedProducts.length > 0 && (
-              <ButtonAPP
-                onClick={handleDeleteProducts}
-                className="m-2 max-[344px]:px-6"
-                negative>
-                <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
-              </ButtonAPP>
-            )}
-            <ButtonAPP
-              href={`/dashboard/catalogs/${catalogId}/new-product`}
-              className="m-2 max-[344px]:px-6">
-              <HiPlus className="w-5 h-5 mr-1 "/> Criar
-            </ButtonAPP>
-            {selectedProducts.length === 1 && (
-              <ButtonAPP
-              href={`/dashboard/catalogs/${catalogId}/${selectedProducts[0]}`}
-              className="m-2 max-[344px]:px-6">
-                <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
-              </ButtonAPP>
-            )}
-          </div>
-        </div>
-        <div className="overflow-x-auto shadow-md rounded-lg">
-          <Table>
-            <TableHead>
-              <TableHeadCell className="p-4 bg-cornflowerblue">
-                {catalog.products && catalog.products.length > 0 && (
-                  <Checkbox
-                    checked={selectedProducts.length === catalog.products.length}
-                    onChange={() => {
-                      if (selectedProducts.length === catalog.products.length) {
-                        setSelectedProducts([]);
-                      } else {
-                        setSelectedProducts(catalog.products.map(product => product.id));
-                      }
-                    }}
-                    className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-                )}
-              </TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Nome</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Catálogo</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Preço</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Data de criação</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">
-                <span className="sr-only">Editar</span>
-              </TableHeadCell>
-            </TableHead>
-            <TableBody className="divide-y !w-full">
-              {catalog.products.length < 1 ? (
-                <TableRow className="bg-jordyblue text-white">
-                  <TableCell colSpan={6}>Você ainda não criou um produto.</TableCell>
-                </TableRow>
-              ) : renderProducts()}
-            </TableBody>
-          </Table>
-        </div>
+        <ActionButtons
+          selectedCount={selectedProducts.length}
+          onDelete={handleDeleteProducts}
+          onCreateHref={`/dashboard/catalogs/${catalogId}/new-product`}
+          onEditHref={selectedProducts.length === 1 ? `/dashboard/catalogs/${catalogId}/${selectedProducts[0]}` : "#"}
+          createLabel="Criar Produto"
+          editLabel="Editar Produto"
+          deleteLabel="Deletar Produtos"
+        />
+        
+        <ResponsiveTable
+          columns={columns}
+          data={catalog.products || []}
+          renderRow={renderProductRow}
+          renderMobileCard={renderProductCard}
+          onSelectAll={handleSelectAll}
+          onSelectItem={toggleProductSelection}
+          selectedItems={selectedProducts}
+          selectable={true}
+          emptyMessage="Você ainda não criou um produto."
+        />
       </>   
     );
 }

@@ -1,26 +1,50 @@
 'use client'
 import { useTool } from "../../contexts/ToolContext";
-import { Spinner } from "flowbite-react"
+import { FullScreenLoader } from "../../components/LoadingSpinner";
 import SideBar from "./SideBar";
 import BackButton from "./BackButton";
+import { useState, useEffect } from "react";
 
 export default function ToolContainer({children}) {
     const { catalogs } = useTool();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    // Detectar se estamos em mobile/tablet
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
         <>
         {catalogs === false ? (
-            <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
-              <Spinner className="text-lightcyan" size="xl"/>
-              <span>Carregando o dashboard...</span>
-            </div>        
+            <FullScreenLoader message="Carregando o dashboard..." />
         ) : (
             <>
-                <div className="w-full">
-                    <SideBar/>
-                    <div className="p-16 max-lg:px-0 max-sm:pt-4 pl-80 pb-48">
+                <div className="w-full min-h-screen">
+                    <SideBar onToggle={setSidebarOpen} />
+                    <div className={`
+                        transition-all duration-300 ease-in-out
+                        ${isMobile 
+                            ? 'p-4 pt-20' 
+                            : sidebarOpen 
+                                ? 'p-4 lg:p-16 pl-4 lg:pl-80' 
+                                : 'p-4 lg:p-16 pl-4 lg:pl-20'
+                        }
+                        pb-48 min-h-screen
+                    `}>
                         <BackButton/>
-                        {children}
+                        <div className="max-w-7xl mx-auto">
+                            {children}
+                        </div>
                     </div>
                 </div>
             </>

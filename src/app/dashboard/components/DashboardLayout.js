@@ -3,9 +3,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Spinner } from "flowbite-react";
 import { ToolProvider } from "../../contexts/ToolContext";
 import ToolContainer from "./ToolContainer";
+import { FullScreenLoader } from "../../components/LoadingSpinner";
 
 export default function DashboardLayout({ children }) {
   const { DBUser, user, mobileMode } = useAuth();
@@ -40,12 +40,7 @@ export default function DashboardLayout({ children }) {
 
   // Exibir um spinner de carregamento enquanto os dados do usuário ainda não foram carregados
   if (user === false || user === null || DBUser === false || DBUser === null) {
-    return (
-      <div className="w-full min-h-screen flex flex-col items-center justify-center text-prussianblue">
-        <Spinner className="text-lightcyan" size="xl" />
-        <span>Carregando...</span>
-      </div>
-    );
+    return <FullScreenLoader message="Carregando..." />;
   } else {
     return (
       <ToolProvider user={user}>

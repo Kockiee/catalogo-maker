@@ -25,7 +25,7 @@ export default function FormField({
         placeholder,
         required,
         "aria-disabled": disabled,
-        className: type === "textarea" ? 'focus:ring-jordyblue focus:border-none focus:ring-2' : className
+        className: type === "textarea" ? 'focus:ring-primary-200 focus:border-primary-300 focus:ring-2' : className
     };
 
     if (shadow && type !== "textarea") {

@@ -12,65 +12,76 @@ export default function CatalogPreview({
     bannerImage 
 }) {
     return (
-        <div className="w-1/2 max-xl:w-full max-xl:mt-6 max-xl:pl-0 pl-8">
-            <p className="text-lg mb-2">Pré-visualização:</p>
+        <div className="w-full">
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             <div 
-                className="w-full relative p-4 rounded-lg shadow-md" 
+                className="w-full relative" 
                 style={{backgroundColor: primaryColor, color: textColor}}
             >
                 <div 
-                    className="p-4 absolute w-full top-0 right-0 rounded-lg flex items-center justify-between" 
+                    className="p-4 w-full flex items-center justify-between" 
                     style={{backgroundColor: secondaryColor}}
                 >
-                    <h1 className="font-bold break-all">{storeName}</h1>
+                    <h1 className="font-bold text-lg truncate">{storeName || "Nome da Loja"}</h1>
                     <div 
-                        className="relative w-64 p-5 rounded-lg" 
+                        className="relative w-48 p-3 rounded-lg" 
                         style={{backgroundColor: primaryColor}}
                     >
-                        <BiSearch className="absolute top-3 right-3"/>
+                        <BiSearch className="absolute top-2 right-2 text-gray-600"/>
                     </div>
                 </div>
-                <div className="py-[72px] flex flex-wrap text-sm">
+                <div className="p-4">
                     <div 
-                        className="p-4 w-full h-16 rounded-lg flex justify-center items-center bg-cover bg-center" 
+                        className="w-full h-24 rounded-lg flex justify-center items-center bg-cover bg-center mb-4" 
                         style={{
                             backgroundColor: tertiaryColor, 
                             backgroundImage: bannerImage ? `url(${bannerImage})` : 'none'
                         }}
-                    ></div>
-                    <div 
-                        className="p-2 rounded-lg flex flex-col m-2" 
-                        style={{
-                            color: textColor === primaryColor ? "#000000" : textColor, 
-                            border: `2px solid ${tertiaryColor}`
-                        }}
                     >
-                        <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
-                        <p>Nome de um produto</p>
-                        <p>R$0.00</p>
+                        {!bannerImage && (
+                            <span className="text-gray-500 text-sm">Banner da loja</span>
+                        )}
                     </div>
-                    <div 
-                        className="p-2 rounded-lg flex flex-col m-2" 
-                        style={{
-                            color: textColor === primaryColor ? "#000000" : textColor, 
-                            border: `2px solid ${tertiaryColor}`
-                        }}
-                    >
-                        <div className="w-full h-full rounded-lg p-8">Imagem de produto</div>
-                        <p>Nome de um produto</p>
-                        <p>R$0.00</p>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div 
+                            className="p-3 rounded-lg flex flex-col" 
+                            style={{
+                                color: textColor === primaryColor ? "#000000" : textColor, 
+                                border: `2px solid ${tertiaryColor}`
+                            }}
+                        >
+                            <div className="w-full h-16 rounded-lg bg-gray-200 flex items-center justify-center text-xs text-gray-500 mb-2">
+                                Imagem
+                            </div>
+                            <p className="text-sm font-medium">Produto 1</p>
+                            <p className="text-sm">R$ 0,00</p>
+                        </div>
+                        <div 
+                            className="p-3 rounded-lg flex flex-col" 
+                            style={{
+                                color: textColor === primaryColor ? "#000000" : textColor, 
+                                border: `2px solid ${tertiaryColor}`
+                            }}
+                        >
+                            <div className="w-full h-16 rounded-lg bg-gray-200 flex items-center justify-center text-xs text-gray-500 mb-2">
+                                Imagem
+                            </div>
+                            <p className="text-sm font-medium">Produto 2</p>
+                            <p className="text-sm">R$ 0,00</p>
+                        </div>
                     </div>
                 </div>
                 <div 
-                    className="w-full p-2 rounded-lg flex flex-col text-sm" 
+                    className="w-full p-4 flex flex-col text-sm" 
                     style={{backgroundColor: secondaryColor}}
                 >
-                    <h1 className="font-bold break-all">{storeName}</h1>
-                    <p className="break-all">{storeDescription}</p>
+                    <h1 className="font-bold text-lg">{storeName || "Nome da Loja"}</h1>
+                    <p className="text-sm mt-1">{storeDescription || "Descrição da loja aparecerá aqui"}</p>
                 </div>
             </div>
-            <p className="text-base inline-flex mt-2">
-                <HiInformationCircle className="w-6 h-6 mr-1"/> 
+            </div>
+            <p className="text-sm text-gray-600 inline-flex items-center mt-3">
+                <HiInformationCircle className="w-4 h-4 mr-1"/> 
                 Isto é uma versão simplificada
             </p>
         </div>

@@ -11,8 +11,8 @@ export default function BackButton() {
     }
 
     return (
-        <ButtonAPP onClick={handleClick} className="mb-4">
-            <HiArrowLeft className="h-6 w-6 mr-0.5"/> Voltar
+        <ButtonAPP onClick={handleClick} className="mb-6 w-fit">
+            <HiArrowLeft className="h-5 w-5 mr-2"/> Voltar
         </ButtonAPP>
     )
 }

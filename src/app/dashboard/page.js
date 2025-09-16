@@ -34,7 +34,7 @@ export default function PAGE() {
                         <p className="text-xl my-2"><span className="font-black">{orders ? orders.length : 0}</span> Pedidos</p>
                         <div className="bg-gray-300 border border-gray-400 p-2 text-sm rounded">
                             <h1 className="font-bold">OBS:</h1>
-                            <p>O valor a cima inclúi tanto pedidos aceitos como não aceitos ainda.</p>
+                            <p>O valor acima inclui tanto pedidos aceitos como não aceitos ainda.</p>
                         </div>
                     </div>
                     <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md h-full">
