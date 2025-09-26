@@ -67,9 +67,11 @@ export default function Main({children}) {
     )}
     {/* Container de notificações que é renderizado em todas as páginas */}
     {/* Posicionado globalmente e sempre visível */}
+    {/* Array com todas as notificações ativas */}
+    {/* Função para remover notificações */}
     <NotificationContainer
-      notifications={notifications}      {/* Array com todas as notificações ativas */}
-      onDismiss={removeNotification}     {/* Função para remover notificações */}
+      notifications={notifications}
+      onDismiss={removeNotification}
     />
     </>
   );
