@@ -19,7 +19,8 @@ import {
   deleteUser,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult
+  getRedirectResult,
+  reload
 } from "firebase/auth";
 // Importação de hooks de navegação do Next.js
 import { useRouter, useSearchParams } from "next/navigation";
@@ -191,6 +192,9 @@ export const AuthProvider = ({ children }) => {
   const verifyEmail = useCallback(async (oobCode) => {
     await handleAction(async () => {
       await applyActionCode(auth, oobCode);
+      if (auth.currentUser) {
+        await reload(auth.currentUser);
+      }
       router.push("/auth/signin");
     });
   }, [handleAction, router]);
