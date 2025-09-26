@@ -1,47 +1,77 @@
 'use client'
+// Importação de hooks do React
 import { useEffect, useState } from "react";
+// Importação do contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext";
+// Importação de ícones
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { MdDiscount } from "react-icons/md";
+// Importação do componente ButtonAPP personalizado
 import ButtonAPP from "@/app/components/ButtonAPP";
 
+/**
+ * Componente de card para exibir informações de um plano de assinatura
+ * Gera link de pagamento dinamicamente e exibe detalhes do plano
+ * @param {number} recurrenceType - Tipo de recorrência (1=mensal, 2=semestral, 3=anual)
+ * @param {number} price - Preço do plano em reais
+ * @param {boolean} disabled - Se o card está desabilitado
+ * @returns {JSX.Element} Card do plano com informações e botão de compra
+ */
 export default function PlanCard({ recurrenceType = 1, price = 25, disabled = false }) {
-  const [paymentLink, setPaymentLink] = useState(null);
-  const [paymentLinkGenerated, setPaymentLinkGenerated] = useState(false);
+  // Estados para controlar o link de pagamento
+  const [paymentLink, setPaymentLink] = useState(null);           // URL do link de pagamento
+  const [paymentLinkGenerated, setPaymentLinkGenerated] = useState(false); // Flag de geração
+  // Desestruturação dos dados do contexto de autenticação
   const { user } = useAuth();
 
+  /**
+   * Efeito para gerar o link de pagamento quando o componente é montado
+   * Só executa se houver usuário, não estiver desabilitado e link ainda não foi gerado
+   */
   useEffect(() => {
+    /**
+     * Função assíncrona para obter o link de pagamento do servidor
+     * Chama a API de pagamentos com token de autenticação
+     */
     const getPaymentLink = async () => {
       try {
+        // Obtém o token de autenticação do usuário
         const token = await user.getIdToken();
+        // Faz requisição para API de criação de link de pagamento
         const response = await fetch("/api/payments/payment-link/create", {
           method: "POST",
           headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json',
+            'Authorization': token,                    // Token para autenticação
+            'Content-Type': 'application/json',        // Tipo de conteúdo
           },
           body: JSON.stringify({
-            uid: user.uid,
-            recurrenceType: recurrenceType,
+            uid: user.uid,                            // ID do usuário
+            recurrenceType: recurrenceType,           // Tipo de recorrência
           }),
         });
 
+        // Verifica se a resposta foi bem-sucedida
         if (!response.ok) {
           throw new Error('Failed to generate payment link');
         }
 
+        // Converte resposta para JSON
         const data = await response.json();
+        // Atualiza estado com o link de pagamento
         setPaymentLink(data.payment_link);
+        // Marca que o link foi gerado
         setPaymentLinkGenerated(true);
       } catch (error) {
+        // Trata erros na geração do link
         console.error('Error generating payment link:', error);
       }
     };
 
+    // Só executa se tiver usuário, não estiver desabilitado e link não foi gerado
     if (user && !disabled && !paymentLinkGenerated) {
-      getPaymentLink();
+      getPaymentLink();  // Inicia geração do link
     }
-  }, [user, recurrenceType, disabled, paymentLinkGenerated]);
+  }, [user, recurrenceType, disabled, paymentLinkGenerated]);  // Dependências do efeito
 
   return (
     <div className="bg-lightcyan p-4 border-4 border-jordyblue rounded-lg flex flex-col items-center space-y-1 m-2 max-sm:text-center">

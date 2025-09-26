@@ -1,20 +1,31 @@
-'use client'
+'use client' // Diretiva para indicar que este código executa no cliente
+
+// Importação de hooks do React e funções de ações
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { startWhatsappSession } from '@/app/actions/startWhatsappSession';
 import { getCatalogWhatsappStatus } from '@/app/actions/getCatalogWhatsappStatus';
 import { setCatalogWhatsapp } from '@/app/actions/setCatalogWhatsapp';
 
+/**
+ * Hook para gerenciar sessões de WhatsApp via QR Code
+ * @param {string} catalogId - ID do catálogo
+ * @param {string} userId - ID do usuário
+ * @returns {Object} Estado e funções para gerenciar a sessão de WhatsApp
+ */
 export function useQrSessionManager(catalogId, userId) {
+    // Estados para controlar o QR code e status da conexão
     const [qrCode, setQrCode] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState(null);
     
+    // Refs para manter valores entre renderizações
     const sessionToken = useRef("");
     const qrIntervalRef = useRef(null);
     const statusIntervalRef = useRef(null);
     const isSessionActive = useRef(false);
 
+    // Função para carregar o QR code
     const loadQRCode = useCallback(async () => {
         try {
             const data = await startWhatsappSession(`${catalogId}-${userId}`, sessionToken.current);
@@ -27,6 +38,7 @@ export function useQrSessionManager(catalogId, userId) {
         }
     }, [catalogId, userId]);
 
+    // Função para verificar o status da conexão
     const checkConnectionStatus = useCallback(async () => {
         try {
             // Se já está conectado ou sessão não está ativa, não faz nada
@@ -64,6 +76,7 @@ export function useQrSessionManager(catalogId, userId) {
         }
     }, [catalogId, userId, isConnected]);
 
+    // Função para iniciar uma nova sessão
     const startSession = useCallback(async () => {
         // Limpa intervalos existentes antes de iniciar nova sessão
         if (qrIntervalRef.current) {

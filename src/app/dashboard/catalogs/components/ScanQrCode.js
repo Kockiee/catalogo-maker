@@ -1,48 +1,78 @@
 'use client'
+// Importação do hook useEffect do React
 import { useEffect } from "react";
+// Importação do componente de QR code
 import QRCodeComponent from "@/app/components/QrCodeComponent";
+// Importação de componentes do Flowbite React
 import { Spinner } from "flowbite-react";
+// Importação de ícones
 import { CiMenuKebab } from "react-icons/ci";
+// Importação do contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
+// Importação do hook personalizado para gerenciar sessão QR
 import { useQrSessionManager } from "@/app/hooks/useQrSessionManager";
+// Importação do hook personalizado para notificações
 import { useNotifications } from "@/app/hooks/useNotifications";
 
+/**
+ * Componente para escanear QR code e conectar catálogo ao WhatsApp
+ * Gerencia o processo de autenticação via QR code para conexão WhatsApp
+ * @param {string} catalogId - ID único do catálogo
+ * @param {string} userId - ID único do usuário
+ * @returns {JSX.Element} Interface para scan de QR code ou null se já conectado
+ */
 export default function ScanQrCode({ catalogId, userId }) {
+    // Desestruturação dos dados e funções do contexto de ferramentas
     const { updateCatalogs, catalogs } = useTool();
+    // Desestruturação da função de notificação
     const { notify } = useNotifications();
-    const { 
-        qrCode, 
-        isLoading, 
-        isConnected, 
-        error, 
-        startSession,
-        stopSession
+    // Desestruturação das funções e estados do gerenciador de sessão QR
+    const {
+        qrCode,           // QR code para autenticação
+        isLoading,        // Estado de carregamento
+        isConnected,      // Estado de conexão
+        error,            // Mensagens de erro
+        startSession,     // Função para iniciar sessão
+        stopSession       // Função para parar sessão
     } = useQrSessionManager(catalogId, userId);
 
+    // Encontra o catálogo específico na lista de catálogos
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
 
+    /**
+     * Efeito para gerenciar o ciclo de vida da sessão QR
+     * Inicia sessão se não houver WhatsApp conectado, para se já houver
+     */
     useEffect(() => {
         // Só inicia a sessão se o catálogo não tiver whatsapp_session
         if (!catalog?.whatsapp_session) {
-            startSession();
+            startSession();  // Inicia processo de geração de QR code
         } else {
             // Se já tem sessão, para qualquer polling ativo
-            stopSession();
+            stopSession();  // Para validação de conexão
         }
     }, [startSession, stopSession, catalog?.whatsapp_session]);
 
+    /**
+     * Efeito para lidar com conexão bem-sucedida
+     * Exibe notificação e atualiza lista de catálogos
+     */
     useEffect(() => {
         if (isConnected) {
-            notify.success("WhatsApp conectado com sucesso!");
-            updateCatalogs();
+            notify.success("WhatsApp conectado com sucesso!");  // Notificação de sucesso
+            updateCatalogs();  // Atualiza dados dos catálogos
         }
-    }, [isConnected, notify, updateCatalogs]);
+    }, [isConnected, notify, updateCatalogs]);  // Dependências: executa quando conexão muda
 
+    /**
+     * Efeito para lidar com erros na conexão
+     * Exibe notificação de erro ao usuário
+     */
     useEffect(() => {
         if (error) {
-            notify.error(error);
+            notify.error(error);  // Exibe erro para o usuário
         }
-    }, [error, notify]);
+    }, [error, notify]);  // Dependências: executa quando erro muda
 
     // Se o catálogo já tem whatsapp_session, não renderiza o QR
     if (catalog?.whatsapp_session) {

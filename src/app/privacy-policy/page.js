@@ -1,28 +1,45 @@
+// Importa o ícone do WhatsApp da biblioteca react-icons/fa6
 import { FaWhatsapp } from "react-icons/fa6";
+
+// Importa o componente de botão de voltar usado no layout da página
 import BackButton from "../dashboard/components/BackButton";
 
+// Define metadados da página para SEO e informações do cabeçalho
 export const metadata = {
-    title: 'Política de Privacidade',
-    description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.",
+    title: 'Política de Privacidade', // Título exibido na aba/navegador
+    description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.", // Meta descrição
 };
 
+// Define o componente principal da página (função padrão exportada)
 export default function PAGE() {
     return (
+        // Estrutura principal com flexbox em coluna e itens centralizados
         <div className="flex flex-col items-center">
+            {/* Área superior que contém o botão de voltar */}
             <div className="max-w-4xl w-full">
                 <BackButton/>
             </div>
+
+            {/* Título principal da página */}
             <h1 className="font-bold text-2xl mb-4">Política de Privacidade</h1>
+
+            {/* Conteúdo da política, limitado a uma largura máxima para melhor leitura */}
             <div className="max-w-4xl space-y-4">
+
+                {/* Introdução */}
                 <p>
                     Esta Política de Privacidade descreve como Catálogo Maker coleta,
                     utiliza e protege as informações que você fornece quando visita nosso site.
                 </p>
+
+                {/* Seção: Coleta de Informações */}
                 <h2 className="font-bold text-xl">Coleta de Informações</h2>
                 <p>
                     Não coletamos informações pessoais identificáveis sobre você quando visita
                     nosso site, a menos que você nos forneça essas informações de forma voluntária.
                 </p>
+
+                {/* Seção: Informações fornecidas voluntariamente */}
                 <h2 className="font-bold text-xl">Informações que Você Fornece Voluntariamente</h2>
                 <p>
                     Podemos coletar informações pessoais identificáveis que você nos forneça
@@ -30,17 +47,23 @@ export default function PAGE() {
                     ou por e-mail. Essas informações podem incluir seu nome, endereço de e-mail
                     e quaisquer outras informações que você escolha fornecer.
                 </p>
+
+                {/* Seção: Uso das informações */}
                 <h2 className="font-bold text-xl">Uso de Informações</h2>
                 <p>
                     As informações que você nos fornece serão utilizadas apenas para responder às
                     suas consultas e fornecer o serviço solicitado. Não compartilharemos suas informações
                     pessoais com terceiros sem o seu consentimento, exceto quando exigido por lei.
                 </p>
+
+                {/* Seção: Cookies */}
                 <h2 className="font-bold text-xl">Cookies e Tecnologias Semelhantes</h2>
                 <p>
                     Nosso site não utiliza cookies ou outras tecnologias de rastreamento para
                     coletar informações sobre você.
                 </p>
+
+                {/* Seção: Links de terceiros */}
                 <h2 className="font-bold text-xl">Links para Sites de Terceiros</h2>
                 <p>
                     Nosso site pode conter links para sites de terceiros. Por favor, esteja ciente
@@ -49,11 +72,15 @@ export default function PAGE() {
                     políticas de privacidade de cada site que coleta informações pessoalmente 
                     identificáveis.
                 </p>
+
+                {/* Seção: Segurança */}
                 <h2 className="font-bold text-xl">Segurança da Informação</h2>
                 <p>
                     Tomamos medidas razoáveis para proteger as informações que você nos fornece
                     contra acesso não autorizado, divulgação, alteração ou destruição.
                 </p>
+
+                {/* Seção: Alterações futuras */}
                 <h2 className="font-bold text-xl">Alterações a Esta Política de Privacidade</h2>
                 <p>
                     Podemos atualizar nossa Política de Privacidade de tempos em tempos. Recomendamos
@@ -61,14 +88,22 @@ export default function PAGE() {
                     a usar nosso site após quaisquer alterações nesta Política de Privacidade, você
                     estará aceitando tais alterações.
                 </p>
+
+                {/* Seção: Contato */}
                 <h2 className="font-bold text-xl">Contato</h2>
                 <p>
                     Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato 
                     conosco pelos contatos:
                 </p>
                 <ul className="list-disc p-4">
-                    <li>Whatsapp: +55 16 997767624 <FaWhatsapp className="inline-flex ml-1 w-6 h-6"/></li>
+                    {/* Exibe o contato via WhatsApp com ícone */}
+                    <li>
+                        Whatsapp: +55 16 997767624 
+                        <FaWhatsapp className="inline-flex ml-1 w-6 h-6"/>
+                    </li>
                 </ul>
+
+                {/* Data da última atualização da política */}
                 <p>
                     Última atualização: 17/04/2024
                 </p>

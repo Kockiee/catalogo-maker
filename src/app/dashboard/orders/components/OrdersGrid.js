@@ -1,22 +1,42 @@
 'use client'
+// Importação de hooks do React
 import { useState } from 'react';
+// Importação de ícones do Heroicons
 import { HiChevronDown, HiChevronUp, HiX } from "react-icons/hi";
+// Importação do contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
+// Importação de componentes do Flowbite React
 import { Button, Label, Textarea, Tooltip } from 'flowbite-react';
+// Importação de ícones
 import { CiMenuKebab } from 'react-icons/ci';
+// Importação de ações do servidor para gerenciar pedidos
 import { acceptOrder } from '@/app/actions/acceptOrder';
 import { cancelOrder } from '@/app/actions/cancelOrder';
 import { refuseOrder } from '@/app/actions/refuseOrder';
+// Importação de função utilitária para formatar números
 import { formatPhoneNumber } from '@/app/utils/functions';
+// Importação do hook personalizado para notificações
 import { useNotifications } from '@/app/hooks/useNotifications';
+// Importação do componente Link do Next.js
 import Link from 'next/link';
+// Importação do ícone do WhatsApp
 import { FaWhatsapp } from 'react-icons/fa';
 
+/**
+ * Componente de grid para exibir e gerenciar pedidos dos catálogos
+ * Permite visualizar detalhes, aceitar, recusar ou cancelar pedidos
+ * @returns {JSX.Element} Grid com lista de pedidos e controles de ação
+ */
 export default function OrdersGrid() {
+    // Desestruturação dos dados e funções do contexto de ferramentas
     const { orders, updateOrders, catalogs } = useTool();
+    // Estado para controlar quais pedidos estão expandidos (mostrando detalhes)
     const [expandedOrders, setExpandedOrders] = useState([]);
+    // Estado para controlar qual menu de opções está aberto
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
+    // Estado para controlar se o formulário de cancelamento está visível
     const [showCancelationForm, setShowCancelationForm] = useState(false);
+    // Desestruturação da função de notificação
     const { notify } = useNotifications();
 
     const toggleOrder = (index) => {
@@ -29,17 +49,29 @@ export default function OrdersGrid() {
         });
     };
 
+    /**
+     * Função para alternar a abertura/fechamento do menu de opções de um pedido
+     * Controla qual pedido tem o menu expandido
+     * @param {number} index - Índice do pedido na lista
+     */
     const toggleMenu = (index) => {
         if (openMenuIndex === index) {
-            setOpenMenuIndex(null);
+            setOpenMenuIndex(null);  // Fecha o menu se já estiver aberto
         } else {
-            setOpenMenuIndex(index);
+            setOpenMenuIndex(index); // Abre o menu para este pedido
         }
     };
 
+    /**
+     * Função para renderizar a lista de pedidos
+     * Mapeia cada pedido para um card com informações detalhadas
+     * @returns {Array<JSX.Element>} Array de cards de pedidos
+     */
     const renderOrders = () => {
         return orders.map((order, index) => {
+            // Encontra os dados do catálogo relacionado ao pedido
             const catalogData = catalogs.find(catalog => catalog.id === order.catalog_id);
+            // Renderiza o card do pedido
             return <div key={index} className="text-sm rounded border-lightcyan border-4 bg-white m-2 flex flex-wrap w-full">
                 {showCancelationForm && (
                     <div className='fixed z-20 w-full bg-periwinkle h-full top-16 max-md:px-4 right-0 flex flex-col items-center'>

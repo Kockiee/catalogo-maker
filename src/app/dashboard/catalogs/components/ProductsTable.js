@@ -1,41 +1,76 @@
 'use client'
 
+// Importação de hooks do React
 import { useState, useEffect } from "react";
+// Importação do contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
+// Importação de componentes do Flowbite React para tabela
 import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+// Importação do componente Link do Next.js
 import Link from 'next/link';
+// Importação de ícones
 import { BiEdit } from "react-icons/bi";
 import { HiPlus, HiTrash } from "react-icons/hi";
+// Importação de ação do servidor para deletar produtos
 import { deleteProducts } from "../../../actions/deleteProducts";
+// Importação do hook personalizado para notificações
 import { useNotifications } from "../../../hooks/useNotifications";
+// Importação do componente ButtonAPP personalizado
 import ButtonAPP from "../../../components/ButtonAPP";
 
+/**
+ * Componente de tabela para exibir e gerenciar produtos de um catálogo
+ * Permite visualizar, selecionar, editar e deletar produtos
+ * @param {string} catalogId - ID único do catálogo cujos produtos serão exibidos
+ * @returns {JSX.Element} Tabela com lista de produtos e controles de ação
+ */
 export default function ProductsTable({ catalogId }) {
+    // Desestruturação dos dados e funções do contexto de ferramentas
     const { catalogs, updateCatalogs } = useTool();
+    // Desestruturação da função de notificação
     const { notify } = useNotifications();
+    // Encontra o catálogo específico na lista de catálogos
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
+    // Estado para armazenar os produtos selecionados para operações em lote
     const [selectedProducts, setSelectedProducts] = useState([]);
 
+    /**
+     * Efeito para carregar os catálogos quando o componente é montado
+     * Garante que os dados estejam atualizados na inicialização
+     */
     useEffect(() => {
-      updateCatalogs();
-    }, []);
+      updateCatalogs();  // Carrega lista de catálogos do servidor
+    }, []);  // Array vazio = executa apenas na montagem
 
+    /**
+     * Função para alternar a seleção de um produto
+     * Adiciona ou remove produto da lista de selecionados
+     * @param {string} productId - ID único do produto
+     */
     const toggleProductSelection = (productId) => {
       if (selectedProducts.includes(productId)) {
+        // Se já está selecionado, remove da lista
         setSelectedProducts(prevState => prevState.filter(id => id !== productId));
       } else {
+        // Se não está selecionado, adiciona à lista
         setSelectedProducts(prevState => [...prevState, productId]);
       }
     };
 
+    /**
+     * Função assíncrona para lidar com a exclusão de produtos selecionados
+     * Executa a exclusão e atualiza a interface
+     */
     const handleDeleteProducts = async () => {
-      notify.processing("Excluindo produtos...");
+      notify.processing("Excluindo produtos...");  // Exibe notificação de processamento
       try {
+        // Chama a ação do servidor para deletar os produtos selecionados
         await deleteProducts(selectedProducts);
-        notify.productDeleted();
-        setSelectedProducts([]);
-        updateCatalogs();
+        notify.productDeleted();  // Exibe notificação de sucesso
+        setSelectedProducts([]);  // Limpa a seleção
+        updateCatalogs();  // Atualiza lista de catálogos
       } catch (error) {
+        // Trata erros na exclusão
         notify.productDeletionFailed();
       }
     };

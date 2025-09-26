@@ -1,21 +1,45 @@
+// Indica que este componente é um Client Component do Next.js
+/**
+ * Página de cadastro de novo usuário
+ * Permite criar conta via email/senha ou Google
+ * Exige aceitação dos termos de uso
+ * Exibe mensagens de erro conforme necessário
+ * @param {object} searchParams Parâmetros da URL
+ * @returns {JSX.Element} Interface de cadastro
+ */
+// Indica que este componente é um Client Component do Next.js
 'use client'
+
+// Importa componente para exibir erros
 import ErrorCard from '@/app/auth/components/ErrorCard';
+// Importa contexto de autenticação para acessar funções
 import { useAuth } from '@/app/contexts/AuthContext';
+// Importa componentes de UI da Flowbite
 import { Button, Checkbox, Label, Spinner, TextInput } from 'flowbite-react';
+// Importa componente de link do Next.js
 import Link from 'next/link';
+// Importa hook de estado do React
 import { useState } from 'react';
+// Importa ícone do Google para botão social
 import { FcGoogle } from "react-icons/fc";
 
+// Componente principal para página de cadastro de usuário
 export default function PAGE({searchParams}) {
+    // Verifica se está no modo mobile via parâmetro
     const mobileMode = searchParams.mobileMode;
+    // Estados para campos do formulário
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
+    // Estado para controle de aceitação dos termos
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+    // Estado para mensagem de erro
     const [error, setError] = useState('');
+    // Funções de autenticação e estado de loading
     const { signUpWithEmailAndPassword, signInWithGoogle, authLoading } = useAuth()
 
+    // Middleware para garantir aceitação dos termos antes de executar ação
     const signUpMiddleware = async(action) => {
       if (isTermsAccepted) {
         await action();
@@ -24,14 +48,18 @@ export default function PAGE({searchParams}) {
       }
     } 
 
+    // Função para tratar envio do formulário de cadastro
     const handleSubmit = (e) => {
-      e.preventDefault();
+      e.preventDefault(); // Previne comportamento padrão do formulário
       signUpMiddleware(async() => {
+        // Verifica se as senhas coincidem
         if (password === repeatedPassword) {
           try {
+            // Tenta cadastrar usuário com email e senha
             await signUpWithEmailAndPassword(username, email, password)
           } catch (err) {
-            setError("")
+            setError("") // Limpa erro anterior
+            // Trata erros específicos de email já existente, inválido ou senha fraca
             if (err.code == 'auth/email-already-in-use') {
               setError("Esse email já existe.")
             } else if (err.code == 'auth/invalid-email') {
@@ -46,11 +74,13 @@ export default function PAGE({searchParams}) {
       })
     }
 
+    // Função para tratar cadastro via Google
     const handleSignWithGoogle = () => {
       signUpMiddleware(async() => {
         try {
           await signInWithGoogle()
         } catch (err) {
+          // Trata erro de email já existente
           if (err.code === 'auth/email-already-in-use') {
             setError(<Text className="text-base text-red-600 dark:text-red-400"><Text className="font-medium">Opa!</Text> Esse email já existe.</Text>)
           }
@@ -58,10 +88,13 @@ export default function PAGE({searchParams}) {
       })
     }
 
+    // Renderiza o formulário de cadastro e botão social
     return (
         <main className="flex justify-center items-center h-full">
+            {/* Card centralizado para cadastro */}
             <div className="rounded-lg max-w-md w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
                 <h1 className='font-bold text-xl'>Crie uma conta</h1>
+                {/* Formulário de cadastro */}
                 <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
                   <div>
                     <div className="mb-2 block">
@@ -106,7 +139,7 @@ export default function PAGE({searchParams}) {
                     <TextInput
                     onChange={(e) => {
                       setPassword(e.target.value);
-                      setError("")
+                      setError("") // Limpa erro ao digitar
                     }} 
                     color="light"
                     id="password" 
@@ -125,7 +158,7 @@ export default function PAGE({searchParams}) {
                     color="light"
                     onChange={(e) => {
                       setRepeatedPassword(e.target.value);
-                      setError("")
+                      setError("") // Limpa erro ao digitar
                     }}
                     id="repeat-password" 
                     type="password"
@@ -133,7 +166,9 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
+                  {/* Exibe mensagem de erro, se houver */}
                   <ErrorCard error={error}/>
+                  {/* Checkbox para aceitar termos de uso e política de privacidade */}
                   <div className="flex items-center gap-2">
                     <Checkbox className='w-6 h-6 mr-2' onChange={(e) => setIsTermsAccepted(e.target.checked)} id="agree" required color="blue"/>
                     <Label htmlFor="agree">
@@ -145,6 +180,7 @@ export default function PAGE({searchParams}) {
                       </Link>
                     </Label>
                   </div>
+                  {/* Link para login caso já tenha conta */}
                   <div className="flex items-center gap-2">
                     <Label htmlFor='donthaveaccount' className="flex">
                       Já tem uma conta ?&nbsp;
@@ -153,11 +189,13 @@ export default function PAGE({searchParams}) {
                       </Link>
                     </Label>
                   </div>
+                  {/* Botão de envio do formulário */}
                   <Button type="submit" className='bg-neonblue hover:!bg-neonblue/80 focus:ring-0'>
                     {!authLoading ? <>Criar Conta</> : <Spinner className="text-lightcyan" size={'md'}></Spinner>}
                   </Button>
                 </form>
                 <p className='text-base'>ou</p>
+                {/* Botão para cadastro via Google */}
                 <Button 
                 onClick={handleSignWithGoogle}
                 className='inline-flex bg-gray-100 text-black hover:!bg-gray-200 border border-gray-200 focus:ring-0'>

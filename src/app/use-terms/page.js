@@ -2,15 +2,17 @@ import { FaWhatsapp } from "react-icons/fa6";
 import BackButton from "../dashboard/components/BackButton";
 
 export const metadata = {
+    // Metadados da página, incluindo título e descrição
     title: 'Termos de Uso',
     description: "Com o Catálogo Maker você é capaz de criar um catálogo online para sua loja ainda hoje e já começar a receber pedidos de forma automática.",
 };
 
 export default function PAGE() {
+    // Componente principal que renderiza os Termos de Uso
     return (
         <div className="flex flex-col items-center">
             <div className="max-w-4xl w-full">
-                <BackButton/>
+                <BackButton/> {/* Botão para voltar à página anterior */}
             </div>
             <h1 className="font-bold text-2xl mb-4">Termos de Uso</h1>
             <div className="max-w-4xl space-y-4">

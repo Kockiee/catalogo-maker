@@ -1,5 +1,8 @@
-'use client'
+'use client' // Diretiva para indicar que este é um componente do lado do cliente
+
+// Importação de hooks do React necessários para gerenciar estado e efeitos
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
+// Importação de funções de autenticação do Firebase
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -18,83 +21,119 @@ import {
   signInWithRedirect,
   getRedirectResult
 } from "firebase/auth";
+// Importação de hooks de navegação do Next.js
 import { useRouter, useSearchParams } from "next/navigation";
+// Importação da função de criação de conta do servidor
 import { createAccount } from "../actions/createAccount";
+// Importação da instância de autenticação do Firebase
 import { auth } from "../utils/firebase";
 
+// Função auxiliar para criar um usuário no banco de dados após autenticação
 async function createUser(result) {
+  // Chama a função do servidor para criar o usuário no banco de dados
   const data = await createAccount(result.uid, result.displayName, result.email);
   return data;
 }
 
+// Criação do contexto de autenticação
 const AuthContext = createContext();
 
+// Provedor de autenticação que envolve a aplicação
 export const AuthProvider = ({ children }) => {
+  // Estado para controlar o carregamento durante operações de autenticação
   const [authLoading, setAuthLoading] = useState(false);
+  // Estado para armazenar o usuário autenticado do Firebase
   const [user, setUser] = useState(false);
+  // Estado para armazenar os dados do usuário do banco de dados
   const [DBUser, setDBUser] = useState(false);
+  // Hook de navegação do Next.js
   const router = useRouter();
+  // Hook para acessar parâmetros de busca da URL
   const searchParams = useSearchParams();
+  // Estado para controlar o modo móvel
   const [mobileMode, setMobileMode] = useState(false);
 
+  // Função para lidar com ações de autenticação e gerenciar o estado de carregamento
   const handleAction = useCallback(async (action) => {
     try {
+      // Define o estado de carregamento como verdadeiro antes da ação
       setAuthLoading(true);
+      // Executa a ação passada como parâmetro
       await action();
     } finally {
+      // Define o estado de carregamento como falso após a ação, independentemente do resultado
       setAuthLoading(false);
     }
   }, []);
 
+  // Função para lidar com a autenticação e definir a persistência
   const handleAuthentication = useCallback(async (authAction) => {
+    // Define a persistência como local para manter o usuário logado mesmo após fechar o navegador
     await setPersistence(auth, browserLocalPersistence);
+    // Executa a ação de autenticação passada como parâmetro
     await authAction();
-  }, [searchParams]); // Inclua searchParams para evitar mudanças inesperadas  
+  }, [searchParams]); // Inclui searchParams para evitar mudanças inesperadas  
 
+  // Efeito para verificar e definir o modo móvel ao carregar a página
   useEffect(() => {
-    if (typeof window !== "undefined") {  // Garante que é no cliente
+    if (typeof window !== "undefined") {  // Garante que o código está sendo executado no cliente
+      // Verifica se o parâmetro mobileMode está presente na URL
       const modeSearchParams = searchParams.get("mobileMode") === "True" ? true : false;
+      // Obtém o modo móvel do armazenamento local
       const mode = JSON.parse(localStorage.getItem("mobileMode"));
+      // Se não houver modo definido no armazenamento local, usa o valor da URL
       if(mode === null || mode === undefined) {
         localStorage.setItem("mobileMode", 
           JSON.stringify(modeSearchParams)
         );
         setMobileMode(modeSearchParams);
       } else {
+        // Caso contrário, usa o valor do armazenamento local
         setMobileMode(mode)
       }
     }
   }, []);
 
+  // Efeito para observar mudanças no estado de autenticação
   useEffect(() => {
+    // Inscreve-se para receber atualizações do estado de autenticação
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        // Se houver um usuário autenticado, obtém o token de ID
         const token = await currentUser.getIdToken();
+        // Faz uma requisição para obter os dados do usuário do banco de dados
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
           headers: {
             'authorization': token,
           },
         });
         const data = await response.json();
+        // Se o usuário existir no banco de dados, define o estado DBUser
         if (response.status === 200) {
           setDBUser(data);
         } else if (response.status === 404) {
+          // Se o usuário não existir no banco de dados, cria um novo
           const createdUser = await createUser(currentUser);
           setDBUser(createdUser);
         }
+        // Define o estado do usuário do Firebase
         setUser(currentUser);
       } else {
+        // Se não houver usuário autenticado, limpa os estados
         setUser(null);
         setDBUser(null);
       }
     });
   
+    // Função de limpeza para cancelar a inscrição quando o componente for desmontado
     return () => unsubscribe();
-  }, [createUser]); // Adiciona a dependência corretamente  
+  }, []); // Removida a dependência createUser que não é necessária
 
+  // Efeito para lidar com o resultado do redirecionamento de autenticação
   useEffect(() => {
     const handleRedirectResult = async () => {
       try {
+        // Obtém o resultado do redirecionamento de autenticação
         const result = await getRedirectResult(auth);
         if (result?.user) {
         // Usuário autenticado — estado será atualizado pelo onAuthStateChanged

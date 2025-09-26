@@ -1,3 +1,6 @@
+/* Importação das camadas base do Tailwind CSS */
 @tailwind base;
+/* Importação dos componentes do Tailwind CSS */
 @tailwind components;
+/* Importação das utilidades do Tailwind CSS */
 @tailwind utilities;

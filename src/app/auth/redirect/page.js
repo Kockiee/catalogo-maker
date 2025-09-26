@@ -4,9 +4,9 @@ import { useEffect } from "react";
 
 export default function RedirectHandler() {
   useEffect(() => {
-    // Exemplo: redirecionar para o app após login com Firebase
+    // Redireciona o usuário para o aplicativo móvel após login bem-sucedido
     window.location.href = "catalogomakermobile://auth?success=true";
-  }, []);
+  }, []); // Executa o redirecionamento apenas uma vez ao montar o componente
 
-  return <p>Redirecionando de volta para o app...</p>;
+  return <p>Redirecionando de volta para o app...</p>; // Mensagem exibida enquanto o redirecionamento ocorre
 }

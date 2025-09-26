@@ -1,33 +1,57 @@
 'use client'
+// Importação de componentes do Flowbite React
 import { Button, Label, Radio } from "flowbite-react";
+// Importação do hook useState do React
 import { useState } from "react";
+// Importação do contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext";
+// Importação do componente de scan de QR code
 import ScanQrCode from "./ScanQrCode";
+// Importação do contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
+// Importação do hook personalizado para notificações
 import { useNotifications } from "@/app/hooks/useNotifications";
+// Importação do hook personalizado para gerenciar sessão WhatsApp
 import { useWhatsappSessionManager } from "@/app/hooks/useWhatsappSessionManager";
 
+/**
+ * Componente para verificação de telefone e configuração de recebimento de pedidos
+ * Permite conectar catálogo ao WhatsApp para receber pedidos automaticamente
+ * @param {string} catalogId - ID único do catálogo a ser configurado
+ * @returns {JSX.Element} Interface de verificação de telefone e conexão WhatsApp
+ */
 export default function PhoneVerification({catalogId}) {
+    // Estado para controlar qual opção de recebimento de pedidos está selecionada
     const [orderForm, setOrderForm] = useState(1);
+    // Desestruturação da função de notificação
     const { notify } = useNotifications()
+    // Desestruturação dos dados do usuário
     const { user } = useAuth()
+    // Desestruturação da função para atualizar catálogos
     const { updateCatalogs } = useTool()
+    // Desestruturação das funções do gerenciador de sessão WhatsApp
     const { connectWhatsappSession, isProcessing } = useWhatsappSessionManager()
 
+    /**
+     * Função assíncrona para conectar o catálogo ao WhatsApp
+     * Utiliza sessão padrão do WhatsApp configurada nas variáveis de ambiente
+     */
     const handleSetCatalogWhatsapp = async() => {
+        // Obtém credenciais padrão da sessão WhatsApp das variáveis de ambiente
         const defaultSession = process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION
         const defaultSessionToken = process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN
 
+        // Chama o gerenciador de sessão WhatsApp com callbacks de sucesso/erro
         await connectWhatsappSession(
-            defaultSession, 
-            defaultSessionToken, 
-            catalogId,
-            (message) => {
-                notify.success(message)
-                updateCatalogs()
+            defaultSession,      // ID da sessão padrão
+            defaultSessionToken, // Token da sessão padrão
+            catalogId,           // ID do catálogo a ser conectado
+            (message) => {       // Callback de sucesso
+                notify.success(message)  // Exibe notificação de sucesso
+                updateCatalogs()         // Atualiza lista de catálogos
             },
-            (message) => {
-                notify.error(message)
+            (message) => {       // Callback de erro
+                notify.error(message)    // Exibe notificação de erro
             }
         )
     }

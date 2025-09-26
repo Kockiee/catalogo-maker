@@ -1,38 +1,64 @@
 'use client'
+// Importação do contexto de ferramentas
 import { useTool } from "../../../contexts/ToolContext"
+// Importação de componentes do Flowbite React
 import { Button, Tooltip } from "flowbite-react"
+// Importação de hooks do React
 import { useEffect, useState } from "react";
+// Importação de ações do servidor para catálogos
 import { updateCatalog } from "../../../actions/updateCatalog";
 import { disconnectCatalogWhatsapp } from "../../../actions/disconnectCatalogWhatsapp";
+// Importação do hook useFormState do React DOM
 import { useFormState } from 'react-dom'
+// Importação do hook personalizado para notificações
 import { useNotifications } from "../../../hooks/useNotifications";
+// Importação de componentes de UI
 import ErrorCard from "../../../auth/components/ErrorCard";
 import FormField from "../../../components/FormField";
 import ImageUpload from "../../../components/ImageUpload";
 import ColorPickerGroup from "../../../components/ColorPickerGroup";
 import CatalogPreview from "../../../components/CatalogPreview";
+// Importação de ícones
 import { HiExclamationCircle, HiLogout } from "react-icons/hi";
 import { FaWhatsapp } from "react-icons/fa";
 
+/**
+ * Componente container para edição de catálogos
+ * Permite editar configurações, cores, imagem e gerenciar conexão WhatsApp
+ * @param {string} catalogId - ID único do catálogo a ser editado
+ * @returns {JSX.Element} Interface de edição de catálogo
+ */
 export default function EditCatalogContainer({catalogId}) {
+    // Desestruturação dos dados e funções do contexto de ferramentas
     const { catalogs, updateCatalogs } = useTool();
+    // Encontra o catálogo específico na lista de catálogos
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
-    const [identificationName, setIdentificationName] = useState(catalog.name);
-    const [storeName, setStoreName] = useState(catalog.store_name);
-    const [storeDescription, setStoreDescription] = useState(catalog.store_description);
+    // Estados para armazenar os dados editáveis do catálogo
+    const [identificationName, setIdentificationName] = useState(catalog.name);           // Nome de identificação
+    const [storeName, setStoreName] = useState(catalog.store_name);                       // Nome da loja
+    const [storeDescription, setStoreDescription] = useState(catalog.store_description);   // Descrição da loja
+    // Estado para armazenar as cores personalizadas do catálogo
     const [colors, setColors] = useState({
-        primaryColor: catalog.primary_color,
-        secondaryColor: catalog.secondary_color,
-        tertiaryColor: catalog.tertiary_color,
-        textColor: catalog.text_color
+        primaryColor: catalog.primary_color,     // Cor de fundo principal
+        secondaryColor: catalog.secondary_color, // Cor do cabeçalho/rodapé
+        tertiaryColor: catalog.tertiary_color,   // Cor dos detalhes/bordas
+        textColor: catalog.text_color            // Cor do texto
     });
-    const [bannerImage, setBannerImage] = useState(catalog.banner_url);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [isDisconnecting, setIsDisconnecting] = useState(false);
-    const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+    const [bannerImage, setBannerImage] = useState(catalog.banner_url);  // URL da imagem do banner
+    // Estados para controlar o processo de edição
+    const [loading, setLoading] = useState(false);                       // Estado de carregamento
+    const [error, setError] = useState("");                             // Mensagens de erro
+    const [isDisconnecting, setIsDisconnecting] = useState(false);       // Estado de desconexão WhatsApp
+    const [showDisconnectModal, setShowDisconnectModal] = useState(false); // Controle do modal de desconexão
+    // Desestruturação da função de notificação
     const { notify } = useNotifications();
 
+    /**
+     * Função para lidar com mudanças nas cores do catálogo
+     * Atualiza o estado de cores dinamicamente
+     * @param {string} colorKey - Chave da cor a ser alterada
+     * @param {string} value - Novo valor da cor em formato hexadecimal
+     */
     const handleColorChange = (colorKey, value) => {
         setColors(prev => ({ ...prev, [colorKey]: value }));
     };

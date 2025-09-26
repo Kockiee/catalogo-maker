@@ -64,11 +64,13 @@ export const NotificationContainer = ({ notifications, onDismiss }) => {
 
 // Componente legado para compatibilidade (será removido gradualmente)
 export default function Notification({ type, message, setPattern }) {
+  // Componente de notificação que exibe mensagens temporárias na tela
   return (
     <div className="fixed bottom-4 left-0 w-full flex justify-center z-20">
+      {/* Renderiza um item de notificação com os dados fornecidos */}
       <NotificationItem
-        notification={{ id: Date.now(), type, message }}
-        onDismiss={() => setPattern(<></>)}
+        notification={{ id: Date.now(), type, message }} // Cria um objeto de notificação com ID único, tipo e mensagem
+        onDismiss={() => setPattern(<></>)} // Define o comportamento ao dispensar a notificação
       />
     </div>
   );

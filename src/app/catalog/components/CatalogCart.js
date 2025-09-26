@@ -1,16 +1,24 @@
+// Este arquivo define o componente do carrinho de compras do catálogo.
+// Permite ao usuário visualizar, adicionar, remover e finalizar produtos do carrinho.
+// Utiliza React, contexto do catálogo e ícones para interação visual.
+
 'use client'
 import { HiMinus, HiPlus, HiShoppingBag, HiX } from "react-icons/hi";
 import { useCatalog } from "../../contexts/CatalogContext"
 import { useEffect } from "react";
 import Link from "next/link"
 
+// Componente principal do carrinho de compras
 export default function CatalogCart({catalog}) {
+    // Obtém dados e funções do contexto do catálogo
     const { viewingCart, setViewingCart, cart, removeProductFromCatalog, addProductToCatalog } = useCatalog()
     
+    // Efeito para garantir que o carrinho seja exibido ao alterar o conteúdo
     useEffect(() => {
         return () => setViewingCart(true);
     }, [cart])
 
+    // Função para renderizar os produtos do carrinho
     const renderProducts = () => {
         return cart.map((product, index) => (
             <div key={index} className="border p-1 rounded flex flex-row">
@@ -56,6 +64,7 @@ export default function CatalogCart({catalog}) {
         ))
     } 
 
+    // Renderiza o carrinho fixo na lateral da tela
     return (
         <div className={`max-w-sm w-full fixed top-0 right-0 z-20 transition-transform duration-300 ease-in-out transform ${viewingCart ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="p-6 space-y-2 w-full h-full min-h-screen" style={{backgroundColor: catalog.tertiary_color}}>
