@@ -1,11 +1,28 @@
-'use server'
+/**
+ * AÇÃO DE ACEITAR PEDIDO
+ * 
+ * Este arquivo contém a ação server-side para aceitar um pedido e notificar
+ * o comprador e vendedor via WhatsApp. A função envia mensagens formatadas
+ * com os detalhes do pedido e atualiza o status no banco de dados.
+ * 
+ * Funcionalidades:
+ * - Aceitar pedido do cliente
+ * - Enviar notificação ao comprador via WhatsApp
+ * - Enviar notificação ao vendedor via WhatsApp
+ * - Atualizar status do pedido para "accepted"
+ * - Formatação de mensagens com detalhes do pedido
+ * - Formatação de preços em BRL
+ */
 
-import { db } from "../utils/firebase";
-import { doc, updateDoc } from "firebase/firestore";
-import { sendMessage } from "./sendMessage";
-import { getChatId } from "./getChatId";
+'use server' // Diretiva para indicar que esta função roda no servidor
+
+import { db } from "../utils/firebase"; // Importa instância do banco de dados
+import { doc, updateDoc } from "firebase/firestore"; // Importa funções do Firestore
+import { sendMessage } from "./sendMessage"; // Importa função para enviar mensagem
+import { getChatId } from "./getChatId"; // Importa função para obter chatId
 
 export async function acceptOrder(order, waSession) {
+    // Envia mensagem de confirmação ao comprador
     const response = await sendMessage(waSession.id, waSession.token, `${order.buyer_phone}@c.us`, 
 `*Seu Pedido em ${order.store_name} foi Aceito*
 
@@ -24,9 +41,12 @@ ${order.content.map((item) => `✅ ${item.quantity} x ${item.name}
 ---------------------------------
 *Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
 
+    // Se mensagem foi enviada com sucesso e não é sessão padrão
     if((response.status === 200 || response.status === 201) && waSession.id !== "catalog-maker") {
+        // Obtém chatId do vendedor
         const catalogOwnerChatId = await getChatId(waSession.id, waSession.token);
 
+        // Envia notificação ao vendedor
         await sendMessage(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogOwnerChatId, 
 `*Você Aceitou um Novo Pedido*
 
@@ -47,9 +67,10 @@ ${order.content.map((item) => `✅ ${item.quantity} x ${item.name}
 ---------------------------------
 *Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
 
-        const docRef = doc(db, 'orders', order.id);
-        await updateDoc(docRef, {
-            status: 'accepted',
+        // Atualiza status do pedido no banco de dados
+        const docRef = doc(db, 'orders', order.id); // Cria referência ao documento do pedido
+        await updateDoc(docRef, { // Atualiza documento
+            status: 'accepted', // Define status como aceito
         })
     }
 }

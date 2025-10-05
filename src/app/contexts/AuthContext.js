@@ -1,101 +1,134 @@
-'use client'
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import {
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  confirmPasswordReset,
-  sendPasswordResetEmail,
-  onAuthStateChanged,
-  setPersistence,
-  signOut,
-  sendEmailVerification,
-  applyActionCode,
-  updateProfile,
-  browserLocalPersistence,
-  deleteUser,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult
-} from "firebase/auth";
-import { useRouter, useSearchParams } from "next/navigation";
-import { createAccount } from "../actions/createAccount";
-import { auth } from "../utils/firebase";
+/**
+ * CONTEXTO DE AUTENTICAÇÃO
+ * 
+ * Este arquivo contém o contexto de autenticação do Catálogo Maker, que gerencia
+ * toda a lógica de autenticação da aplicação, incluindo login, logout, cadastro,
+ * recuperação de senha e integração com Firebase Auth.
+ * 
+ * Funcionalidades:
+ * - Cadastro com email e senha
+ * - Login com email e senha
+ * - Login com Google (popup e redirect)
+ * - Recuperação de senha
+ * - Verificação de email
+ * - Logout
+ * - Exclusão de conta
+ * - Persistência de autenticação
+ * - Gerenciamento de modo mobile
+ * - Sincronização com banco de dados
+ */
 
+'use client' // Diretiva para indicar que este componente roda no lado do cliente
+import { createContext, useContext, useEffect, useState, useCallback } from "react"; // Importa hooks do React
+import {
+  GoogleAuthProvider, // Provider para login com Google
+  createUserWithEmailAndPassword, // Função para criar usuário com email e senha
+  signInWithEmailAndPassword, // Função para fazer login com email e senha
+  confirmPasswordReset, // Função para confirmar reset de senha
+  sendPasswordResetEmail, // Função para enviar email de recuperação
+  onAuthStateChanged, // Listener para mudanças no estado de autenticação
+  setPersistence, // Função para definir persistência da sessão
+  signOut, // Função para fazer logout
+  sendEmailVerification, // Função para enviar email de verificação
+  applyActionCode, // Função para aplicar código de ação (verificação)
+  updateProfile, // Função para atualizar perfil do usuário
+  browserLocalPersistence, // Tipo de persistência local do navegador
+  deleteUser, // Função para deletar usuário
+  signInWithPopup, // Função para login com popup
+  signInWithRedirect, // Função para login com redirect
+  getRedirectResult // Função para obter resultado do redirect
+} from "firebase/auth";
+import { useRouter, useSearchParams } from "next/navigation"; // Hooks de navegação do Next.js
+import { createAccount } from "../actions/createAccount"; // Ação para criar conta no banco de dados
+import { auth } from "../utils/firebase"; // Instância de autenticação do Firebase
+
+// Função auxiliar para criar usuário no banco de dados
 async function createUser(result) {
-  const data = await createAccount(result.uid, result.displayName, result.email);
-  return data;
+  const data = await createAccount(result.uid, result.displayName, result.email); // Cria registro no banco
+  return data; // Retorna dados do usuário criado
 }
 
+// Cria o contexto de autenticação
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  // Estado de carregamento das operações de autenticação
   const [authLoading, setAuthLoading] = useState(false);
+  // Usuário autenticado do Firebase
   const [user, setUser] = useState(false);
+  // Usuário do banco de dados
   const [DBUser, setDBUser] = useState(false);
+  // Hook de navegação
   const router = useRouter();
+  // Parâmetros de busca da URL
   const searchParams = useSearchParams();
+  // Estado para controlar modo mobile
   const [mobileMode, setMobileMode] = useState(false);
 
+  // Função wrapper para ações que requerem loading
   const handleAction = useCallback(async (action) => {
     try {
-      setAuthLoading(true);
-      await action();
+      setAuthLoading(true); // Ativa loading
+      await action(); // Executa a ação
     } finally {
-      setAuthLoading(false);
+      setAuthLoading(false); // Desativa loading sempre
     }
   }, []);
 
+  // Função wrapper para ações de autenticação que requerem persistência
   const handleAuthentication = useCallback(async (authAction) => {
-    await setPersistence(auth, browserLocalPersistence);
-    await authAction();
-  }, [searchParams]); // Inclua searchParams para evitar mudanças inesperadas  
+    await setPersistence(auth, browserLocalPersistence); // Define persistência local
+    await authAction(); // Executa a ação de autenticação
+  }, [searchParams]); // Inclui searchParams para evitar mudanças inesperadas  
 
+  // Efeito para configurar modo mobile baseado em localStorage e parâmetros de URL
   useEffect(() => {
     if (typeof window !== "undefined") {  // Garante que é no cliente
-      const modeSearchParams = searchParams.get("mobileMode") === "True" ? true : false;
-      const mode = JSON.parse(localStorage.getItem("mobileMode"));
-      if(mode === null || mode === undefined) {
+      const modeSearchParams = searchParams.get("mobileMode") === "True" ? true : false; // Verifica parâmetro de URL
+      const mode = JSON.parse(localStorage.getItem("mobileMode")); // Obtém modo do localStorage
+      if(mode === null || mode === undefined) { // Se não há valor no localStorage
         localStorage.setItem("mobileMode", 
-          JSON.stringify(modeSearchParams)
+          JSON.stringify(modeSearchParams) // Salva valor dos parâmetros
         );
-        setMobileMode(modeSearchParams);
+        setMobileMode(modeSearchParams); // Define o estado
       } else {
-        setMobileMode(mode)
+        setMobileMode(mode) // Usa valor do localStorage
       }
     }
   }, []);
 
+  // Efeito para monitorar mudanças no estado de autenticação
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const token = await currentUser.getIdToken();
+      if (currentUser) { // Se há usuário autenticado
+        const token = await currentUser.getIdToken(); // Obtém token do usuário
         const response = await fetch(`/api/auth/get-user/${currentUser.uid}`, {
           headers: {
-            'authorization': token,
+            'authorization': token, // Envia token no header
           },
         });
-        const data = await response.json();
-        if (response.status === 200) {
-          setDBUser(data);
-        } else if (response.status === 404) {
-          const createdUser = await createUser(currentUser);
-          setDBUser(createdUser);
+        const data = await response.json(); // Obtém dados da resposta
+        if (response.status === 200) { // Se usuário existe no banco
+          setDBUser(data); // Define dados do banco
+        } else if (response.status === 404) { // Se usuário não existe no banco
+          const createdUser = await createUser(currentUser); // Cria usuário no banco
+          setDBUser(createdUser); // Define dados do usuário criado
         }
-        setUser(currentUser);
-      } else {
-        setUser(null);
-        setDBUser(null);
+        setUser(currentUser); // Define usuário do Firebase
+      } else { // Se não há usuário autenticado
+        setUser(null); // Limpa usuário do Firebase
+        setDBUser(null); // Limpa usuário do banco
       }
     });
   
-    return () => unsubscribe();
+    return () => unsubscribe(); // Limpa listener ao desmontar
   }, [createUser]); // Adiciona a dependência corretamente  
 
+  // Efeito para lidar com resultado de redirect de autenticação
   useEffect(() => {
     const handleRedirectResult = async () => {
       try {
-        const result = await getRedirectResult(auth);
+        const result = await getRedirectResult(auth); // Obtém resultado do redirect
         if (result?.user) {
         // Usuário autenticado — estado será atualizado pelo onAuthStateChanged
         }
@@ -103,109 +136,120 @@ export const AuthProvider = ({ children }) => {
         console.error("Erro ao processar redirecionamento do login:", error);
       }
     };
-    handleRedirectResult();
+    handleRedirectResult(); // Executa ao montar
   }, []);
   
+  // Função para cadastro com email e senha
   const signUpWithEmailAndPassword = useCallback(async (username, email, password) => {
     await handleAction(async () => {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password); // Cria usuário no Firebase
       await updateProfile(auth.currentUser, {
-        displayName: username,
+        displayName: username, // Define nome de exibição
       });
     });
   }, [handleAction]);
 
+  // Função para enviar email de verificação
   const signUpEmailVerification = useCallback(async () => {
     await handleAction(async () => {
-      await sendEmailVerification(auth.currentUser);
+      await sendEmailVerification(auth.currentUser); // Envia email de verificação
     });
   }, [handleAction]);
 
+  // Função para login com email e senha
   const loginWithEmailAndPassword = useCallback(async (email, password) => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
-        await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, email, password); // Faz login no Firebase
       });
     });
   }, [handleAction, handleAuthentication]);
 
+  // Função para login com Google
   const signInWithGoogle = useCallback(async () => {
     await handleAuthentication(async () => {
       await handleAction(async () => {
-        const provider = new GoogleAuthProvider();
-        const mode = JSON.parse(localStorage.getItem("mobileMode"));
+        const provider = new GoogleAuthProvider(); // Cria provider do Google
+        const mode = JSON.parse(localStorage.getItem("mobileMode")); // Verifica modo mobile
         if (mode) {
-          await signInWithRedirect(auth, provider); // para WebView/mobile
+          await signInWithRedirect(auth, provider); // para WebView/mobile usa redirect
         } else {
-          await signInWithPopup(auth, provider); // para desktop
+          await signInWithPopup(auth, provider); // para desktop usa popup
         }
       });
     });
   }, [handleAction, handleAuthentication]);
 
+  // Função para enviar email de recuperação de senha
   const sendForgotPasswordEmail = useCallback(async (email) => {
     await handleAction(async () => {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, email); // Envia email de recuperação
     });
   }, [handleAction]);
 
+  // Função para verificar email
   const verifyEmail = useCallback(async (oobCode) => {
     await handleAction(async () => {
-      await applyActionCode(auth, oobCode);
-      router.push("/auth/signin");
+      await applyActionCode(auth, oobCode); // Aplica código de verificação
+      router.push("/auth/signin"); // Redireciona para login
     });
   }, [handleAction, router]);
 
+  // Função para resetar senha
   const resetPassword = useCallback(async (oobCode, newPassword) => {
     await handleAction(async () => {
-      await confirmPasswordReset(auth, oobCode, newPassword);
-      router.push("/auth/signin");
+      await confirmPasswordReset(auth, oobCode, newPassword); // Confirma nova senha
+      router.push("/auth/signin"); // Redireciona para login
     });
   }, [handleAction, router]);
 
+  // Função para fazer logout
   const logout = useCallback(async () => {
     await handleAction(async () => {
-      await signOut(auth)
-      setUser(null);
+      await signOut(auth) // Faz logout no Firebase
+      setUser(null); // Limpa estado do usuário
     });
   }, [handleAction]);
 
+  // Função para deletar conta
   const deleteAccount = useCallback(async () => {
     await handleAction(async () => {
-      await fetch('/api/auth/delete-user', {
+      await fetch('/api/auth/delete-user', { // Deleta dados do banco
         method: 'DELETE',
         headers: { 
           'Content-Type': 'application/json',
-          'authorization': await auth.currentUser.getIdToken()
+          'authorization': await auth.currentUser.getIdToken() // Envia token
         },
         body: JSON.stringify({
-          uid: auth.currentUser.uid
+          uid: auth.currentUser.uid // Envia UID
         }),
       });
-      await deleteUser(auth.currentUser);
-      setUser(null)
+      await deleteUser(auth.currentUser); // Deleta usuário do Firebase
+      setUser(null) // Limpa estado
     });
   }, [handleAction]);
 
+  // Objeto com todos os valores e funções do contexto
   const context = {
-    user,
-    DBUser,
-    authLoading,
-    mobileMode,
-    signUpWithEmailAndPassword,
-    signUpEmailVerification,
-    loginWithEmailAndPassword,
-    signInWithGoogle,
-    sendForgotPasswordEmail,
-    resetPassword,
-    logout,
-    deleteAccount,
-    verifyEmail,
+    user, // Usuário do Firebase
+    DBUser, // Usuário do banco de dados
+    authLoading, // Estado de carregamento
+    mobileMode, // Modo mobile
+    signUpWithEmailAndPassword, // Função de cadastro
+    signUpEmailVerification, // Função de verificação de email
+    loginWithEmailAndPassword, // Função de login
+    signInWithGoogle, // Função de login com Google
+    sendForgotPasswordEmail, // Função de recuperação de senha
+    resetPassword, // Função de reset de senha
+    logout, // Função de logout
+    deleteAccount, // Função de deletar conta
+    verifyEmail, // Função de verificar email
   };
 
   return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>;
 };
 
+// Hook personalizado para usar o contexto de autenticação
 export const useAuth = () => {
-  return useContext(AuthContext);
+  return useContext(AuthContext); // Retorna o contexto
 };

@@ -1,12 +1,29 @@
-'use server'
+/**
+ * AÇÃO DE CANCELAR PEDIDO
+ * 
+ * Este arquivo contém a ação server-side para cancelar um pedido e notificar
+ * o comprador e vendedor via WhatsApp. A função deleta o pedido do banco,
+ * envia mensagens formatadas com motivo do cancelamento.
+ * 
+ * Funcionalidades:
+ * - Cancelar e deletar pedido
+ * - Enviar notificação ao comprador com motivo
+ * - Enviar notificação ao vendedor
+ * - Formatação de mensagens com detalhes do pedido
+ * - Formatação de preços em BRL
+ */
 
-import { sendMessage } from "./sendMessage";
-import { refuseOrder } from "./refuseOrder";
-import { getChatId } from "./getChatId";
+'use server' // Diretiva para indicar que esta função roda no servidor
+
+import { sendMessage } from "./sendMessage"; // Importa função para enviar mensagem
+import { refuseOrder } from "./refuseOrder"; // Importa função para recusar pedido
+import { getChatId } from "./getChatId"; // Importa função para obter chatId
 
 export async function cancelOrder(formdata, order, waSession) {
-    const reason = formdata.get('reason');
-    await refuseOrder(order.id)
+    const reason = formdata.get('reason'); // Obtém motivo do cancelamento do formulário
+    await refuseOrder(order.id) // Deleta pedido do banco de dados
+    
+    // Envia mensagem de cancelamento ao comprador
     const response = await sendMessage(waSession.id, waSession.token, `${order.buyer_phone}@c.us`, `
         *Seu Pedido em ${order.store_name} Foi Cancelado*
 
@@ -23,9 +40,12 @@ export async function cancelOrder(formdata, order, waSession) {
         *Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
     `)
 
+    // Se mensagem foi enviada com sucesso
     if (response.status === 200) {
+        // Obtém chatId do vendedor
         const catalogOwnerChatId = await getChatId(waSession.id, waSession.token);
 
+        // Envia notificação de cancelamento ao vendedor
         await sendMessage(process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION, process.env.NEXT_PUBLIC_WHATSAPP_API_DEFAULT_SESSION_TOKEN, catalogOwnerChatId, `
 *Pedido Cancelado*
 
