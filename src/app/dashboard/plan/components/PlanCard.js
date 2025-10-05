@@ -77,7 +77,6 @@ export default function PlanCard({ recurrenceType = 1, price = 25, disabled = fa
   }, [user, recurrenceType, disabled, paymentLinkGenerated]); // Executa quando essas dependências mudam
 
   return (
-    {/* Container principal do card de plano */}
     <div className="bg-lightcyan p-4 border-4 border-jordyblue rounded-lg flex flex-col items-center space-y-1 m-2 max-sm:text-center">
       {/* Badge promocional no topo do card */}
       <div className="flex w-full justify-center">
