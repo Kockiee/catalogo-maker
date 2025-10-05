@@ -1,37 +1,82 @@
+/**
+ * Página de Cadastro de Usuário
+ * 
+ * Esta página permite que novos usuários criem uma conta no sistema.
+ * Oferece duas opções de cadastro: com email e senha ou através do Google.
+ * Inclui validações de formulário, verificação de termos de uso e
+ * tratamento de erros específicos do Firebase Authentication.
+ */
+
 'use client'
+// Importa componente para exibição de erros
 import ErrorCard from '@/app/auth/components/ErrorCard';
+// Importa o contexto de autenticação
 import { useAuth } from '@/app/contexts/AuthContext';
+// Importa componentes da biblioteca Flowbite
 import { Button, Checkbox, Label, Spinner, TextInput } from 'flowbite-react';
+// Importa componente de link do Next.js
 import Link from 'next/link';
+// Importa hook useState para gerenciar estado local
 import { useState } from 'react';
+// Importa ícone do Google
 import { FcGoogle } from "react-icons/fc";
 
+/**
+ * Componente principal da página de cadastro
+ * @param {object} searchParams - Parâmetros de busca da URL
+ * @returns {JSX.Element} - Interface de cadastro de usuário
+ */
 export default function PAGE({searchParams}) {
+    // Verifica se está no modo mobile através dos parâmetros da URL
     const mobileMode = searchParams.mobileMode;
+    // Estado para armazenar o email digitado
     const [email, setEmail] = useState('');
+    // Estado para armazenar o nome de usuário
     const [username, setUsername] = useState('');
+    // Estado para armazenar a senha
     const [password, setPassword] = useState('');
+    // Estado para armazenar a confirmação da senha
     const [repeatedPassword, setRepeatedPassword] = useState('');
+    // Estado para controlar se os termos foram aceitos
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+    // Estado para armazenar mensagens de erro
     const [error, setError] = useState('');
+    // Obtém funções do contexto de autenticação
     const { signUpWithEmailAndPassword, signInWithGoogle, authLoading } = useAuth()
 
+    /**
+     * Middleware para verificar aceitação dos termos antes de executar ações
+     * @param {function} action - Função a ser executada se os termos foram aceitos
+     */
     const signUpMiddleware = async(action) => {
+      // Verifica se os termos foram aceitos
       if (isTermsAccepted) {
+        // Executa a ação se os termos foram aceitos
         await action();
       } else {
+        // Exibe erro se os termos não foram aceitos
         setError("Você precisa aceitar os termos de uso e a política de privacidade antes de continuar.")
       }
     } 
 
+    /**
+     * Função para processar o envio do formulário de cadastro
+     * @param {Event} e - Evento de submit do formulário
+     */
     const handleSubmit = (e) => {
+      // Previne o comportamento padrão do formulário
       e.preventDefault();
+      // Executa o middleware de verificação de termos
       signUpMiddleware(async() => {
+        // Verifica se as senhas coincidem
         if (password === repeatedPassword) {
           try {
+            // Tenta criar a conta com email e senha
             await signUpWithEmailAndPassword(username, email, password)
           } catch (err) {
+            // Limpa erros anteriores
             setError("")
+            // Trata diferentes tipos de erro do Firebase
             if (err.code == 'auth/email-already-in-use') {
               setError("Esse email já existe.")
             } else if (err.code == 'auth/invalid-email') {
@@ -41,16 +86,23 @@ export default function PAGE({searchParams}) {
             }
           }
         } else {
+          // Exibe erro se as senhas não coincidem
           setError("As senhas digitadas não coincidem")
         }
       })
     }
 
+    /**
+     * Função para processar cadastro com Google
+     */
     const handleSignWithGoogle = () => {
+      // Executa o middleware de verificação de termos
       signUpMiddleware(async() => {
         try {
+          // Tenta fazer login com Google
           await signInWithGoogle()
         } catch (err) {
+          // Trata erro de email já em uso
           if (err.code === 'auth/email-already-in-use') {
             setError(<Text className="text-base text-red-600 dark:text-red-400"><Text className="font-medium">Opa!</Text> Esse email já existe.</Text>)
           }
@@ -60,9 +112,13 @@ export default function PAGE({searchParams}) {
 
     return (
         <main className="flex justify-center items-center h-full">
+            {/* Card principal do formulário de cadastro */}
             <div className="rounded-lg max-w-md w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
+                {/* Título da página */}
                 <h1 className='font-bold text-xl'>Crie uma conta</h1>
+                {/* Formulário de cadastro */}
                 <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
+                  {/* Campo de nome de usuário */}
                   <div>
                     <div className="mb-2 block">
                       <Label 
@@ -80,6 +136,7 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
+                  {/* Campo de email */}
                   <div>
                     <div className="mb-2 block">
                       <Label 
@@ -97,6 +154,7 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
+                  {/* Campo de senha */}
                   <div>
                     <div className="mb-2 block">
                       <Label 
@@ -115,6 +173,7 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
+                  {/* Campo de confirmação de senha */}
                   <div>
                     <div className="mb-2 block">
                       <Label 
@@ -133,7 +192,9 @@ export default function PAGE({searchParams}) {
                     required 
                     shadow />
                   </div>
+                  {/* Componente para exibir erros */}
                   <ErrorCard error={error}/>
+                  {/* Checkbox para aceitar termos de uso */}
                   <div className="flex items-center gap-2">
                     <Checkbox className='w-6 h-6 mr-2' onChange={(e) => setIsTermsAccepted(e.target.checked)} id="agree" required color="blue"/>
                     <Label htmlFor="agree">
@@ -145,6 +206,7 @@ export default function PAGE({searchParams}) {
                       </Link>
                     </Label>
                   </div>
+                  {/* Link para página de login */}
                   <div className="flex items-center gap-2">
                     <Label htmlFor='donthaveaccount' className="flex">
                       Já tem uma conta ?&nbsp;
@@ -153,11 +215,14 @@ export default function PAGE({searchParams}) {
                       </Link>
                     </Label>
                   </div>
+                  {/* Botão de submit do formulário */}
                   <Button type="submit" className='bg-neonblue hover:!bg-neonblue/80 focus:ring-0'>
                     {!authLoading ? <>Criar Conta</> : <Spinner className="text-lightcyan" size={'md'}></Spinner>}
                   </Button>
                 </form>
+                {/* Separador visual */}
                 <p className='text-base'>ou</p>
+                {/* Botão de cadastro com Google */}
                 <Button 
                 onClick={handleSignWithGoogle}
                 className='inline-flex bg-gray-100 text-black hover:!bg-gray-200 border border-gray-200 focus:ring-0'>

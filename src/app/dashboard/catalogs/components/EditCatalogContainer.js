@@ -1,88 +1,138 @@
+/**
+ * Container para edição de catálogos
+ * 
+ * Este arquivo contém o componente principal para editar
+ * um catálogo existente. Permite modificar todas as informações
+ * do catálogo incluindo nome, descrição, banner, cores e
+ * gerenciar a conexão WhatsApp.
+ * 
+ * Funcionalidades principais:
+ * - Edição de informações do catálogo
+ * - Upload de novo banner
+ * - Seleção de cores personalizadas
+ * - Gerenciamento de conexão WhatsApp
+ * - Modal de confirmação para desconectar WhatsApp
+ * - Pré-visualização em tempo real
+ */
+
 'use client'
+// Importa contexto de ferramentas
 import { useTool } from "../../../contexts/ToolContext"
+// Importa componentes do Flowbite
 import { Button, Tooltip } from "flowbite-react"
+// Importa hooks do React para estado e efeitos
 import { useEffect, useState } from "react";
+// Importa ação para atualizar catálogo
 import { updateCatalog } from "../../../actions/updateCatalog";
+// Importa ação para desconectar WhatsApp
 import { disconnectCatalogWhatsapp } from "../../../actions/disconnectCatalogWhatsapp";
+// Importa hook useFormState do React DOM
 import { useFormState } from 'react-dom'
+// Importa hook de notificações
 import { useNotifications } from "../../../hooks/useNotifications";
+// Importa componente de card de erro
 import ErrorCard from "../../../auth/components/ErrorCard";
+// Importa componente de campo de formulário
 import FormField from "../../../components/FormField";
+// Importa componente de upload de imagem
 import ImageUpload from "../../../components/ImageUpload";
+// Importa componente de seleção de cores
 import ColorPickerGroup from "../../../components/ColorPickerGroup";
+// Importa componente de pré-visualização do catálogo
 import CatalogPreview from "../../../components/CatalogPreview";
+// Importa ícones do Heroicons
 import { HiExclamationCircle, HiLogout } from "react-icons/hi";
+// Importa ícone do WhatsApp
 import { FaWhatsapp } from "react-icons/fa";
 
+// Componente principal para edição de catálogos
 export default function EditCatalogContainer({catalogId}) {
+    // Extrai catálogos e função de atualização do contexto de ferramentas
     const { catalogs, updateCatalogs } = useTool();
+    // Encontra o catálogo específico
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
+    // Estado para o nome de identificação do catálogo
     const [identificationName, setIdentificationName] = useState(catalog.name);
+    // Estado para o nome da loja
     const [storeName, setStoreName] = useState(catalog.store_name);
+    // Estado para a descrição da loja
     const [storeDescription, setStoreDescription] = useState(catalog.store_description);
+    // Estado para as cores do catálogo
     const [colors, setColors] = useState({
         primaryColor: catalog.primary_color,
         secondaryColor: catalog.secondary_color,
         tertiaryColor: catalog.tertiary_color,
         textColor: catalog.text_color
     });
+    // Estado para a imagem do banner
     const [bannerImage, setBannerImage] = useState(catalog.banner_url);
+    // Estado de loading durante atualização
     const [loading, setLoading] = useState(false);
+    // Estado para mensagens de erro
     const [error, setError] = useState("");
+    // Estado que indica se está desconectando WhatsApp
     const [isDisconnecting, setIsDisconnecting] = useState(false);
+    // Estado que controla se o modal de desconexão está visível
     const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+    // Hook para exibir notificações ao usuário
     const { notify } = useNotifications();
 
+    // Função que atualiza uma cor específica
     const handleColorChange = (colorKey, value) => {
-        setColors(prev => ({ ...prev, [colorKey]: value }));
+        setColors(prev => ({ ...prev, [colorKey]: value })); // Atualiza a cor específica
     };
 
+    // Função que desconecta a sessão WhatsApp do catálogo
     const handleDisconnectWhatsapp = async () => {
-        if (!catalog.whatsapp_session) return;
+        if (!catalog.whatsapp_session) return; // Se não tem sessão, não faz nada
         
-        setIsDisconnecting(true);
-        setShowDisconnectModal(false);
-        notify.processing("Desconectando sessão do WhatsApp...");
+        setIsDisconnecting(true); // Marca como desconectando
+        setShowDisconnectModal(false); // Fecha modal
+        notify.processing("Desconectando sessão do WhatsApp..."); // Mostra notificação
         
         try {
+            // Chama ação para desconectar WhatsApp
             const result = await disconnectCatalogWhatsapp(catalogId, catalog.whatsapp_session, catalog.whatsapp_session_token);
             
             if (result.success) {
-                notify.success(result.message);
+                notify.success(result.message); // Notifica sucesso
                 // Atualizar a lista de catálogos para refletir a mudança
                 await updateCatalogs();
             } else {
-                notify.error(result.message);
+                notify.error(result.message); // Notifica erro
             }
         } catch (error) {
-            console.error("Erro ao desconectar WhatsApp:", error);
-            notify.error("Erro ao desconectar sessão do WhatsApp");
+            console.error("Erro ao desconectar WhatsApp:", error); // Registra erro
+            notify.error("Erro ao desconectar sessão do WhatsApp"); // Notifica erro
         } finally {
-            setIsDisconnecting(false);
+            setIsDisconnecting(false); // Para desconexão
         }
     };
 
+    // Função que abre o modal de desconexão
     const openDisconnectModal = () => {
-        setShowDisconnectModal(true);
+        setShowDisconnectModal(true); // Mostra modal
     };
 
+    // Hook para gerenciar o estado do formulário e ações
     const [formState, formAction] = useFormState(async(state, formdata) => {
-        setLoading(true);
-        notify.processing("Atualizando catálogo...");
-        return updateCatalog(state, formdata, catalog.id);
+        setLoading(true); // Marca como carregando
+        notify.processing("Atualizando catálogo..."); // Mostra notificação de processamento
+        return updateCatalog(state, formdata, catalog.id); // Chama ação de atualização
     }, {message: ''});
 
+    // Efeito que processa o resultado da atualização do catálogo
     useEffect(() => {
         if (formState.message !== '') {
-            setLoading(false);
+            setLoading(false); // Para loading
             if (formState.message === 'catalog-updated') {
-                notify.catalogUpdated();
-                updateCatalogs();
+                notify.catalogUpdated(); // Notifica sucesso
+                updateCatalogs(); // Atualiza lista de catálogos
             } else if (formState.message === 'invalid-params') {
-                setError("Informações de catálogo inválidas.");
+                setError("Informações de catálogo inválidas."); // Erro de parâmetros inválidos
             }
         }
-    }, [formState]);
+    }, [formState]); // Executa quando formState muda
 
     return (
         <>

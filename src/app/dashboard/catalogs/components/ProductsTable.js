@@ -1,137 +1,189 @@
+/**
+ * Componente de tabela de produtos de um catálogo
+ * 
+ * Este arquivo contém o componente que exibe todos os produtos
+ * de um catálogo específico em formato de tabela responsiva.
+ * Permite seleção múltipla, edição, exclusão e criação de
+ * novos produtos.
+ * 
+ * Funcionalidades principais:
+ * - Exibição de todos os produtos do catálogo
+ * - Seleção múltipla de produtos
+ * - Ações de editar e excluir produtos
+ * - Criação de novos produtos
+ * - Interface responsiva (tabela no desktop, cards no mobile)
+ * - Notificações de feedback para o usuário
+ */
+
 'use client'
 
+// Importa hooks do React para estado e efeitos
 import { useState, useEffect } from "react";
+// Importa contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
-import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+// Importa componente Link do Next.js
 import Link from 'next/link';
-import { BiEdit } from "react-icons/bi";
-import { HiPlus, HiTrash } from "react-icons/hi";
+// Importa ação para excluir produtos
 import { deleteProducts } from "../../../actions/deleteProducts";
+// Importa hook de notificações
 import { useNotifications } from "../../../hooks/useNotifications";
-import ButtonAPP from "../../../components/ButtonAPP";
+// Importa componente de tabela responsiva
+import ResponsiveTable from "../../../components/ResponsiveTable";
+// Importa componente de botões de ação
+import ActionButtons from "../../../components/ActionButtons";
+// Importa componente de célula de tabela do Flowbite
+import { TableCell } from "flowbite-react";
 
+// Componente principal da tabela de produtos
 export default function ProductsTable({ catalogId }) {
+    // Extrai catálogos e função de atualização do contexto de ferramentas
     const { catalogs, updateCatalogs } = useTool();
+    // Hook para exibir notificações ao usuário
     const { notify } = useNotifications();
+    // Encontra o catálogo específico
     const catalog = catalogs.find(catalog => catalog.id === catalogId);
+    // Estado que armazena os produtos selecionados para ações em lote
     const [selectedProducts, setSelectedProducts] = useState([]);
 
+    // Efeito que atualiza a lista de catálogos quando o componente é montado
     useEffect(() => {
-      updateCatalogs();
-    }, []);
+      updateCatalogs(); // Carrega os catálogos do usuário
+    }, []); // Executa apenas uma vez
 
+    // Função que alterna a seleção de um produto específico
     const toggleProductSelection = (productId) => {
       if (selectedProducts.includes(productId)) {
+        // Se já está selecionado, remove da seleção
         setSelectedProducts(prevState => prevState.filter(id => id !== productId));
       } else {
+        // Se não está selecionado, adiciona à seleção
         setSelectedProducts(prevState => [...prevState, productId]);
       }
     };
 
-    const handleDeleteProducts = async () => {
-      notify.processing("Excluindo produtos...");
-      try {
-        await deleteProducts(selectedProducts);
-        notify.productDeleted();
+    // Função que seleciona/deseleciona todos os produtos
+    const handleSelectAll = () => {
+      if (selectedProducts.length === catalog.products.length) {
+        // Se todos estão selecionados, deseleciona todos
         setSelectedProducts([]);
-        updateCatalogs();
-      } catch (error) {
-        notify.productDeletionFailed();
+      } else {
+        // Se nem todos estão selecionados, seleciona todos
+        setSelectedProducts(catalog.products.map(product => product.id));
       }
     };
 
-    const renderProducts = () => {
-      return catalog.products.map((product, index) => (
-        <TableRow key={index} className="bg-lightcyan text-prussianblue">
-          <TableCell>
-            <Checkbox
-              checked={selectedProducts.includes(product.id)}
-              onChange={() => toggleProductSelection(product.id)}
-              className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-          </TableCell>
-          <TableCell className="whitespace-nowrap font-bold">
-            <Link className="py-4 hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
-              {product.name}
-            </Link>
-          </TableCell>
-          <TableCell>
-            {catalog.name}
-          </TableCell>
-          <TableCell>
-            {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-          </TableCell>
-          <TableCell>
-            {new Date(product.created_at.seconds * 1000).toLocaleString()}
-          </TableCell>
-          <TableCell>
-            <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="font-bold text-neonblue hover:underline">
-              Editar
-            </Link>
-          </TableCell>
-        </TableRow>
-      ));
+    // Função que exclui os produtos selecionados
+    const handleDeleteProducts = async () => {
+      notify.processing("Excluindo produtos..."); // Mostra notificação de processamento
+      try {
+        await deleteProducts(selectedProducts); // Executa a exclusão
+        notify.productDeleted(); // Mostra notificação de sucesso
+        setSelectedProducts([]); // Limpa a seleção
+        updateCatalogs(); // Atualiza a lista de catálogos
+      } catch (error) {
+        notify.productDeletionFailed(); // Mostra notificação de erro
+      }
     };
+
+    // Função que renderiza uma linha da tabela para desktop
+    const renderProductRow = (product, index) => (
+      <>
+        {/* Célula com nome do produto (link clicável) */}
+        <TableCell className="whitespace-nowrap font-bold">
+          <Link className="py-4 hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
+            {product.name}
+          </Link>
+        </TableCell>
+        {/* Célula com nome do catálogo */}
+        <TableCell>
+          {catalog.name}
+        </TableCell>
+        {/* Célula com preço formatado */}
+        <TableCell>
+          {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        </TableCell>
+        {/* Célula com data de criação formatada */}
+        <TableCell>
+          {new Date(product.created_at.seconds * 1000).toLocaleString()}
+        </TableCell>
+        {/* Célula com link para editar */}
+        <TableCell>
+          <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="font-bold text-neonblue hover:underline">
+            Editar
+          </Link>
+        </TableCell>
+      </>
+    );
+
+    // Função que renderiza um card para mobile
+    const renderProductCard = (product, index) => (
+      <div className="space-y-3">
+        {/* Header do card com nome e botão editar */}
+        <div className="flex justify-between items-start">
+          <Link className="text-lg font-bold text-prussianblue hover:underline" href={`/dashboard/catalogs/${catalog.id}/${product.id}`}>
+            {product.name}
+          </Link>
+          <Link href={`/dashboard/catalogs/${catalog.id}/${product.id}`} className="text-sm font-bold text-neonblue hover:underline">
+            Editar
+          </Link>
+        </div>
+        
+        {/* Grid com informações do produto */}
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="font-medium text-gray-600">Catálogo:</span>
+            <p className="text-gray-800">{catalog.name}</p>
+          </div>
+          <div>
+            <span className="font-medium text-gray-600">Preço:</span>
+            <p className="font-bold text-green-600">
+              {product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            </p>
+          </div>
+        </div>
+        
+        {/* Data de criação */}
+        <div className="text-sm">
+          <span className="font-medium text-gray-600">Criado em:</span>
+          <p className="text-gray-800">{new Date(product.created_at.seconds * 1000).toLocaleString()}</p>
+        </div>
+      </div>
+    );
+
+    // Define as colunas da tabela
+    const columns = [
+      { label: "Nome" },
+      { label: "Catálogo" },
+      { label: "Preço" },
+      { label: "Data de criação" },
+      { label: "Ações" }
+    ];
 
     return (
       <>
-        <div className="max-sm:fixed max-sm:z-10 max-sm:bottom-6 left-0 max-sm:flex max-sm:justify-center max-sm:w-full">
-          <div className="flex flex-wrap items-center max-sm:flex-row max-sm:bg-lightcyan max-sm:border-jordyblue max-sm:border-4 max-sm:rounded-xl max-sm:flex max-sm:justify-around">
-            {selectedProducts.length > 0 && (
-              <ButtonAPP
-                onClick={handleDeleteProducts}
-                className="m-2 max-[344px]:px-6"
-                negative>
-                <HiTrash className="w-5 h-5 mr-1 max-sm:m-0"/> Deletar
-              </ButtonAPP>
-            )}
-            <ButtonAPP
-              href={`/dashboard/catalogs/${catalogId}/new-product`}
-              className="m-2 max-[344px]:px-6">
-              <HiPlus className="w-5 h-5 mr-1 "/> Criar
-            </ButtonAPP>
-            {selectedProducts.length === 1 && (
-              <ButtonAPP
-              href={`/dashboard/catalogs/${catalogId}/${selectedProducts[0]}`}
-              className="m-2 max-[344px]:px-6">
-                <BiEdit className="w-5 h-5 mr-1 max-sm:m-0"/> Editar
-              </ButtonAPP>
-            )}
-          </div>
-        </div>
-        <div className="overflow-x-auto shadow-md rounded-lg">
-          <Table>
-            <TableHead>
-              <TableHeadCell className="p-4 bg-cornflowerblue">
-                {catalog.products && catalog.products.length > 0 && (
-                  <Checkbox
-                    checked={selectedProducts.length === catalog.products.length}
-                    onChange={() => {
-                      if (selectedProducts.length === catalog.products.length) {
-                        setSelectedProducts([]);
-                      } else {
-                        setSelectedProducts(catalog.products.map(product => product.id));
-                      }
-                    }}
-                    className="text-prussianblue focus:ring-jordyblue cursor-pointer border-prussianblue"/>
-                )}
-              </TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Nome</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Catálogo</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Preço</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">Data de criação</TableHeadCell>
-              <TableHeadCell className="bg-cornflowerblue text-white">
-                <span className="sr-only">Editar</span>
-              </TableHeadCell>
-            </TableHead>
-            <TableBody className="divide-y !w-full">
-              {catalog.products.length < 1 ? (
-                <TableRow className="bg-jordyblue text-white">
-                  <TableCell colSpan={6}>Você ainda não criou um produto.</TableCell>
-                </TableRow>
-              ) : renderProducts()}
-            </TableBody>
-          </Table>
-        </div>
+        {/* Componente de botões de ação (criar, editar, excluir) */}
+        <ActionButtons
+          selectedCount={selectedProducts.length} // Quantidade de itens selecionados
+          onDelete={handleDeleteProducts} // Função para excluir produtos
+          onCreateHref={`/dashboard/catalogs/${catalogId}/new-product`} // Link para criar novo produto
+          onEditHref={selectedProducts.length === 1 ? `/dashboard/catalogs/${catalogId}/${selectedProducts[0]}` : "#"} // Link para editar (só funciona com 1 selecionado)
+          createLabel="Criar Produto" // Texto do botão criar
+          editLabel="Editar Produto" // Texto do botão editar
+          deleteLabel="Deletar Produtos" // Texto do botão excluir
+        />
+        
+        {/* Tabela responsiva que exibe os produtos */}
+        <ResponsiveTable
+          columns={columns} // Colunas da tabela
+          data={catalog.products || []} // Dados dos produtos (array vazio se não houver)
+          renderRow={renderProductRow} // Função para renderizar linha da tabela
+          renderMobileCard={renderProductCard} // Função para renderizar card mobile
+          onSelectAll={handleSelectAll} // Função para selecionar todos
+          onSelectItem={toggleProductSelection} // Função para selecionar item individual
+          selectedItems={selectedProducts} // IDs dos itens selecionados
+          selectable={true} // Permite seleção de itens
+          emptyMessage="Você ainda não criou um produto." // Mensagem quando não há dados
+        />
       </>   
     );
 }

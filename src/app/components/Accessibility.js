@@ -1,83 +1,52 @@
-'use client'
-import { useState, useEffect } from "react";
-import { FaVolumeUp, FaPlus, FaMinus, FaLowVision, FaUniversalAccess } from "react-icons/fa";
-import ButtonAPP from "./ButtonAPP";
+/**
+ * COMPONENTE DE ACESSIBILIDADE
+ * 
+ * Este arquivo contém o componente principal do widget de acessibilidade do Catálogo Maker.
+ * Ele fornece funcionalidades de acessibilidade como ajuste de fonte, contraste, leitura em voz alta,
+ * e outras opções para tornar o site mais acessível para usuários com necessidades especiais.
+ * 
+ * O componente utiliza lazy loading para melhorar a performance da aplicação, carregando
+ * o conteúdo de acessibilidade apenas quando necessário.
+ */
+
+'use client' // Diretiva para indicar que este componente roda no lado do cliente
+import { useState, useEffect, lazy, Suspense } from "react"; // Importa hooks do React e componentes para lazy loading
+import { FaVolumeUp, FaPlus, FaMinus, FaLowVision, FaUniversalAccess } from "react-icons/fa"; // Importa ícones da biblioteca react-icons
+import ButtonAPP from "./ButtonAPP"; // Importa o componente de botão personalizado
+
+// Lazy load do componente de acessibilidade para melhor performance
+// Carrega o componente AccessibilityContent apenas quando necessário
+const AccessibilityWidgetContent = lazy(() => import('./AccessibilityContent'));
 
 export default function AccessibilityWidget() {
-  const [fontScale, setFontScale] = useState(1);
-  const [letterSpacing, setLetterSpacing] = useState(1);
-  const [lineSpacing, setLineSpacing] = useState(1.5);
-  const [highContrast, setHighContrast] = useState(false);
-  const [speechEnabled, setSpeechEnabled] = useState(false);
+  // Estado para controlar se o widget está aberto ou fechado
   const [isOpen, setIsOpen] = useState(false);
-  const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
+  // Estado para controlar se o componente foi montado (evita problemas de hidratação)
+  const [mounted, setMounted] = useState(false);
 
+  // Efeito que executa quando o componente é montado
   useEffect(() => {
-    document.documentElement.style.fontSize = `${fontScale}em`;
-  }, [fontScale]);
+    setMounted(true); // Marca o componente como montado
+  }, []); // Array vazio significa que executa apenas uma vez
 
-  useEffect(() => {
-    document.documentElement.style.lineHeight = `${lineSpacing}`;
-  }, [lineSpacing]);
-
-  useEffect(() => {
-    document.documentElement.style.letterSpacing = `${letterSpacing}px`;
-  }, [letterSpacing]);
-
-  useEffect(() => {
-    if (highContrast) {
-      document.documentElement.style.filter = "contrast(1.5)";
-    } else {
-      document.documentElement.style.filter = "none";
-    }
-  }, [highContrast]);
-
-  const handleSpeak = () => {
-    if (synth) {
-      if (!speechEnabled) {
-        setSpeechEnabled(true);
-        const text = document.body.innerText;
-        const utterance = new SpeechSynthesisUtterance(text);
-        synth.speak(utterance);
-      } else {
-        setSpeechEnabled(false);
-        synth.cancel();
-      }
-    }
-  };
+  // Se o componente ainda não foi montado, não renderiza nada
+  // Isso evita problemas de hidratação entre servidor e cliente
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <div className="fixed bottom-5 right-5 flex flex-col items-start z-50">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all"
-        style={{ position: "fixed", bottom: "20px", right: "20px" }}
-      >
-        <FaUniversalAccess size={24} />
-      </button>
-      {isOpen && (
-        <div className="mt-3 p-3 bg-white shadow-lg rounded-xl flex flex-col space-y-2 max-w-xs"
-          style={{ position: "fixed", bottom: "80px", right: "20px" }}>
-          <ButtonAPP onClick={() => setFontScale((scale) => Math.min(2, scale + 0.1))}>
-            <FaPlus className="mr-2" /> Aumentar Fonte
-          </ButtonAPP>
-          <ButtonAPP onClick={() => setFontScale((scale) => Math.max(0.8, scale - 0.1))}>
-            <FaMinus className="mr-2" /> Diminuir Fonte
-          </ButtonAPP>
-          <ButtonAPP onClick={() => setLetterSpacing((spacing) => Math.min(5, spacing + 0.5))}>
-            <FaPlus className="mr-2" /> Aumentar Espaçamento entre Letras
-          </ButtonAPP>
-          <ButtonAPP onClick={() => setLetterSpacing((spacing) => Math.max(0, spacing - 0.5))}>
-            <FaMinus className="mr-2" /> Diminuir Espaçamento entre Letras
-          </ButtonAPP>
-          <ButtonAPP onClick={() => setHighContrast((prev) => !prev)}>
-            <FaLowVision className="mr-2" /> Alto Contraste
-          </ButtonAPP>
-          <ButtonAPP onClick={handleSpeak}>
-            <FaVolumeUp className="mr-2" /> {speechEnabled ? "Parar Leitura" : "Ler em Voz Alta"}
-          </ButtonAPP>
-        </div>
-      )}
-    </div>
+    // Suspense permite mostrar um fallback enquanto o componente lazy está carregando
+    <Suspense fallback={
+      // Fallback: botão de acessibilidade que aparece enquanto carrega
+      <div className="fixed bottom-20 right-5 z-40">
+        <button className="p-3 bg-blue-600 text-white rounded-full shadow-lg">
+          <FaUniversalAccess size={24} />
+        </button>
+      </div>
+    }>
+      {/* Renderiza o conteúdo do widget de acessibilidade */}
+      <AccessibilityWidgetContent isOpen={isOpen} setIsOpen={setIsOpen} />
+    </Suspense>
   );
 }

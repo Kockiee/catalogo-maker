@@ -1,44 +1,84 @@
+/**
+ * Página de Ação de Autenticação
+ * 
+ * Esta página processa ações de autenticação vindas de links enviados por email,
+ * como verificação de email e redefinição de senha. Funciona como um hub central
+ * que determina qual ação executar baseado nos parâmetros da URL e executa
+ * a operação correspondente do Firebase Authentication.
+ */
+
 'use client'
+// Importa o contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext"
+// Importa funções de navegação do Next.js
 import { redirect, useSearchParams } from "next/navigation"
+// Importa hooks do React
 import { useEffect, useState } from "react"
+// Importa componentes da biblioteca Flowbite
 import { Button, Spinner, TextInput } from "flowbite-react"
+// Importa componente de exibição de erros
 import ErrorCard from "@/app/auth/components/ErrorCard"
 
+/**
+ * Componente principal da página de ação
+ * @param {object} searchParams - Parâmetros de busca da URL
+ * @returns {JSX.Element} - Interface para ações de autenticação
+ */
 export default function PAGE({searchParams}) {
+    // Obtém funções do contexto de autenticação
     const { resetPassword, verifyEmail, authLoading } = useAuth()
+    // Estado para armazenar a nova senha (para redefinição)
     const [password, setPassword] = useState("")
+    // Estado para armazenar mensagens de erro
     const [error, setError] = useState("")
 
-    const mobileMode = searchParams.mobileMode
-    const oobCode = searchParams.oobCode
-    const mode = searchParams.mode
+    // Extrai parâmetros da URL
+    const mobileMode = searchParams.mobileMode  // Modo mobile
+    const oobCode = searchParams.oobCode        // Código de ação do Firebase
+    const mode = searchParams.mode              // Tipo de ação (verifyEmail, resetPassword)
 
+    // Efeito que executa ações baseadas nos parâmetros da URL
     useEffect(() => {
+        /**
+         * Função para verificar email automaticamente
+         */
         async function sendVerifyEmail() {
             try {
+                // Tenta verificar o email usando o código da URL
                 await verifyEmail(oobCode)
             } catch (err) {
+                // Trata erro de código inválido
                 if (err.code === "auth/invalid-action-code") {
                     setError("Código ou URL de verificação inválido !")
                 }
             }
         }
+        
+        // Se não há código de ação, redireciona para login
         if (!oobCode) {
             redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`)
         }
+        
+        // Se o modo é verificação de email, executa automaticamente
         if (mode === 'verifyEmail') {
             sendVerifyEmail()
         }
     }, [])
     
-    
+    /**
+     * Função para processar redefinição de senha
+     * @param {Event} e - Evento de submit do formulário
+     */
     const handleResetPasswordFormSubmit = async(e) => {
+        // Previne o comportamento padrão do formulário
         e.preventDefault();
         try {
+            // Tenta redefinir a senha usando o código e nova senha
             await resetPassword(oobCode, password)
         } catch (err) {
+            // Limpa erros anteriores
             setError("")
+            // Trata diferentes tipos de erro do Firebase
             if (err.code == 'auth/weak-password') {
                 setError("Sua senha tem que ter pelo menos 6 caracteres.")
             } else if (err.code == 'auth/invalid-action-code') {
@@ -49,24 +89,33 @@ export default function PAGE({searchParams}) {
 
     return (
         <>
+        {/* Renderiza interface baseada no tipo de ação */}
         {mode === "verifyEmail" ? (
+            /* Interface para verificação de email */
             <div className="w-full">
                 <div className="w-full h-full">
+                    {/* Se não há erro, mostra loading */}
                     {!error ? (
                         <div className="flex flex-col items-center">
                             <Spinner className="text-lightcyan" size={'lg'}></Spinner>
                             <p>Verificando seu E-mail...</p>
                         </div>
                     ): (
+                        /* Se há erro, mostra mensagem de erro */
                         <ErrorCard error={error}/>
                     )}
                 </div>
             </div>
         ) : mode === "resetPassword" && (
+            /* Interface para redefinição de senha */
             <div className="w-full flex justify-center">
+                {/* Card principal do formulário de redefinição */}
                 <div className="rounded-lg max-w-md w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
+                    {/* Título da página */}
                     <h1 className="text-xl font-bold">Redefina sua senha</h1>
+                    {/* Formulário de redefinição */}
                     <form className="w-full" onSubmit={handleResetPasswordFormSubmit}>
+                        {/* Campo de nova senha */}
                         <div className="mb-3">
                             <label className="text-base" htmlFor="email">Nova senha</label>
                             <TextInput
@@ -81,7 +130,9 @@ export default function PAGE({searchParams}) {
                             required 
                             shadow />
                         </div>
+                        {/* Componente para exibir erros */}
                         <ErrorCard error={error}/>
+                        {/* Botão de submit do formulário */}
                         <Button
                             type="submit"
                             className="w-full !bg-neonblue hover:!bg-neonblue/80 enabled:focus:ring-4 enabled:focus:outline-none enabled:focus:!ring-jordyblue"
