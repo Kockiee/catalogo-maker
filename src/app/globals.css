@@ -1,30 +1,50 @@
+/**
+ * ESTILOS GLOBAIS - CSS PRINCIPAL DA APLICAÇÃO
+ * 
+ * Este arquivo contém os estilos globais da aplicação Catálogo Maker,
+ * incluindo configurações do Tailwind CSS, otimizações de performance
+ * e estilos customizados para componentes reutilizáveis.
+ * 
+ * Funcionalidades:
+ * - Importa e configura Tailwind CSS
+ * - Define estilos globais para performance
+ * - Inclui animações customizadas
+ * - Otimizações de carregamento e renderização
+ */
+
+/* Importa as camadas base do Tailwind CSS */
 @tailwind base;
+/* Importa os componentes do Tailwind CSS */
 @tailwind components;
+/* Importa as utilitárias do Tailwind CSS */
 @tailwind utilities;
 
-/* Otimizações de performance */
+/* Otimizações de performance para todos os elementos */
 * {
-  box-sizing: border-box;
+  box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
 }
 
+/* Configurações globais para o elemento HTML */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth; /* Scroll suave entre seções */
 }
 
+/* Configurações globais para o corpo da página */
 body {
-  font-display: swap;
+  font-display: swap; /* Otimiza carregamento de fontes */
 }
 
-/* Melhorias de carregamento */
+/* Classe para spinner de carregamento */
 .loading-spinner {
-  animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite; /* Aplica animação de rotação contínua */
 }
 
+/* Definição da animação de rotação */
 @keyframes spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* Estado inicial: 0 graus */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* Estado final: 360 graus (volta completa) */
   }
 }
