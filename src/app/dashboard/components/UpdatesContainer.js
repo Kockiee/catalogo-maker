@@ -35,7 +35,7 @@ export default async function UpdatesContainer() {
     console.log(data);
 
     return (
-        {/* Container principal das atualizações */}
+        /* Container principal das atualizações */
         <div className="p-4 bg-lightcyan rounded-lg w-2/5 max-lg:w-full shadow-md">
             {/* Título da seção */}
             <h1 className="text-xl font-bold mb-2">Atualizações da Catálogo Maker</h1>

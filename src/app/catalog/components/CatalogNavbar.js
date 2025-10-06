@@ -44,7 +44,7 @@ export default function CatalogNavbar({catalog}) {
     };
 
     return (
-        {/* Container principal da navbar com layout flexível */}
+        /* Container principal da navbar com layout flexível */
         <div className="flex flex-wrap justify-around items-center p-5" style={{backgroundColor: catalog.secondary_color, color: catalog.text_color}}>
             {/* Link para página principal do catálogo com nome da loja */}
             <Link href={`/catalog/${catalog.id}`}>

@@ -65,7 +65,7 @@ export default function PhoneVerification({catalogId}) {
     }
 
     return (
-        {/* Container principal do componente */}
+        /* Container principal do componente */
         <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
             <div className="w-full space-y-2">
                 {/* Título do componente */}

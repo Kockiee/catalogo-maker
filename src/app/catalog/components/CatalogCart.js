@@ -99,7 +99,7 @@ export default function CatalogCart({catalog}) {
     } 
 
     return (
-        {/* Container principal do carrinho com posicionamento fixo e animação */}
+        /* Container principal do carrinho com posicionamento fixo e animação */
         <div className={`max-w-sm w-full fixed top-0 right-0 z-20 transition-transform duration-300 ease-in-out transform ${viewingCart ? 'translate-x-0' : 'translate-x-full'}`}>
             {/* Painel interno do carrinho */}
             <div className="p-6 space-y-2 w-full h-full min-h-screen" style={{backgroundColor: catalog.tertiary_color}}>

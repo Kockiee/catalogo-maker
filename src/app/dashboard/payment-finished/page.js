@@ -34,7 +34,7 @@ export default function PAGE() {
     }, []) // Executa apenas uma vez quando o componente é montado
     
     return (
-        {/* Container principal centralizado */}
+        /* Container principal centralizado */
         <div className="w-full h-full flex justify-center">
             <div className="flex flex-col items-center">
                 {/* Ícone de verificação grande e verde */}

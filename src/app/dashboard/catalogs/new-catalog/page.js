@@ -19,7 +19,7 @@ import CreateCatalogContainer from "@/app/dashboard/components/CreateCatalogCont
 // Componente principal da página de novo catálogo
 export default function PAGE() {
     return (
-        {/* Renderiza o container de criação de catálogo */}
+        /* Renderiza o container de criação de catálogo */
         <CreateCatalogContainer/>
     )
 }

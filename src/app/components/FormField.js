@@ -69,7 +69,7 @@ export default function FormField({
             />
             {/* Renderiza textarea ou input baseado no tipo */}
             {type === "textarea" ? (
-                <Textarea {...commonProps} /> {/* Textarea com todas as propriedades */}
+                <Textarea {...commonProps} /> /* Textarea com todas as propriedades */
             ) : (
                 <TextInput 
                     {...commonProps} // Todas as propriedades comuns
