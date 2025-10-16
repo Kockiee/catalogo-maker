@@ -40,12 +40,18 @@ export default function CopyButton({toCopy, successMessage}) {
     return (
         <>
             {/* Tooltip com botão de copiar */}
-            <Tooltip content="Copiar" placement="left" className="bg-gray-600" arrow={false}>
+            <Tooltip 
+                content={successMessage || "Copiar para área de transferência"} 
+                placement="top" 
+                className="bg-gray-800 text-white text-sm rounded-md px-2 py-1 shadow-lg" 
+                arrow={true}
+            >
                 <button 
-                    className="duration-200 text-lightcyan bg-cornflowerblue hover:bg-neonblue rounded p-1.5 border border-neonblue ml-2" 
+                    className="duration-200 text-lightcyan bg-cornflowerblue hover:bg-neonblue rounded-full p-2 border border-neonblue shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-neonblue" 
                     onClick={handleCopy}
+                    aria-label={`Copiar ${toCopy}`}
                 >
-                    <MdOutlineContentCopy className="w-6 h-6"/>
+                    <MdOutlineContentCopy className="w-5 h-5"/>
                 </button>
             </Tooltip>
         </>

@@ -136,124 +136,130 @@ export default function EditCatalogContainer({catalogId}) {
 
     return (
         <>
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap">
-            <div className="flex flex-col w-1/2 max-xl:w-full">
-                <form 
-                onSubmit={() => {
-                    notify.processing("Atualizando catálogo...");
-                    setLoading(true)
-                }}
-                action={(formdata) => formAction(formdata)}>
-                    <FormField
-                        label="Nome de identificação"
-                        name="identificationName"
-                        id="identification-name"
-                        value={identificationName}
-                        onChange={(e) => {
-                            setError("")
-                            setIdentificationName(e.target.value)
+        <div className="bg-white p-6 lg:p-8 rounded-lg shadow-md">
+            {/* Grid responsivo com formulário e pré-visualização */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
+                {/* Coluna do formulário que contém as informações atuais do catálogo, mas que podem ser aqui modificadas */}
+                <div className="flex flex-col">
+                    <form 
+                        onSubmit={() => {
+                            notify.processing("Atualizando catálogo...");
+                            setLoading(true)
                         }}
-                        placeholder="catalogo01"
-                        disabled={loading}
-                        required
-                    />
-                    
-                    <FormField
-                        label="Nome da loja"
-                        name="storeName"
-                        id="store-name"
-                        value={storeName}
-                        onChange={(e) => {
-                            setError("")
-                            setStoreName(e.target.value);
-                        }}
-                        placeholder="Mister Store"
-                        maxLength={40}
-                        disabled={loading}
-                        required
-                    />
-                    
-                    <FormField
-                        type="textarea"
-                        label="Descrição da loja"
-                        name="storeDescription"
-                        id="store-description"
-                        value={storeDescription}
-                        onChange={(e) => {
-                            setError("")
-                            setStoreDescription(e.target.value);
-                        }}
-                        placeholder="Uma loja de roupas, calçados e acessórios..."
-                        rows={4}
-                        maxLength={2000}
-                        disabled={loading}
-                        required
-                    />
-                    
-                    <ImageUpload
-                        label="Banner"
-                        name="bannerImage"
-                        id="store-banner"
-                        onChange={e => {
-                            setError("")
-                            const file = e.target.files[0]
-                            const reader = new FileReader();
-
-                            reader.onloadend = () => {
-                                setBannerImage(reader.result);
-                            };
-                            if (file) { 
-                                reader.readAsDataURL(file);
-                            }
-                        }}
-                        disabled={loading}
-                        helperText="Selecione um novo banner para o catálogo"
-                    />
-                    
-                    <ColorPickerGroup
-                        colors={colors}
-                        onColorChange={handleColorChange}
-                        disabled={loading}
-                    />
-                    
-                    <div className="py-2 w-full">
-                        <ErrorCard error={error}/>
-                        <Button 
-                            aria-disabled={loading} 
-                            type="submit" 
-                            className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" 
-                            size="lg"
-                        >
-                            {loading ? "Salvando..." : "Salvar alterações"}
-                        </Button>
-                    </div>
-
-                    {/* Botão para trocar WhatsApp */}
-                    <div className="py-2 w-full">
-                        <Tooltip content="Trocar WhatsApp do catálogo" placement="top" arrow={false} trigger="hover">
-                            <Button
-                                color="success"
+                        action={(formdata) => formAction(formdata)}
+                        className="space-y-6"
+                    >
+                        <FormField
+                            label="Nome de identificação"
+                            name="identificationName"
+                            id="identification-name"
+                            value={identificationName}
+                            onChange={(e) => {
+                                setError("")
+                                setIdentificationName(e.target.value)
+                            }}
+                            placeholder="catalogo01"
+                            disabled={loading}
+                            required
+                        />
+                        <FormField
+                            label="Nome da loja"
+                            name="storeName"
+                            id="store-name"
+                            value={storeName}
+                            onChange={(e) => {
+                                setError("")
+                                setStoreName(e.target.value);
+                            }}
+                            placeholder="Mister Store"
+                            maxLength={40}
+                            disabled={loading}
+                            required
+                        />
+                        <FormField
+                            type="textarea"
+                            label="Descrição da loja"
+                            name="storeDescription"
+                            id="store-description"
+                            value={storeDescription}
+                            onChange={(e) => {
+                                setError("")
+                                setStoreDescription(e.target.value);
+                            }}
+                            placeholder="Uma loja de roupas, calçados e acessórios..."
+                            rows={4}
+                            maxLength={2000}
+                            disabled={loading}
+                            required
+                        />
+                        <ImageUpload
+                            label="Banner"
+                            name="bannerImage"
+                            id="store-banner"
+                            onChange={e => {
+                                setError("")
+                                const file = e.target.files[0]
+                                const reader = new FileReader();
+                                reader.onloadend = () => {
+                                    setBannerImage(reader.result);
+                                };
+                                if (file) { 
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                            disabled={loading}
+                            helperText="Selecione um novo banner para o catálogo"
+                        />
+                        <ColorPickerGroup
+                            colors={colors}
+                            onColorChange={handleColorChange}
+                            disabled={loading}
+                        />
+                        {/* Botão para trocar WhatsApp */}
+                        <div className="py-2 w-full">
+                            <Tooltip content="Trocar WhatsApp do catálogo" placement="top" arrow={false} trigger="hover">
+                                <Button
+                                    color="success"
+                                    size="lg"
+                                    disabled={isDisconnecting || loading}
+                                    onClick={openDisconnectModal}
+                                    className="w-full flex items-center justify-center gap-2"
+                                >
+                                    <FaWhatsapp className="w-5 h-5 mr-1" />
+                                    Trocar WhatsApp do catálogo
+                                </Button>
+                            </Tooltip>
+                        </div>
+                        <div className="py-2 w-full">
+                            <ErrorCard error={error}/>
+                            <Button 
+                                aria-disabled={loading} 
+                                type="submit" 
+                                className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" 
                                 size="lg"
-                                disabled={isDisconnecting || loading}
-                                onClick={openDisconnectModal}
-                                className="w-full flex items-center justify-center gap-2"
                             >
-                                <FaWhatsapp className="w-5 h-5 mr-1" />
-                                Trocar WhatsApp do catálogo
+                                {loading ? "Salvando..." : "Salvar alterações"}
                             </Button>
-                        </Tooltip>
+                        </div>
+                    </form>
+                </div>
+                {/* Coluna da pré-visualização */}
+                <div className="flex flex-col">
+                    <h2 className="text-xl font-semibold mb-4 text-primary-800">Pré-visualização</h2>
+                    {/* Container sticky para pré-visualização */}
+                    <div className="sticky top-4">
+                        <CatalogPreview
+                            storeName={storeName}
+                            storeDescription={storeDescription}
+                            primaryColor={colors.primaryColor}
+                            secondaryColor={colors.secondaryColor}
+                            tertiaryColor={colors.tertiaryColor}
+                            textColor={colors.textColor}
+                            bannerImage={bannerImage}
+                        />
                     </div>
-                </form>
+                </div>
             </div>
-            <CatalogPreview
-                storeName={storeName}
-                storeDescription={storeDescription}
-                primaryColor={colors.primaryColor}
-                secondaryColor={colors.secondaryColor}
-                tertiaryColor={colors.tertiaryColor}
-                textColor={colors.textColor}
-                bannerImage={bannerImage}
-            />
         </div>
 
         {/* Modal de confirmação para desconectar WhatsApp */}

@@ -38,12 +38,8 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     // Verifica se o usuário está autenticado e tem dados no banco
     if (user && DBUser) {
-      // Se o email foi verificado, redireciona para o dashboard
-      if (user.emailVerified) {
-        router.push('/dashboard'); // Correção: usar router.push() ao invés de redirect()
-      } 
       // Se o email não foi verificado e não está nas páginas de verificação, redireciona para verificação
-      else if (pathname !== "/auth/verify-email" && pathname !== "/auth/action") {
+      if (!user.emailVerified && pathname !== "/auth/verify-email" && pathname !== "/auth/action") {
         router.push(`/auth/verify-email${mobileMode ? "?mobileMode=True" : ""}`);
       }
     }

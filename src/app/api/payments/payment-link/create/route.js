@@ -11,7 +11,7 @@
 import verifyJWTToken from '@/app/api/middlewares/verifyJWTToken';
 
 // Configura o cliente do Stripe com a chave secreta
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY);
 
 /**
  * Função principal para criação de link de pagamento
@@ -31,11 +31,11 @@ export async function POST(req) {
     if (uid && recurrenceType && uid !== "" && recurrenceType !== "") {
       // Define o ID do preço baseado no tipo de recorrência
       const price_id = recurrenceType === 1 ? 
-      process.env.STRIPE_MONTHLY_PRICE_ID      // Plano mensal
+      process.env.STRIPE_TEST_MONTHLY_PRICE_ID      // Plano mensal
       : recurrenceType === 2 ? 
-      process.env.STRIPE_QUARTERLY_PRICE_ID    // Plano trimestral
+      process.env.STRIPE_TEST_QUARTERLY_PRICE_ID    // Plano trimestral
       : recurrenceType === 3 &&
-      process.env.STRIPE_ANNUAL_PRICE_ID       // Plano anual
+      process.env.STRIPE_TEST_ANNUAL_PRICE_ID       // Plano anual
       
       // Lista todos os links de pagamento existentes
       const paymentLinks = await stripe.paymentLinks.list();

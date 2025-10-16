@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://catalogomaker.com.br
-
-# Sitemaps
-Sitemap: https://catalogomaker.com.br/sitemap.xml

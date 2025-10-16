@@ -30,17 +30,17 @@ export default function PAGE() {
     useEffect(() => {
         setTimeout(() => {
             router.push('/dashboard') // Redireciona para o dashboard
-        }, 3000) // Aguarda 3 segundos antes de redirecionar
+        }, 7000) // Aguarda 3 segundos antes de redirecionar
     }, []) // Executa apenas uma vez quando o componente é montado
     
     return (
-        {/* Container principal centralizado */}
+        /* Container principal centralizado */
         <div className="w-full h-full flex justify-center">
             <div className="flex flex-col items-center">
                 {/* Ícone de verificação grande e verde */}
                 <MdVerified className="w-32 h-32 text-green-400"/>
                 {/* Mensagem de parabéns */}
-                <p className="text-xl">Parabéns, sua conta agora é premium !!!</p>
+                <p className="text-xl">Parabéns, sua conta agora é premium!</p>
                 {/* Mensagem de redirecionamento */}
                 <p>Estamos de redirecionando para o painel de controle...</p>
             </div>

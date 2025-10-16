@@ -19,7 +19,7 @@ import CreateProductContainer from "@/app/dashboard/catalogs/components/CreatePr
 // Componente principal da página de novo produto
 export default function PAGE({params}) {
     return (
-        {/* Renderiza o container de criação de produto com ID do catálogo */}
+        /* Renderiza o container de criação de produto com ID do catálogo */
         <CreateProductContainer catalogId={params.catalogId}/>
     )
 }

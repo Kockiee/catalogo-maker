@@ -17,8 +17,10 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import { Button, Label, Spinner, TextInput } from 'flowbite-react';
 // Importa componente de link do Next.js
 import Link from 'next/link';
-// Importa hook useState para gerenciar estado local
-import { useState } from 'react';
+// Importa hooks do React
+import { useEffect, useState } from 'react';
+// Importa navegação do Next.js
+import { useRouter } from 'next/navigation';
 // Importa ícone do Google
 import { FcGoogle } from "react-icons/fc";
 
@@ -37,7 +39,16 @@ export default function PAGE({searchParams}) {
   // Estado para armazenar mensagens de erro
   const [error, setError] = useState('');
   // Obtém funções do contexto de autenticação
-  const { signInWithGoogle, loginWithEmailAndPassword, authLoading } = useAuth();
+  const { signInWithGoogle, loginWithEmailAndPassword, authLoading, user, DBUser } = useAuth();
+  // Roteador para redirecionamentos
+  const router = useRouter();
+
+  // Redireciona usuários já autenticados e com email verificado
+  useEffect(() => {
+    if (user && DBUser && user.emailVerified) {
+      router.push(`/dashboard${mobileMode ? "?mobileMode=True" : ""}`)
+    }
+  }, [user, DBUser, mobileMode, router]);
 
   /**
    * Função para processar o envio do formulário de login

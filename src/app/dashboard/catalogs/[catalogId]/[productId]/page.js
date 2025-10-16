@@ -26,7 +26,7 @@ export default function PAGE({params}) {
     // Extrai o ID do produto dos parâmetros da URL
     const productId = params.productId
     return (
-        {/* Renderiza o container de edição de produto com IDs do catálogo e produto */}
+        /* Renderiza o container de edição de produto com IDs do catálogo e produto */
         <EditProductContainer catalogId={catalogId} productId={productId}/>
     )
 }

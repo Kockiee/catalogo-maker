@@ -31,7 +31,7 @@ export default function BackButton() {
     }
 
     return (
-        {/* Botão de voltar com ícone e texto */}
+        /* Botão de voltar com ícone e texto */
         <ButtonAPP onClick={handleClick} className="mb-6 w-fit">
             <HiArrowLeft className="h-5 w-5 mr-2"/> Voltar
         </ButtonAPP>

@@ -37,7 +37,7 @@ export default function ButtonAPP({
                         className={`w-full h-full flex items-center duration-200 !border-b-4 ${
                             negative 
                                 ? '!bg-error hover:!bg-error/90 focus:!ring-error/50' // Estilo negativo (vermelho)
-                                : '!bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200' // Estilo positivo (azul)
+                                : 'bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200' // Estilo positivo (azul)
                         }`} 
                         onClick={onClick} // Função de clique
                     >
@@ -52,7 +52,7 @@ export default function ButtonAPP({
                     className={`${className} flex items-center duration-200 !border-b-4 ${
                         negative 
                             ? '!bg-error hover:!bg-error/90 focus:!ring-error/50' // Estilo negativo (vermelho)
-                            : '!bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200' // Estilo positivo (azul)
+                            : 'bg-primary-400 hover:!bg-primary-500 focus:!ring-primary-200' // Estilo positivo (azul)
                     }`} 
                     onClick={onClick} // Função de clique
                 >

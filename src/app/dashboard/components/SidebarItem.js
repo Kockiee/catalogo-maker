@@ -18,7 +18,7 @@ import Link from "next/link";
 // Componente de item da sidebar
 export default function SidebarItem({icon, text, href, target = "_self"}) {
     return (
-        {/* Link de navegação */}
+        /* Link de navegação */
         <Link href={href} target={target}>
           {/* Container do item com estilos */}
           <div

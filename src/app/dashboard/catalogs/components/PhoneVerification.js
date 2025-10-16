@@ -65,16 +65,16 @@ export default function PhoneVerification({catalogId}) {
     }
 
     return (
-        {/* Container principal do componente */}
+        /* Container principal do componente */
         <div className="bg-white !border-4 !border-lightcyan p-4 rounded flex flex-wrap">
-            <div className="w-full space-y-2">
+            <div className="w-full space-y-4">
                 {/* Título do componente */}
-                <h1 className="text-lg font-bold mb-2">Opa, falta só mais uma informação!</h1>
+                <h1 className="text-lg font-bold">Opa, falta só mais uma informação!</h1>
                 {/* Label da pergunta principal */}
                 <Label
                 className="text-lg"
                 htmlFor="ordering-form"
-                value="Como deseja receber pedidos neste catálogo?"
+                value="Como deseja iniciar a conversa com os clientes desse catálogo?"
                 />
                 {/* Campo de seleção com opções de rádio */}
                 <fieldset className="flex flex-col gap-4">
@@ -88,7 +88,7 @@ export default function PhoneVerification({catalogId}) {
                         value={1} 
                         onClick={(e) => {if (e.target.checked) setOrderForm(1)}} 
                         /> 
-                        <Label htmlFor="receive-cm-notification" value="Receber notificação da Catálogo Maker no WhatsApp"/>
+                        <Label className="text-base text-gray-600" htmlFor="receive-cm-notification" value="Eu mesmo quero entrar em contato com o cliente."/>
                     </div>
                     {/* Opção 2: WhatsApp próprio */}
                     <div className="inline-flex items-center space-x-2">
@@ -100,7 +100,7 @@ export default function PhoneVerification({catalogId}) {
                         value={2} 
                         onClick={(e) => {if (e.target.checked) setOrderForm(2)}} 
                         /> 
-                        <Label htmlFor="use-own-whatsapp" value="Usar meu próprio WhatsApp" />
+                        <Label className="text-base text-gray-600" htmlFor="use-own-whatsapp" value="Quero que o cliente seja diretamente direcionado para o meu WhatsApp." />
                     </div>
                 </fieldset>
                 {/* Se opção 2 selecionada, mostra componente de QR Code */}
@@ -112,7 +112,7 @@ export default function PhoneVerification({catalogId}) {
                     onClick={handleSetCatalogWhatsapp} 
                     disabled={orderForm === 2 || isProcessing} // Desabilita se opção 2 ou processando
                     size="md" 
-                    className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full"
+                    className="duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full !mt-8"
                 >
                     {isProcessing ? "Conectando..." : "Continuar"}
                 </Button>
