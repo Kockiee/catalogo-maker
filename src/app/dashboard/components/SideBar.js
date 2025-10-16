@@ -141,7 +141,7 @@ export default function SideBar({ onToggle }) {
           {/* Link externo para Assinatura */}
           <SidebarItem
           text={<p className='flex items-center'>Assinatura <FaExternalLinkAlt className='ml-1 w-3 h-3 text-gray-400'/></p>}
-          href="https://billing.stripe.com/p/login/bIYeVCgog7Tl48M000" 
+          href={process.env.NEXT_PUBLIC_STRIPE_TEST_BILLING_PORTAL_URL} 
           target="_blank"
           icon={<HiShoppingBag className='text-primary-50/80 w-6 h-6'/>}
           />
@@ -152,7 +152,7 @@ export default function SideBar({ onToggle }) {
             <Sidebar.Item 
             icon={() => <FaSignOutAlt className='text-primary-50/80 w-6 h-6'/>} 
             onClick={handleSignOut} 
-            className="!text-error/80 duration-100 hover:cursor-pointer hover:!bg-primary-400/70">
+            className="!text-error duration-100 hover:cursor-pointer hover:!bg-primary-900">
               Sair da conta
             </Sidebar.Item>
           )}

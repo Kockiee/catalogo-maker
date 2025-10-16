@@ -28,7 +28,7 @@ import { ToolProvider } from "../../contexts/ToolContext";
 // Importa container de ferramentas
 import ToolContainer from "./ToolContainer";
 // Importa componente de loading em tela cheia
-import { FullScreenLoader } from "../../components/LoadingSpinner";
+import { FullScreenLoader } from "../../components/FullScreenLoader";
 
 // Componente principal do layout do dashboard
 export default function DashboardLayout({ children }) {

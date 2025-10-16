@@ -41,15 +41,25 @@ export const CatalogProvider = ({children}) => {
     // Função para adicionar produto ao carrinho
     const addProductToCatalog = (product, variations) => {
         const storagedCart = JSON.parse(localStorage.getItem('cart')) || []; // Obtém carrinho atual
-        // Busca produto existente com as mesmas variações
-        const existingProductIndex = storagedCart.findIndex(item => item.id === product.id && item.variations.toString() === variations.toString());
-    
+        // Função para comparar variações profundamente
+        const areVariationsEqual = (a, b) => {
+            if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+            // Ordena para garantir comparação independente da ordem
+            const sortFn = (v) => v.name + ':' + v.variants;
+            const aSorted = [...a].sort((x, y) => sortFn(x).localeCompare(sortFn(y)));
+            const bSorted = [...b].sort((x, y) => sortFn(x).localeCompare(sortFn(y)));
+            return aSorted.every((v, i) => v.name === bSorted[i].name && v.variants === bSorted[i].variants);
+        };
+
+        // Busca produto existente com as mesmas variações (comparação profunda)
+        const existingProductIndex = storagedCart.findIndex(item => item.id === product.id && areVariationsEqual(item.variations, variations));
+
         if (existingProductIndex !== -1) { // Se produto já existe no carrinho
             storagedCart[existingProductIndex].quantity += 1; // Incrementa quantidade
-        } else { // Se produto não existe no carrinho
+        } else { // Se produto não existe no carrinho OU variações são diferentes
             storagedCart.push({ ...product, variations, quantity: 1 }); // Adiciona novo produto
         }
-    
+
         localStorage.setItem('cart', JSON.stringify(storagedCart)); // Salva no localStorage
         setCart(storagedCart); // Atualiza estado
     };
@@ -57,18 +67,27 @@ export const CatalogProvider = ({children}) => {
     // Função para remover produto do carrinho
     const removeProductFromCatalog = (productId, variations) => {
         let storagedCart = JSON.parse(localStorage.getItem('cart')) || []; // Obtém carrinho atual
-        // Busca produto existente com as mesmas variações
-        const existingProductIndex = storagedCart.findIndex(item => item.id === productId && item.variations.toString() === variations.toString());
-    
+        // Função para comparar variações profundamente
+        const areVariationsEqual = (a, b) => {
+            if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+            const sortFn = (v) => v.name + ':' + v.variants;
+            const aSorted = [...a].sort((x, y) => sortFn(x).localeCompare(sortFn(y)));
+            const bSorted = [...b].sort((x, y) => sortFn(x).localeCompare(sortFn(y)));
+            return aSorted.every((v, i) => v.name === bSorted[i].name && v.variants === bSorted[i].variants);
+        };
+
+        // Busca produto existente com as mesmas variações (comparação profunda)
+        const existingProductIndex = storagedCart.findIndex(item => item.id === productId && areVariationsEqual(item.variations, variations));
+
         if (existingProductIndex !== -1) { // Se produto existe no carrinho
             if (storagedCart[existingProductIndex].quantity > 1) { // Se quantidade maior que 1
                 storagedCart[existingProductIndex].quantity -= 1; // Decrementa quantidade
             } else { // Se quantidade é 1
                 // Remove completamente o produto do carrinho
-                storagedCart = storagedCart.filter(item => !(item.id === productId && item.variations.toString() === variations.toString()));
+                storagedCart = storagedCart.filter(item => !(item.id === productId && areVariationsEqual(item.variations, variations)));
             }
         }
-    
+
         localStorage.setItem('cart', JSON.stringify(storagedCart)); // Salva no localStorage
         setCart(storagedCart); // Atualiza estado
     };

@@ -20,7 +20,6 @@ import { useEffect } from "react";
 // Importa componente de QR Code
 import QRCodeComponent from "@/app/components/QrCodeComponent";
 // Importa componente de loading
-import LoadingSpinner from "@/app/components/LoadingSpinner";
 // Importa ícone de menu kebab
 import { CiMenuKebab } from "react-icons/ci";
 // Importa contexto de ferramentas
@@ -29,6 +28,7 @@ import { useTool } from "@/app/contexts/ToolContext";
 import { useQrSessionManager } from "@/app/hooks/useQrSessionManager";
 // Importa hook de notificações
 import { useNotifications } from "@/app/hooks/useNotifications";
+import { Spinner } from "flowbite-react";
 
 // Componente principal de escaneamento de QR Code
 export default function ScanQrCode({ catalogId, userId }) {
@@ -108,7 +108,7 @@ export default function ScanQrCode({ catalogId, userId }) {
             ) : (
                 /* Se não há QR Code, mostra loading */
                 <div className="flex justify-center items-center w-[225px] h-[225px]">
-                    <LoadingSpinner size="lg" showMessage={false} />
+                    <Spinner color="info" size="lg" showMessage={false} />
                 </div>
             )}
             {/* Instruções para o usuário */}

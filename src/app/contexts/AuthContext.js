@@ -190,10 +190,38 @@ export const AuthProvider = ({ children }) => {
   // Função para verificar email
   const verifyEmail = useCallback(async (oobCode) => {
     await handleAction(async () => {
-      await applyActionCode(auth, oobCode); // Aplica código de verificação
-      router.push("/auth/signin"); // Redireciona para login
+      const code = typeof oobCode === 'string' ? decodeURIComponent(oobCode) : String(oobCode);
+      try {
+        // Verifica previamente o código de ação para mensagens mais claras
+        const { operation } = await import('firebase/auth').then(m => m.checkActionCode(auth, code));
+        // Apenas por segurança: esperamos operação VERIFY_EMAIL
+        if (operation) {
+          await applyActionCode(auth, code);
+        } else {
+          await applyActionCode(auth, code);
+        }
+      } catch (error) {
+        // Se o código já foi usado, tentamos tratar como sucesso se o usuário já estiver verificado
+        if (error && error.code === 'auth/invalid-action-code') {
+          try {
+            if (auth.currentUser) {
+              await auth.currentUser.reload();
+              if (auth.currentUser.emailVerified) {
+                setUser(auth.currentUser);
+                return; // Considera sucesso
+              }
+            }
+          } catch {}
+        }
+        throw error; // Propaga para tratamento da UI
+      }
+      // Atualiza o usuário atual (se estiver logado) para refletir a verificação
+      if (auth.currentUser) {
+        await auth.currentUser.reload();
+        setUser(auth.currentUser);
+      }
     });
-  }, [handleAction, router]);
+  }, [handleAction]);
 
   // Função para resetar senha
   const resetPassword = useCallback(async (oobCode, newPassword) => {
@@ -229,6 +257,16 @@ export const AuthProvider = ({ children }) => {
     });
   }, [handleAction]);
 
+  // Função para recarregar o estado do usuário atual e retornar o usuário atualizado
+  const refreshCurrentUser = useCallback(async () => {
+    if (auth.currentUser) {
+      await auth.currentUser.reload();
+      setUser(auth.currentUser);
+      return auth.currentUser;
+    }
+    return null;
+  }, []);
+
   // Objeto com todos os valores e funções do contexto
   const context = {
     user, // Usuário do Firebase
@@ -244,6 +282,7 @@ export const AuthProvider = ({ children }) => {
     logout, // Função de logout
     deleteAccount, // Função de deletar conta
     verifyEmail, // Função de verificar email
+    refreshCurrentUser, // Função para recarregar usuário atual
   };
 
   return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>;

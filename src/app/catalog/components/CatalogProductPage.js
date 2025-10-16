@@ -39,11 +39,9 @@ export default function CatalogProductPage({catalog, params}) {
     // Inicializa com a primeira variação disponível
     const [selectedVariants, setSelectedVariants] = useState([{name: product.variations[0].name, variants: product.variations[0].variants[0]}]);
     
-    // Log para debugging - mostra as variações atualmente selecionadas
-    console.log(selectedVariants)
-    
     // Função que gerencia a seleção de uma variação
     const handleVariantSelection = (variationName, variant) => {
+        console.log(`Selecionada variação: ${variationName} - ${variant}`); // Log da seleção
         // Cria uma cópia do array de variações selecionadas
         const updatedVariants = [...selectedVariants];
         // Procura se já existe uma seleção para esta categoria de variação
@@ -60,6 +58,9 @@ export default function CatalogProductPage({catalog, params}) {
         
         // Atualiza o estado com as novas variações selecionadas
         setSelectedVariants(updatedVariants);
+
+        // Garante que a variação pré-selecionada seja substituída
+        console.log('Estado atualizado:', updatedVariants);
     };
 
     // Verifica se todas as variações foram selecionadas
@@ -95,7 +96,6 @@ export default function CatalogProductPage({catalog, params}) {
                 
                 {/* Preço do produto formatado em reais (BRL) */}
                 <h2 className="text-2xl font-bold">{product.price.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}</h2>
-                
                 {/* Seção de seleção de variações */}
                 <div className="space-y-2 text-xl">
                     {/* Mapeia cada tipo de variação (ex: tamanho, cor) */}
@@ -105,27 +105,32 @@ export default function CatalogProductPage({catalog, params}) {
                             <h3 className="font-medium">{variation.name}</h3>
                             
                             {/* Mapeia cada opção dentro da categoria (ex: P, M, G) */}
-                            {variation.variants.map((variant, variantIndex) => (
-                                <button 
-                                    key={variantIndex}
-                                    // Classes de estilo com borda destacada quando selecionado
-                                    className={`border rounded-lg text-base p-2 hover:opacity-80 ${
-                                        selectedVariants.find(item => item.name === variation.name && item.variants === variant) ? 'border-4' : ''
-                                    }`} 
-                                    // Estilos inline dinâmicos baseados nas cores do catálogo
-                                    style={{
-                                        color: catalog.text_color,
-                                        backgroundColor: catalog.tertiary_color, 
-                                        border: `4px dashed ${catalog.primary_color}`
-                                    }}
-                                    // Função chamada ao clicar no botão
-                                    onClick={() => handleVariantSelection(variation.name, variant)}
-                                    // Desabilita o botão se a variação já foi selecionada
-                                    disabled={selectedVariants.find(item => item.name === variation.name)}
-                                >
-                                    {variant} {/* Texto da variação (ex: "P", "Vermelho") */}
-                                </button>
-                            ))}
+                            <div className="flex flex-wrap gap-2">
+                                {variation.variants.map((variant, variantIndex) => {
+                                    const isSelected = selectedVariants.find(item => item.name === variation.name && item.variants === variant);
+                                    return (
+                                        <button 
+                                            key={variantIndex}
+                                            // Classes de estilo com borda destacada quando selecionado
+                                            className={`border rounded-lg text-base p-2 hover:opacity-80 cursor-pointer ${isSelected ? '!border-4' : ''}`} 
+                                            // Estilos inline dinâmicos baseados nas cores do catálogo
+                                            style={{
+                                                color: catalog.text_color,
+                                                backgroundColor: catalog.tertiary_color, 
+                                                border: isSelected 
+                                                    ? `4px solid ${catalog.tertiary_color}` 
+                                                    : `4px dashed ${catalog.primary_color}`
+                                            }}
+                                            // Função chamada ao clicar no botão
+                                            onClick={() => handleVariantSelection(variation.name, variant)}
+                                            // Desabilita o botão se a variação já foi selecionada
+                                            disabled={selectedVariants.some(item => item.name === variation.name && item.variants === variant)}
+                                        >
+                                            {variant} {/* Texto da variação (ex: "P", "Vermelho") */}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     ))}
                 </div>

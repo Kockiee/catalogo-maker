@@ -80,6 +80,8 @@ export function useWhatsappSessionManager() {
         setStatus(null); // Limpa status anterior
         
         try {
+            console.log('[useWhatsappSessionManager.js] Iniciando conexão da sessão WhatsApp:', sessionId);
+            console.log('[useWhatsappSessionManager.js] Usando token:', sessionToken);
             // Primeiro, verifica o status atual da sessão
             const initialStatus = await getCatalogWhatsappStatus(sessionId, sessionToken);
             

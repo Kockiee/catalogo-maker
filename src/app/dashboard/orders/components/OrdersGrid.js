@@ -220,6 +220,7 @@ export default function OrdersGrid() {
                                                         {variation.name}: {variation.variants}
                                                     </p>
                                                 ))}
+                                                <p className='text-sm text-gray-800 mt-1 font-medium'>Subtotal: { (product.price * product.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }</p>
                                             </div>
                                         </div>
                                     ))}

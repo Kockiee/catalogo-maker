@@ -18,7 +18,7 @@
 // Importa contexto de ferramentas
 import { useTool } from "../../contexts/ToolContext";
 // Importa componente de loading em tela cheia
-import { FullScreenLoader } from "../../components/LoadingSpinner";
+import { FullScreenLoader } from "../../components/FullScreenLoader";
 // Importa componente da sidebar
 import SideBar from "./SideBar";
 // Importa componente do botão de voltar

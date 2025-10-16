@@ -7,17 +7,19 @@
  * seu endereço de email.
  */
 
-'use client'
+"use client"
 // Importa o hook useState para gerenciar estado local
 import { useState } from "react";
 // Importa o contexto de autenticação
 import { useAuth } from "../../contexts/AuthContext";
+import { useRouter, useSearchParams } from "next/navigation";
 // Importa componentes da biblioteca Flowbite
 import { Button, Spinner, Toast } from "flowbite-react";
 // Importa ícone de avião de papel
 import { HiPaperAirplane } from "react-icons/hi";
 // Importa componente de exibição de erros
 import ErrorCard from "@/app/auth/components/ErrorCard";
+import ButtonAPP from "@/app/components/ButtonAPP";
 
 /**
  * Componente principal da página de verificação de email
@@ -29,7 +31,10 @@ export default function PAGE() {
     // Estado para armazenar mensagens de erro
     const [error, setError] = useState("")
     // Obtém funções e dados do contexto de autenticação
-    const { signUpEmailVerification, authLoading, user } = useAuth()
+    const { signUpEmailVerification, authLoading, user, refreshCurrentUser } = useAuth()
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const mobileMode = searchParams.get("mobileMode") === "True"
 
     /**
      * Função para enviar email de verificação
@@ -52,20 +57,37 @@ export default function PAGE() {
         }
       }
     }
+
+    const handleContinue = async () => {
+      // Recarrega o estado do usuário e verifica se o email foi verificado
+      const current = await refreshCurrentUser()
+      if (current && current.emailVerified) {
+        router.push(`/dashboard${mobileMode ? "?mobileMode=True" : ""}`)
+      } else {
+        setError("Ainda não confirmamos sua verificação. Confira seu email e tente novamente em instantes.")
+      }
+    }
     
     return (
       <div className="w-full flex justify-center">
         {/* Card principal com formulário de verificação */}
-        <div className="rounded-lg max-w-md w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
+        <div className="rounded-lg max-w-xl w-full flex flex-col items-center space-y-2 bg-white !border-4 !border-lightcyan p-4">
           {/* Título da página */}
           <h1 className="text-xl font-bold">Verifique seu Email</h1>
           {/* Texto explicativo com email do usuário */}
-          <p>Para sua segurança é necessário fazer uma breve verificação de email. Enviaremos um link para seu email ({user && user.email}) assim que você clicar no botão abaixo.</p>
+          <p>Para sua segurança é necessário fazer uma breve verificação de email. Enviaremos um link para seu email <span className="font-bold">{user && user.email}</span> assim que você clicar no botão abaixo.</p>
+          <p>Caso não receba o email, verifique sua caixa de spam ou solicite um novo envio.</p>
           {/* Botão para enviar email de verificação */}
-          <Button onClick={handleVerifyEmail} className="w-full !bg-neonblue hover:!bg-neonblue/80 enabled:focus:ring-4 enabled:focus:outline-none enabled:focus:!ring-jordyblue">
+          <ButtonAPP onClick={handleVerifyEmail} className="w-full">
             {/* Mostra texto ou spinner baseado no estado de carregamento */}
-            {!authLoading ? <>Enviar Email</> : <Spinner color={'warning'} size={'md'}></Spinner>}
-          </Button>
+            {!authLoading ? <>Enviar Email</> : <Spinner color={'info'} size={'md'}></Spinner>}
+          </ButtonAPP>
+          {/* Exibe botão de continuar após o envio do email */}
+          {emailInvited && (
+            <Button onClick={handleContinue} className="w-full !bg-green-400 hover:!bg-green-500 focus:!ring-green-200">
+              Continuar para o Dashboard
+            </Button>
+          )}
           {/* Componente para exibir erros */}
           <ErrorCard error={error}/>
         </div>

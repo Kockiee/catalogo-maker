@@ -11,13 +11,14 @@
 // Importa o contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext"
 // Importa funções de navegação do Next.js
-import { redirect, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 // Importa hooks do React
 import { useEffect, useState } from "react"
 // Importa componentes da biblioteca Flowbite
 import { Button, Spinner, TextInput } from "flowbite-react"
 // Importa componente de exibição de erros
 import ErrorCard from "@/app/auth/components/ErrorCard"
+import ButtonAPP from "@/app/components/ButtonAPP"
 
 /**
  * Componente principal da página de ação
@@ -31,9 +32,10 @@ export default function PAGE({searchParams}) {
     const [password, setPassword] = useState("")
     // Estado para armazenar mensagens de erro
     const [error, setError] = useState("")
+    // Estado para indicar verificação concluída com sucesso
+    const [verified, setVerified] = useState(false)
 
     // Extrai parâmetros da URL
-    const mobileMode = searchParams.mobileMode  // Modo mobile
     const oobCode = searchParams.oobCode        // Código de ação do Firebase
     const mode = searchParams.mode              // Tipo de ação (verifyEmail, resetPassword)
 
@@ -46,21 +48,21 @@ export default function PAGE({searchParams}) {
             try {
                 // Tenta verificar o email usando o código da URL
                 await verifyEmail(oobCode)
+                setVerified(true)
             } catch (err) {
                 // Trata erro de código inválido
                 if (err.code === "auth/invalid-action-code") {
-                    setError("Código ou URL de verificação inválido !")
+                    setError("Código ou URL de verificação inválido!")
                 }
             }
         }
         
-        // Se não há código de ação, redireciona para login
-        if (!oobCode) {
-            redirect(`/auth/signin${mobileMode ? "?mobileMode=True" : ""}`)
-        }
-        
         // Se o modo é verificação de email, executa automaticamente
         if (mode === 'verifyEmail') {
+            if (!oobCode) {
+                setError("Link de verificação inválido ou expirado.")
+                return
+            }
             sendVerifyEmail()
         }
     }, [])
@@ -94,15 +96,20 @@ export default function PAGE({searchParams}) {
             /* Interface para verificação de email */
             <div className="w-full">
                 <div className="w-full h-full">
-                    {/* Se não há erro, mostra loading */}
-                    {!error ? (
+                    {/* Se há erro, mostra mensagem de erro; senão mostra sucesso ou carregando */}
+                    {error ? (
+                        <ErrorCard error={error}/>
+                    ) : verified ? (
+                        <div className="flex flex-col items-center space-y-2">
+                            <p className="text-xl font-semibold text-neonblue">Email verificado com sucesso!</p>
+                            <p className="text-base text-gray-700">Você já pode retornar ao aplicativo e acessar sua conta.</p>
+                            <ButtonAPP href="/dashboard">Continuar para o dashboard</ButtonAPP>
+                        </div>
+                    ) : (
                         <div className="flex flex-col items-center">
                             <Spinner className="text-lightcyan" size={'lg'}></Spinner>
-                            <p>Verificando seu E-mail...</p>
+                            <p>Verificando seu e-mail...</p>
                         </div>
-                    ): (
-                        /* Se há erro, mostra mensagem de erro */
-                        <ErrorCard error={error}/>
                     )}
                 </div>
             </div>

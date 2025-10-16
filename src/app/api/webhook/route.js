@@ -29,7 +29,7 @@ export async function POST(req) {
   // Extrai a assinatura do Stripe do header 'stripe-signature'
   const sig = headersList.get('stripe-signature');
   // Obtém o segredo do webhook das variáveis de ambiente
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const endpointSecret = process.env.STRIPE_TEST_WEBHOOK_SECRET;
 
   // Variável para armazenar o evento decodificado
   let event;

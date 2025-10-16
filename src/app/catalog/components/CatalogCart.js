@@ -50,7 +50,7 @@ export default function CatalogCart({catalog}) {
                 <div className="flex flex-col p-2">
                     <Link href={`/catalog/${catalog.id}/${product.id}`}>
                         {/* Nome do produto */}
-                        <h1 className="text-base font-medium">{product.name}</h1>
+                        <h1 className="text-base font-medium break-all">{product.name}</h1>
                         
                         {/* Lista as variações selecionadas do produto */}
                         {product.variations.map((variation, index) => (

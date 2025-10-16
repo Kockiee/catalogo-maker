@@ -162,17 +162,13 @@ async function getSessionStatus(sessionId, sessionToken) {
         return data;
     };
 
-    let attempts = 0; // Contador de tentativas
-    let data = await checkStatus(); // Primeira verificação
-    
-    // Loop para tentar novamente se a sessão estiver fechada
-    while (data.status === "CLOSED" && attempts < 2) {
-        attempts++; // Incrementa contador
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Aguarda 1 segundo
-        data = await checkStatus(); // Verifica novamente
-    }
+    const data = await checkStatus(); // Verificação do status armazenada na variável
 
-    return { status: data.status }; // Retorna o status final
+    console.log('[WhatsappAdapter.js] Verificando status da sessão:', sessionId);
+    console.log('[WhatsappAdapter.js] Usando token:', sessionToken);
+    console.log('[WhatsappAdapter.js] Status da sessão verificado:', data);
+
+    return { status: data.status }; // Retorna o status
 }
 
 /**
