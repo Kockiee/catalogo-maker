@@ -7,8 +7,6 @@
  * Retorna informações completas do catálogo e lista de produtos.
  */
 
-// Importa o middleware de verificação de token JWT para autenticação
-import verifyJWTToken from "@/app/api/middlewares/verifyJWTToken";
 // Importa a conexão com o banco de dados Firebase
 import { db } from "../../../../utils/firebase";
 // Importa as funções necessárias do Firestore para busca de dados
