@@ -100,7 +100,7 @@ export default function PhoneVerification({catalogId}) {
                         value={2} 
                         onClick={(e) => {if (e.target.checked) setOrderForm(2)}} 
                         /> 
-                        <Label className="text-base text-gray-600" htmlFor="use-own-whatsapp" value="Quero que o cliente seja diretamente direcionado para o meu WhatsApp." />
+                        <Label className="text-base text-gray-600" htmlFor="use-own-whatsapp" value="Quero que o cliente seja direcionado para o meu WhatsApp." />
                     </div>
                 </fieldset>
                 {/* Se opção 2 selecionada, mostra componente de QR Code */}
