@@ -29,8 +29,9 @@ export default function forgotpassword() {
     const [emailInvited, setEmailInvited] = useState(false)
     // Obtém funções do contexto de autenticação
     const { sendForgotPasswordEmail, authLoading } = useAuth()
-    // Estado para armazenar mensagens de erro
+    // Estado para armazenar mensagens de erro local (para ErrorCard)
     const [error, setError] = useState("")
+    const { notify } = useNotifications()
 
     /**
      * Função para processar o envio do formulário de recuperação
@@ -48,8 +49,12 @@ export default function forgotpassword() {
             // Trata diferentes tipos de erro do Firebase
             if (err.code === 'auth/invalid-email') {
                 setError("O email digitado é inválido.")
+                notify.error('O email digitado é inválido.')
             } else if (err.code === 'auth/too-many-requests') {
                 setError("O email já deve estar na sua caixa de entrada, caso não esteja aguarde um pouco e envie de novo.")
+                notify.warning('Muitas solicitações. Verifique sua caixa de entrada ou tente novamente mais tarde.')
+            } else {
+                notify.error('Erro ao solicitar redefinição de senha.')
             }
         }
     }

@@ -19,6 +19,7 @@ import { Button, Label, Spinner, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 // Importa hooks do React
 import { useEffect, useState } from 'react';
+import { useNotifications } from '@/app/hooks/useNotifications';
 // Importa navegação do Next.js
 import { useRouter } from 'next/navigation';
 // Importa ícone do Google
@@ -38,6 +39,7 @@ export default function PAGE({searchParams}) {
   const [password, setPassword] = useState('');
   // Estado para armazenar mensagens de erro
   const [error, setError] = useState('');
+  const { notify } = useNotifications();
   // Obtém funções do contexto de autenticação
   const { signInWithGoogle, loginWithEmailAndPassword, authLoading, user, DBUser } = useAuth();
   // Roteador para redirecionamentos
@@ -63,15 +65,15 @@ export default function PAGE({searchParams}) {
     } catch (err) {
       // Trata diferentes tipos de erro do Firebase
       if (err.code == 'auth/user-not-found') {
-        setError("Não encontramos sua conta.")
+        notify.error('Não encontramos sua conta.');
       } else if (err.code == 'auth/invalid-email') {
-        setError("O email digitado é inválido.")
+        notify.error('O email digitado é inválido.');
       } else if (err.code == 'auth/wrong-password') {
-        setError("Sua senha está errada.")
+        notify.error('Senha incorreta.');
       } else if (err.code == 'auth/too-many-requests') {
-        setError("Muitas tentativas! Tente novamente mais tarde ou mude a sua senha.")
+        notify.warning('Muitas tentativas. Tente novamente mais tarde.');
       } else if (err.code == 'auth/invalid-credential') {
-        setError("As credenciais fornecidas são inválidas.")
+        notify.error('Credenciais inválidas.');
       }
     }
   }
@@ -86,7 +88,7 @@ export default function PAGE({searchParams}) {
     } catch (err) {
       // Trata erro de email já em uso
       if (err.code === 'auth/email-already-in-use') {
-        setError(<Text className="text-base text-red-600 dark:text-red-400"><Text className="font-medium">Opa!</Text> Esse email já existe.</Text>)
+        notify.error('Esse email já existe.');
       }
     }
   }

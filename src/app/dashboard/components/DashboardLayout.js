@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }) {
   // Redirecionamento se o usuário não for premium
   useEffect(() => {
     // Se não é premium e não está nas páginas permitidas, redireciona para planos
-    if (isPremiumUser === false && pathname !== "/dashboard/plan" && pathname !== "/dashboard/account") {
+    if (isPremiumUser === false && pathname !== "/dashboard/plan" && pathname !== "/dashboard/account" && pathname !== "/dashboard/payment-finished") {
       router.push(`/dashboard/plan${mobileMode ? "?mobileMode=True" : ""}`);
     }
   }, [pathname, isPremiumUser, mobileMode, router]); // Executa quando pathname, isPremiumUser, mobileMode ou router mudam

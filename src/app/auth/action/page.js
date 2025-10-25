@@ -19,6 +19,7 @@ import { Button, Spinner, TextInput } from "flowbite-react"
 // Importa componente de exibição de erros
 import ErrorCard from "@/app/auth/components/ErrorCard"
 import ButtonAPP from "@/app/components/ButtonAPP"
+import { useNotifications } from '@/app/hooks/useNotifications'
 
 /**
  * Componente principal da página de ação
@@ -32,6 +33,7 @@ export default function PAGE({searchParams}) {
     const [password, setPassword] = useState("")
     // Estado para armazenar mensagens de erro
     const [error, setError] = useState("")
+    const { notify } = useNotifications()
     // Estado para indicar verificação concluída com sucesso
     const [verified, setVerified] = useState(false)
 
@@ -49,10 +51,12 @@ export default function PAGE({searchParams}) {
                 // Tenta verificar o email usando o código da URL
                 await verifyEmail(oobCode)
                 setVerified(true)
+                notify.success('Email verificado com sucesso!')
             } catch (err) {
                 // Trata erro de código inválido
                 if (err.code === "auth/invalid-action-code") {
                     setError("Código ou URL de verificação inválido!")
+                    notify.error('Código ou link de verificação inválido ou expirado.')
                 }
             }
         }
@@ -83,8 +87,10 @@ export default function PAGE({searchParams}) {
             // Trata diferentes tipos de erro do Firebase
             if (err.code == 'auth/weak-password') {
                 setError("Sua senha tem que ter pelo menos 6 caracteres.")
+                notify.error('Sua senha tem que ter pelo menos 6 caracteres.')
             } else if (err.code == 'auth/invalid-action-code') {
                 setError("Parece que esse link de redefinição de senha expirou, tente novamente.")
+                notify.error('Link de redefinição expirado ou inválido. Solicite um novo e tente novamente.')
             }
         }
     }
