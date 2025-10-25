@@ -18,6 +18,7 @@ import { Button, Checkbox, Label, Spinner, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 // Importa hooks do React
 import { useEffect, useState } from 'react';
+import { useNotifications } from '@/app/hooks/useNotifications'
 // Importa navegação do Next.js
 import { useRouter } from 'next/navigation';
 // Importa ícone do Google
@@ -43,6 +44,7 @@ export default function PAGE({searchParams}) {
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
     // Estado para armazenar mensagens de erro
     const [error, setError] = useState('');
+  const { notify } = useNotifications()
     // Obtém funções do contexto de autenticação
     const { signUpWithEmailAndPassword, signInWithGoogle, authLoading, user, DBUser } = useAuth()
     // Roteador
@@ -67,6 +69,7 @@ export default function PAGE({searchParams}) {
       } else {
         // Exibe erro se os termos não foram aceitos
         setError("Você precisa aceitar os termos de uso e a política de privacidade antes de continuar.")
+        notify.warning('Você precisa aceitar os termos de uso e a política de privacidade.')
       }
     } 
 
@@ -90,10 +93,13 @@ export default function PAGE({searchParams}) {
             // Trata diferentes tipos de erro do Firebase
             if (err.code == 'auth/email-already-in-use') {
               setError("Esse email já existe.")
+              notify.error('Esse email já existe.')
             } else if (err.code == 'auth/invalid-email') {
               setError("O email digitado é inválido.")
+              notify.error('O email digitado é inválido.')
             } else if (err.code == 'auth/weak-password') {
               setError("Sua senha tem que ter pelo menos 6 caracteres.")
+              notify.error('Sua senha tem que ter pelo menos 6 caracteres.')
             }
           }
         } else {
