@@ -60,17 +60,34 @@ export default function EditProductContainer({catalogId, productId}) {
     const [variations, setVariations] = useState(product.variations);
     
     // Converter imagens existentes para o formato do ImageGallery
-    const [images, setImages] = useState(
-        product.images.map((imageUrl, index) => ({
-            url: imageUrl, // URL da imagem
-            id: `existing-${index}`, // ID único
-            isExisting: true // Marca como imagem existente
-        }))
-    );
+    // Deduplicamos URLs para evitar múltiplas renderizações da mesma imagem
+    const initialImageUrls = Array.from(new Set(product.images));
+    const initialImages = initialImageUrls.map((imageUrl, index) => ({
+        url: imageUrl, // URL da imagem
+        id: `existing-${index}`, // ID único
+        isExisting: true // Marca como imagem existente
+    }));
+    const [images, setImages] = useState(initialImages);
 
     // Função que atualiza a lista de imagens
     const handleImagesChange = (newImages) => {
-        setImages(newImages); // Atualiza estado das imagens
+        // Deduplica as imagens recebidas por URL (ou por file name para novas imagens)
+        const seen = new Set();
+        const unique = [];
+        for (const img of newImages) {
+            // chave para dedup: preferir url (existentes e dataURLs); para arquivos novos, usar file name+size
+            let key = img.url || (img.file && `${img.file.name}_${img.file.size}`) || img.id;
+            if (!seen.has(key)) {
+                seen.add(key);
+                unique.push(img);
+            }
+        }
+
+        setImages(unique); // Atualiza estado das imagens com a lista deduplicada
+
+        // Mantém lista de arquivos que precisam ser enviados (novas imagens)
+        const addedFiles = unique.filter(img => !img.isExisting && img.file).map(img => img.file);
+        setToAddImages(addedFiles);
     };
 
     // Função que gerencia a remoção de imagens
@@ -98,6 +115,23 @@ export default function EditProductContainer({catalogId, productId}) {
         formdata.set("price", productPrice) // Define o preço
         return updateProduct(state, formdata, catalogId, productId, variations); // Chama ação de atualização
     }, {message: ''});
+
+    // Função de submit do formulário de edição
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Monta FormData a partir do form
+        const formData = new FormData(e.target);
+
+        // Garante preço atualizado no form
+        formData.set('price', productPrice);
+
+        // Marca loading e notifica — formAction também define loading/notify porém definimos aqui para resposta imediata
+        setLoading(true);
+        notify.processing('Atualizando produto...');
+
+        // Dispara a action do useFormState
+        formAction(formData);
+    };
 
     // Efeito que processa o resultado da atualização do produto
     useEffect(() => {
@@ -133,29 +167,32 @@ export default function EditProductContainer({catalogId, productId}) {
             <div className="bg-white p-8 rounded-lg shadow-md flex flex-wrap w-full">
                 <div className="flex flex-col w-full">
                     {/* Formulário de edição do produto */}
-                    <ProductForm
-                        productName={productName}
-                        setProductName={setProductName}
-                        productDescription={productDescription}
-                        setProductDescription={setProductDescription}
-                        productPrice={productPrice}
-                        setProductPrice={setProductPrice}
-                        images={images}
-                        onImagesChange={handleImagesChange}
-                        onImageRemove={handleImageRemove}
-                        loading={loading}
-                        error={error}
-                        onSubmit={() => {
-                            notify.processing("Atualizando produto..."); // Mostra notificação
-                            setLoading(true) // Marca como carregando
-                        }}
-                        submitText="Salvar alterações"
-                    >
-                        {/* Container para variações do produto */}
-                        <div className="py-2 w-full">
-                            <CreateProductVariants variations={variations} setVariations={setVariations}/>
-                        </div>
-                    </ProductForm>
+                    <form onSubmit={handleSubmit}>
+                        <ProductForm
+                            productName={productName}
+                            setProductName={setProductName}
+                            productDescription={productDescription}
+                            setProductDescription={setProductDescription}
+                            productPrice={productPrice}
+                            setProductPrice={setProductPrice}
+                            images={images}
+                            onImagesChange={handleImagesChange}
+                            onImageRemove={handleImageRemove}
+                            loading={loading}
+                            error={error}
+                            onSubmit={() => {
+                                notify.processing("Atualizando produto..."); // Mostra notificação
+                                setLoading(true) // Marca como carregando
+                            }}
+                            loadingText="Atualizando produto..."
+                            submitText="Salvar alterações"
+                        >
+                            {/* Container para variações do produto */}
+                            <div className="py-2 w-full">
+                                <CreateProductVariants variations={variations} setVariations={setVariations}/>
+                            </div>
+                        </ProductForm>
+                    </form>
                 </div>
             </div>
         </div>

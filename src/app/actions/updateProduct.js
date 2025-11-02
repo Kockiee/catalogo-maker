@@ -29,8 +29,8 @@ export async function updateProduct(prevState, formData, catalogId, productId, v
     const description = formData.get('description'); // Descrição do produto
     const soldInCatalog = formData.get('soldInCatalog') || false; // Se o produto é vendido no catálogo
 
-    // Valida se todos os campos obrigatórios estão presentes
-    if (name && description && price && imagesToDelete && imagesToCreate) {
+    // Valida se os campos obrigatórios estão presentes (permitir preço = 0)
+    if (name && description && !Number.isNaN(price)) {
         const colRef = collection(db, "products"); // Cria referência à coleção de produtos
         // Query para verificar se já existe outro produto com o mesmo nome no catálogo
         const q = query(colRef, where("name", "==", name), where("id", "!=", productId), where("catalog", "==", catalogId));
@@ -41,32 +41,58 @@ export async function updateProduct(prevState, formData, catalogId, productId, v
         }
 
         const docRef = doc(db, "products", productId); // Cria referência ao documento
-        const docSnap = await getDoc(docRef); // Obtém dados atuais do produto
+    const docSnap = await getDoc(docRef); // Obtém dados atuais do produto
+    const docData = docSnap.data() || {};
 
-        var productImages = docSnap.data().images // Obtém array de URLs das imagens atuais
+    const owner = docData.owner || docData.uid || '';
+    var productImages = Array.isArray(docData.images) ? [...docData.images] : []; // Obtém array de URLs das imagens atuais
 
         // Atualiza dados básicos do produto
         await updateDoc(docRef, {
             name: name, // Atualiza nome
             price: price, // Atualiza preço
             description: description, // Atualiza descrição
-            variants: variants, // Atualiza variações
+            variations: variants, // Atualiza variações
             sold_in_catalog: soldInCatalog // Atualiza status de venda
         });
         
         // Processa imagens a serem deletadas
         if (imagesToDelete.length > 0) { // Se há imagens para deletar
             for (const imageUrl of imagesToDelete) { // Itera sobre cada URL
-                productImages = productImages.filter(image => image !== imageUrl); // Remove URL do array
-                const fileRef = ref(storage, imageUrl); // Cria referência ao arquivo
-                await deleteObject(fileRef); // Deleta arquivo do Storage
+                // Remove a URL do array local
+                productImages = productImages.filter(image => image !== imageUrl);
+
+                try {
+                    // Se a entrada é uma URL de download do Firebase, extraímos o path dentro de /o/<path>?...
+                    // Ex: https://firebasestorage.googleapis.com/v0/b/<bucket>/o/<owner>%2Fproducts-images%2Ffile.jpg?alt=media&token=...
+                    let storagePath = imageUrl;
+                    if (typeof imageUrl === 'string' && imageUrl.includes('/o/')) {
+                        const afterO = imageUrl.split('/o/')[1] || '';
+                        const pathEncoded = afterO.split('?')[0] || '';
+                        storagePath = decodeURIComponent(pathEncoded);
+                    }
+
+                    const fileRef = ref(storage, storagePath); // Cria referência ao arquivo
+                    try {
+                        await deleteObject(fileRef); // Deleta arquivo do Storage
+                    } catch (error) {
+                        if (error.code === 'storage/object-not-found') {
+                            console.log("Arquivo não encontrado no Storage, pulando deleção:", storagePath);
+                        } else {
+                            console.error('Erro ao verificar arquivo:', error);
+                        }
+                    }
+                } catch (err) {
+                    // Se não for possível deletar (path inválido), continuamos — log opcional
+                    console.warn('Não foi possível deletar imagem do Storage:', imageUrl, err);
+                }
             }
         }
 
         // Processa novas imagens a serem adicionadas
         if (imagesToCreate.length > 0) { // Se há novas imagens
             for (const image of imagesToCreate) { // Itera sobre cada imagem
-                const storageRef = ref(storage, `${docSnap.owner}/products-images/${image.name}`); // Cria referência no Storage
+                const storageRef = ref(storage, `${owner}/${catalogId}/products/${newProduct.id}/${image.name}`); // Cria referência no Storage usando owner correto
                 await uploadBytes(storageRef, image); // Faz upload da imagem
                 const url = await getDownloadURL(storageRef); // Obtém URL da imagem
                 productImages.push(url); // Adiciona URL ao array

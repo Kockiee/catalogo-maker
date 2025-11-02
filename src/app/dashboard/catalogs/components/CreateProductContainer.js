@@ -68,10 +68,10 @@ export default function CreateProductContainer({catalogId}) {
 
     // Hook para gerenciar o estado do formulário e ações
     const [formState, formAction] = useFormState((state, formdata) => {
-        if (images.length > 0) {
-            images.forEach(img => {
-                formdata.append('images', img.file); // Adiciona imagens ao FormData
-            });
+        // Esperamos que o FormData já contenha os arquivos (montado em handleSubmit).
+        // Aqui apenas garantimos que o preço esteja setado e chamamos a action.
+        const currentImages = formdata.getAll('images');
+        if (currentImages && currentImages.length > 0) {
             formdata.set("price", productPrice); // Define o preço
             return createProduct(state, formdata, catalog.id, user.uid, variations); // Chama ação de criação
         } else {
@@ -134,6 +134,7 @@ export default function CreateProductContainer({catalogId}) {
                             error={error}
                             onSubmit={() => setLoading(true)} // Marca como carregando ao submeter
                             submitText="Criar produto"
+                            loadingText="Criando produto..."
                         >
                         {/* Container para variações do produto */}
                         <div className="py-2 w-full">

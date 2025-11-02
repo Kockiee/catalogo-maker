@@ -35,6 +35,8 @@ import { redirect } from "next/navigation";
 import { createOrder } from "@/app/actions/createOrder";
 // Importa ícone de verificação
 import { MdVerified } from "react-icons/md";
+// Importa hook de notificações
+import { useNotifications } from "@/app/hooks/useNotifications";
 
 // Componente da página de pagamento
 export default function CatalogPaymentPage({catalog}) {
@@ -50,6 +52,8 @@ export default function CatalogPaymentPage({catalog}) {
     const [phoneNumber, setPhoneNumber] = useState('');
     // Estado para controlar se pedido foi enviado
     const [orderInvited, setOrderInvited] = useState(false);
+    // Hook de notificações
+    const { notify } = useNotifications();
 
     // Redireciona se carrinho estiver vazio
     if (cart && cart.length < 1) redirect(`/catalog/${catalog.id}`)
@@ -108,7 +112,6 @@ export default function CatalogPaymentPage({catalog}) {
 
     // Hook para gerenciar estado do formulário e processar envio
     const [formState, formAction] = useFormState(async(state, formdata) => {
-        
         // Valida se telefone tem 13 dígitos (formato brasileiro)
         if (phoneNumber.length !== 13) {
             setError("Seu telefone precisa ter 13 dígitos");
@@ -132,6 +135,7 @@ export default function CatalogPaymentPage({catalog}) {
             if (formState.message === 'order-created') {
                 setOrderInvited(true); // Mostra tela de sucesso
                 setCart([]) // Limpa carrinho
+                notify.orderCreated(); // Notifica sucesso
                 // Redireciona após 5 segundos
                 setTimeout(() => {redirect(`/catalog/${catalog.id}`)}, 5000)
             } else if (formState.message === 'invalid-params') {
