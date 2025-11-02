@@ -22,7 +22,7 @@ import BackButton from '../dashboard/components/BackButton';
  * @param {object} children - Componentes filhos a serem renderizados
  * @returns {JSX.Element} - Layout com botão de voltar e conteúdo
  */
-export default function RootLayout({ children }) {
+export default function LAYOUT({ children }) {
   // Obtém dados do usuário e usuário do banco de dados do contexto de autenticação
   const { user, DBUser } = useAuth();
   // Obtém o caminho atual da URL

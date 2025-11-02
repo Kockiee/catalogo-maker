@@ -12,6 +12,11 @@
 # next.js
 /.next/
 /out/
+/public
+
+# Ignorar arquivos APK dentro de public (ex.: builds Android colocados em public)
+/public/*.apk
+/public/**/*.apk
 
 # production
 /build

@@ -11,6 +11,7 @@
 import ErrorCard from "@/app/auth/components/ErrorCard"
 // Importa o contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext"
+import { useNotifications } from "@/app/hooks/useNotifications"
 // Importa componentes da biblioteca Flowbite
 import { Button, Spinner, TextInput, Toast } from "flowbite-react"
 // Importa hook useState para gerenciar estado local
@@ -44,7 +45,7 @@ export default function forgotpassword() {
             // Tenta enviar email de recuperação de senha
             await sendForgotPasswordEmail(email)
             // Marca que o email foi enviado com sucesso
-            setEmailInvited(true)
+            notify.success('Email de redefinição de senha enviado com sucesso. Verifique sua caixa de entrada.')
         } catch (err) {
             // Trata diferentes tipos de erro do Firebase
             if (err.code === 'auth/invalid-email') {
@@ -94,19 +95,6 @@ export default function forgotpassword() {
                     >{!authLoading ? <>Enviar Email</> : <Spinner className="text-lightcyan" size={'md'}></Spinner>}</Button>
                 </form>
             </div>
-            {/* Toast de notificação de sucesso */}
-            <Toast className={`fixed border bottom-4 transition-opacity duration-300 ease-in-out opacity-100 ${emailInvited ? '' : 'opacity-0'}`}>
-                {/* Ícone de sucesso */}
-                <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
-                  <HiPaperAirplane className="w-6 h-6 rotate-45"/>
-                </div>
-                {/* Mensagem de sucesso */}
-                <div className="ml-3 text-md font-normal">
-                  Email enviado com sucesso
-                </div>
-                {/* Botão para fechar o toast */}
-                <Toast.Toggle theme={'auto'} onDismiss={() => setEmailInvited(false)}/>
-            </Toast>
         </div>
     )
 }

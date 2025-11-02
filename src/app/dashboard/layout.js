@@ -24,7 +24,7 @@ export const metadata = {
 };
 
 // Componente principal que renderiza o layout do dashboard
-export default function PAGE({children}) {
+export default function LAYOUT({children}) {
     return (
       // Envolve todas as páginas filhas com o layout comum do dashboard
       <DashboardLayout>

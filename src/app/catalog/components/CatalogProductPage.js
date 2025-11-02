@@ -36,8 +36,13 @@ export default function CatalogProductPage({catalog, params}) {
     const product = catalog.products.find(object => object.id === params.productId);
 
     // Estado para armazenar as variações selecionadas pelo usuário
-    // Inicializa com a primeira variação disponível
-    const [selectedVariants, setSelectedVariants] = useState([{name: product.variations[0].name, variants: product.variations[0].variants[0]}]);
+    // Inicializa com a primeira variação disponível quando existirem variações,
+    // caso contrário inicia vazio para evitar erros em produtos sem variantes
+    const hasVariations = Array.isArray(product?.variations) && product.variations.length > 0;
+    const initialSelected = hasVariations
+        ? [{ name: product.variations[0].name, variants: product.variations[0].variants[0] }]
+        : [];
+    const [selectedVariants, setSelectedVariants] = useState(initialSelected);
     
     // Função que gerencia a seleção de uma variação
     const handleVariantSelection = (variationName, variant) => {
@@ -65,7 +70,8 @@ export default function CatalogProductPage({catalog, params}) {
 
     // Verifica se todas as variações foram selecionadas
     // Necessário para habilitar o botão de adicionar ao carrinho
-    const allVariantsSelected = selectedVariants.length === product.variations.length;
+    // Se não houver variações, considera como todas selecionadas (pode adicionar ao carrinho)
+    const allVariantsSelected = hasVariations ? selectedVariants.length === product.variations.length : true;
 
     return (
         // Container principal com layout flexível que quebra em múltiplas linhas
@@ -99,7 +105,7 @@ export default function CatalogProductPage({catalog, params}) {
                 {/* Seção de seleção de variações */}
                 <div className="space-y-2 text-xl">
                     {/* Mapeia cada tipo de variação (ex: tamanho, cor) */}
-                    {product.variations.map((variation, variationIndex) => (
+                    {hasVariations && product.variations.map((variation, variationIndex) => (
                         <div key={variationIndex}>
                             {/* Nome da categoria de variação (ex: "Tamanho") */}
                             <h3 className="font-medium">{variation.name}</h3>

@@ -37,6 +37,7 @@ export default function ProductForm({
     error, // Mensagem de erro
     onSubmit, // Função de submit do formulário
     submitText, // Texto do botão de submit
+    loadingText, // Texto exibido quando loading === true
     children // Para componentes adicionais como ProductVariants
 }) {
     return (
@@ -106,7 +107,7 @@ export default function ProductForm({
                     className="shadow-md hover:shadow-md hover:shadow-cornflowerblue/50 bg-neonblue duration-200 hover:!bg-cornflowerblue focus:ring-jordyblue w-full" 
                     size="lg" // Tamanho grande
                 >
-                    {loading ? "Criando produto..." : submitText} {/* Texto dinâmico baseado no estado */}
+                    {loading ? (loadingText || submitText || "Processando...") : submitText} {/* Texto dinâmico baseado no estado */}
                 </Button>
             </div>
         </div>
