@@ -21,11 +21,14 @@ import { getChatId } from "./getChatId"; // Importa função para obter chatId
 
 export async function cancelOrder(formdata, order, waSession) {
     const reason = formdata.get('reason'); // Obtém motivo do cancelamento do formulário
-    await refuseOrder(order.id) // Deleta pedido do banco de dados
+    await refuseOrder (order, null, false); // Deleta pedido do banco de dados
     
     // Envia mensagem de cancelamento ao comprador
-    const response = await sendMessage(waSession.id, waSession.token, `${order.buyer_phone}@c.us`, `
-*Seu Pedido em ${order.store_name} Foi Cancelado*
+    const response = await sendMessage(
+    waSession.id, 
+    waSession.token, 
+    `${order.buyer_phone}@c.us`, 
+`❌ *Seu Pedido em ${order.store_name} Foi Cancelado* ❌
 
 *Pedido:* ${order.id}
 *Motivo:* ${reason}
@@ -37,8 +40,8 @@ ${order.content.map((item) => `❌ ${item.quantity} x ${item.name}
 *TOTAIS*
 *Produtos*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 ---------------------------------
-*Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-    `)
+*Total*: ${order.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
+);
 
     // Se mensagem foi enviada com sucesso
     if (response.status === 200) {

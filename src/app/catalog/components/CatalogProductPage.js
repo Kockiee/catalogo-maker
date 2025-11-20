@@ -124,8 +124,8 @@ export default function CatalogProductPage({catalog, params}) {
                                                 color: catalog.text_color,
                                                 backgroundColor: catalog.tertiary_color, 
                                                 border: isSelected 
-                                                    ? `4px solid ${catalog.tertiary_color}` 
-                                                    : `4px dashed ${catalog.primary_color}`
+                                                    ? `4px solid ${catalog.secondary_color}` 
+                                                    : `4px solid ${catalog.tertiary_color}`
                                             }}
                                             // Função chamada ao clicar no botão
                                             onClick={() => handleVariantSelection(variation.name, variant)}
