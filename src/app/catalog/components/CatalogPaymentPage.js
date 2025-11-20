@@ -110,16 +110,18 @@ export default function CatalogPaymentPage({catalog}) {
     // Calcula o preço total
     const totalPrice = calculateTotalPrice();
 
+
     // Hook para gerenciar estado do formulário e processar envio
     const [formState, formAction] = useFormState(async(state, formdata) => {
         // Valida se telefone tem 13 dígitos (formato brasileiro)
         if (phoneNumber.length !== 13) {
             setError("Seu telefone precisa ter 13 dígitos");
+            return {message: 'invalid-params'};
         } else {
             // Adiciona telefone aos dados do formulário
             formdata.set('buyerPhone', phoneNumber);
             // Cria o pedido usando a ação createOrder
-            const createdOrder = await createOrder(state, formdata, catalog.id, catalog.name, catalog.store_name, catalog.owner, cart, totalPrice);
+            const createdOrder = await createOrder(state, formdata, catalog, {content: cart, price: totalPrice});
             // Limpa o carrinho
             setCart([]);
             // Remove carrinho do localStorage
@@ -213,7 +215,7 @@ export default function CatalogPaymentPage({catalog}) {
                         <div className="!mt-4">
                             <p className="text-sm">
                                 <HiInformationCircle className="w-6 h-6 inline-flex"/> 
-                                Precisamos do seu número de telefone para te notificar quando seu pedido for aceito
+                                Ao enviar o pedido você concorda em fornecer seu número de telefone ao vendedor para contato sobre o pedido.
                             </p>
                         </div>
                     </div>
@@ -228,7 +230,7 @@ export default function CatalogPaymentPage({catalog}) {
                             <h2>Total</h2>
                             {/* Preço total formatado em reais */}
                             <p className="text-2xl font-medium">{totalPrice.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</p>
-                            <p className="text-sm">Tudo certo? Clique em finalizar enviar seu pedido ao vendedor</p>
+                            <p className="text-sm">Tudo certo? Clique em finalizar para enviar seu pedido ao vendedor</p>
                             
                             {/* Botão para finalizar compra */}
                             <button

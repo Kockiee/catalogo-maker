@@ -51,25 +51,10 @@ export default function CatalogNavbar({catalog}) {
                 <h1 className="text-center font-bold text-lg">{catalog.store_name}</h1>
             </Link>
             
-            {/* Botões para mobile (pesquisa e carrinho) */}
-            <div className="hidden max-md:flex flex-row">
-              {/* Botão de pesquisa (visível apenas no mobile) */}
-              <button className="p-2 px-3 hidden max-md:block" onClick={() => setSearching(!searching)}>
-                <HiSearch className="w-6 h-6"/>
-              </button>
-              
-              {/* Botão do carrinho com indicador de itens */}
-              <button className="p-2 px-3 relative" onClick={() => setViewingCart(!viewingCart)}>
-                {/* Indicador visual quando há itens no carrinho */}
-                {cart.length > 0 && (
-                  <div className="bg-red-500 p-1 absolute top-1.5 right-2.5 rounded-full animate-bounce"></div>
-                )}
-                <HiShoppingCart className="w-6 h-6"/>
-              </button>
-            </div>
+            
             
             {/* Container do campo de pesquisa e botão do carrinho (desktop) */}
-            <div className={`max-w-sm w-full max-md:${searching && 'hidden'} max-md:mt-2 flex flex-row`}>
+            <div className={`max-w-sm w-full max-md:mt-2 flex flex-row`}>
               {/* Formulário de pesquisa */}
               <form onSubmit={handleSubmit} className="w-full">
                   <div className="relative">
@@ -103,7 +88,7 @@ export default function CatalogNavbar({catalog}) {
               </form>
               
               {/* Botão do carrinho (visível apenas no desktop) */}
-              <button className="p-2 px-3 relative max-md:hidden" onClick={() => setViewingCart(!viewingCart)}>
+              <button className="p-2 px-3 relative" onClick={() => setViewingCart(!viewingCart)}>
                 {/* Indicador visual quando há itens no carrinho */}
                 {cart.length > 0 && (
                   <div className="bg-red-500 p-1 absolute top-1.5 right-2.5 rounded-full animate-bounce"></div>

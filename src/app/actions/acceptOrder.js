@@ -23,8 +23,11 @@ import { getChatId } from "./getChatId"; // Importa função para obter chatId
 
 export async function acceptOrder(order, waSession) {
     // Envia mensagem de confirmação ao comprador
-    const response = await sendMessage(waSession.id, waSession.token, `${order.buyer_phone}@c.us`, 
-`*Seu Pedido em ${order.store_name} foi Aceito*
+    const response = await sendMessage(
+    waSession.id, 
+    waSession.token, 
+    `${order.buyer_phone}@c.us`, 
+`⭐ *Seu Pedido em ${order.store_name} foi Aceito* ⭐
 
 *Pedido:* ${order.id}
 *Nome:* ${order.buyer_name}

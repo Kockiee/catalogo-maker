@@ -19,13 +19,15 @@
 // Importa hook useState do React
 import { useState } from 'react';
 // Importa ícones do Heroicons
-import { HiChevronDown, HiChevronUp, HiX } from "react-icons/hi";
+import { HiChevronDown, HiChevronUp, HiTrash, HiX } from "react-icons/hi";
 // Importa contexto de ferramentas
 import { useTool } from "@/app/contexts/ToolContext";
 // Importa componentes do Flowbite
 import { Button, Label, Textarea, Tooltip } from 'flowbite-react';
 // Importa ícone de menu kebab
 import { CiMenuKebab } from 'react-icons/ci';
+import CancelOrderModal from './CancelOrderModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 // Importa ações para gerenciar pedidos
 import { acceptOrder } from '@/app/actions/acceptOrder';
 import { cancelOrder } from '@/app/actions/cancelOrder';
@@ -47,8 +49,10 @@ export default function OrdersGrid() {
     const [expandedOrders, setExpandedOrders] = useState([]);
     // Estado que controla qual menu de ações está aberto
     const [openMenuIndex, setOpenMenuIndex] = useState(null);
-    // Estado que controla se o formulário de cancelamento está visível
-    const [showCancelationForm, setShowCancelationForm] = useState(false);
+    // Estado que controla qual pedido tem o formulário de cancelamento aberto (id)
+    const [cancelModalOrderId, setCancelModalOrderId] = useState(null);
+    // Estado que controla qual pedido tem o modal de exclusão aberto (id)
+    const [deleteModalOrderId, setDeleteModalOrderId] = useState(null);
     // Hook para exibir notificações ao usuário
     const { notify } = useNotifications();
 
@@ -83,53 +87,15 @@ export default function OrdersGrid() {
             const catalogData = catalogs.find(catalog => catalog.id === order.catalog_id);
             return <div key={index} className="text-sm rounded-lg border border-gray-200 bg-white shadow-sm m-2 flex flex-wrap w-full hover:shadow-md transition-shadow">
                 {/* Modal de cancelamento de pedido */}
-                {showCancelationForm && (
-                    <div className='fixed z-20 w-full bg-periwinkle h-full top-16 max-md:px-4 right-0 flex flex-col items-center'>
-                        <div className='bg-white !border-4 !border-lightcyan p-4 rounded max-w-lg max-md:max-w-full w-full shadow relative'>
-                            {/* Botão de fechar o modal */}
-                            <button className='absolute top-2 right-2' onClick={() => setShowCancelationForm(false)}>
-                                <HiX className='w-6 h-6 text-gray-500'/>
-                            </button>
-                            {/* Formulário de cancelamento */}
-                            <form
-                            className='flex flex-col'
-                            onSubmit={async() => {
-                                notify.success("Pedido cancelado com sucesso.");
-                                setShowCancelationForm(false);
-                                await updateOrders();
-                            }}
-                            action={async(formdata) => cancelOrder(formdata, order, {
-                                id: catalogData.whatsapp_session, 
-                                token: catalogData.whatsapp_session_token
-                                })}>
-                                {/* Título do formulário com ID do pedido */}
-                                <h1 className='text-lg font-bold mt-4'>Cancelamento do pedido <span className='break-all'>{order.id}</span></h1>
-                                {/* Label para o campo de motivo */}
-                                <Label
-                                htmlFor="reason"
-                                value="Motivo do cancelamento"
-                                />
-                                {/* Campo de texto para o motivo do cancelamento */}
-                                <Textarea
-                                type='text'
-                                rows={5}
-                                className='focus:ring-jordyblue focus:border-none focus:ring-2'
-                                name="reason"
-                                placeholder="Fora de estoque"
-                                required
-                                />
-                                {/* Botão para submeter o cancelamento */}
-                                <Button
-                                size='sm'
-                                type='submit'
-                                className='duration-200 bg-neonblue hover:!bg-neonblue/80 focus:ring-jordyblue w-full mt-2'
-                                >
-                                    Cancelar pedido
-                                </Button>
-                            </form>
-                        </div>
-                    </div>
-                )}
+                {/* Cancel modal — render via component when open for this order */}
+                <CancelOrderModal
+                    open={cancelModalOrderId === order.id}
+                    onClose={() => setCancelModalOrderId(null)}
+                    order={order}
+                    catalogData={catalogData}
+                    notify={notify}
+                    updateOrders={updateOrders}
+                />
                 {/* Container principal do pedido */}
                 <div className="p-4 w-full relative">
                     {/* Header do pedido com informações básicas */}
@@ -146,12 +112,14 @@ export default function OrdersGrid() {
                                 {order.status === 'waiting-accept' ? "Aguardando" : "Processado"}
                             </span>
                             {/* Botão do menu de ações */}
-                            <button 
-                                className='p-2 hover:bg-gray-100 rounded-full transition-colors' 
-                                onClick={() => toggleMenu(index)}
-                            >
-                                <CiMenuKebab className='w-5 h-5 text-gray-500'/>
-                            </button>
+                            {order.status !== 'waiting-accept' && (
+                                <button 
+                                    className='p-2 hover:bg-gray-100 rounded-full transition-colors' 
+                                    onClick={() => toggleMenu(index)}
+                                >
+                                    <CiMenuKebab className='w-5 h-5 text-gray-500'/>
+                                </button>
+                            )}
                         </div>
                     </div>
                     {/* Menu de ações do pedido */}
@@ -159,11 +127,28 @@ export default function OrdersGrid() {
                         <div className="bg-white flex flex-col z-10 top-16 right-0 absolute border border-gray-200 mt-2 py-2 rounded-md shadow-lg min-w-[120px]">
                             {/* Botão para cancelar pedido */}
                             <button 
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-left text-sm" 
-                                onClick={() => setShowCancelationForm(true)}
+                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-left flex items-center text-sm" 
+                                onClick={() => setCancelModalOrderId(order.id)}
                             >
-                                Cancelar
+                                <HiX className='w-5 h-5 inline'/>Cancelar
                             </button>
+                            <button 
+                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-left flex items-center text-sm" 
+                                onClick={() => setDeleteModalOrderId(order.id)}
+                            >
+                                <HiTrash className='w-5 h-5 inline'/> Excluir
+                            </button>
+                            {/* Delete confirmation modal */}
+                            <ConfirmDeleteModal
+                                open={deleteModalOrderId === order.id}
+                                onClose={() => setDeleteModalOrderId(null)}
+                                order={order}
+                                onConfirm={async () => {
+                                    await refuseOrder(order, null, false);
+                                    notify.success("Pedido excluído com sucesso.");
+                                    await updateOrders();
+                                }}
+                            />
                         </div>
                     )}
                     {/* Detalhes expandidos do pedido */}
@@ -236,10 +221,13 @@ export default function OrdersGrid() {
                                 {/* Botão para recusar pedido */}
                                 <Button
                                     onClick={async() => {
-                                        await refuseOrder(order.id) // Recusa o pedido
+                                        await refuseOrder(order, {
+                                            id: catalogData.whatsapp_session, 
+                                            token: catalogData.whatsapp_session_token
+                                        }) // Recusa o pedido
                                         await updateOrders() // Atualiza a lista
                                     }}
-                                    size='md' 
+                                    size='md'
                                     className='duration-200 focus:!ring-jordyblue bg-transparent flex-1 border-red-500 border-2 text-red-500 hover:text-white hover:!bg-red-500'>
                                     Recusar pedido
                                 </Button>
