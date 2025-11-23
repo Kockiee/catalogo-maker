@@ -31,72 +31,88 @@ export default function CatalogCart({catalog}) {
     
     // Efeito que abre o carrinho automaticamente quando há itens
     useEffect(() => {
-        return () => setViewingCart(true); // Abre o carrinho quando há mudanças
+        if (Array.isArray(cart) && cart.length > 0) {
+            setViewingCart(true);
+        }
     }, [cart]) // Executa quando o carrinho muda
 
     // Função que renderiza a lista de produtos no carrinho
     const renderProducts = () => {
-        return cart.map((product, index) => (
-            <div key={index} className="border p-1 rounded flex flex-row">
-                {/* Link para a página do produto */}
-                <Link href={`/catalog/${catalog.id}/${product.id}`}>
-                    <div>
-                        {/* Imagem do produto */}
-                        <img src={product.images[0]} alt={product.name} className="size-20 rounded border"/>
-                    </div>
-                </Link>
-                
-                {/* Informações do produto */}
-                <div className="flex flex-col p-2">
-                    <Link href={`/catalog/${catalog.id}/${product.id}`}>
-                        {/* Nome do produto */}
-                        <h1 className="text-base font-medium break-all">{product.name}</h1>
-                        
-                        {/* Lista as variações selecionadas do produto */}
-                        {product.variations.map((variation, index) => (
-                            <h2 key={index} className="text-sm !opacity-80" style={{color: catalog.text_color}}>
-                                {variation.name}: {variation.variants}
-                            </h2>
-                        ))}
-                        
-                        {/* Preço total do item (preço × quantidade) */}
-                        <p className="text-sm font-bold">
-                            {(product.price * product.quantity).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                        </p>
+        const safeCart = Array.isArray(cart) ? cart : [];
+
+        return safeCart.map((product, index) => {
+            const prod = product ?? {};
+            const images = Array.isArray(prod.images) && prod.images.length > 0 ? prod.images : [''];
+            const variations = Array.isArray(prod.variations) ? prod.variations : [];
+            const quantity = typeof prod.quantity === 'number' ? prod.quantity : 1;
+            const name = prod.name ?? 'Produto';
+            const price = typeof prod.price === 'number' ? prod.price : 0;
+            const productId = prod.id ?? '';
+
+            const productLink = (catalog?.id && productId) ? `/catalog/${catalog.id}/${productId}` : '#';
+
+            return (
+                <div key={index} className="border p-1 rounded flex flex-row">
+                    {/* Link para a página do produto */}
+                    <Link href={productLink}>
+                        <div>
+                            {/* Imagem do produto (fallback vazio) */}
+                            <img src={images[0]} alt={name} className="size-20 rounded border"/>
+                        </div>
                     </Link>
-                    
-                    {/* Controles de quantidade do produto */}
-                    <div className="relative flex items-center max-w-[8rem] mt-2">
-                        {/* Botão para diminuir quantidade */}
-                        <button
-                        onClick={() => removeProductFromCatalog(product.id, product.variations)}
-                        type="button"
-                        style={{backgroundColor: catalog.secondary_color}} 
-                        className="hover:opacity-80 border border-gray-300 rounded-s-lg p-2 h-9">
-                            <HiMinus/>
-                        </button>
 
-                        {/* Campo de input para mostrar quantidade (somente leitura) */}
-                        <input 
-                        value={product.quantity} 
-                        type="text" 
-                        id="quantity-input" 
-                        className="bg-transparent focus:ring-0 focus:border-none border-x-0 border-gray-300 h-9 text-center text-sm block w-full py-2.5" 
-                        required />
+                    {/* Informações do produto */}
+                    <div className="flex flex-col p-2">
+                        <Link href={productLink}>
+                            {/* Nome do produto */}
+                            <h1 className="text-base font-medium break-all">{name}</h1>
 
-                        {/* Botão para aumentar quantidade */}
-                        <button
-                        onClick={() => addProductToCatalog(product, product.variations)}
-                        type="button" 
-                        style={{backgroundColor: catalog.secondary_color}} 
-                        className="hover:opacity-80 border border-gray-300 rounded-e-lg p-2 h-9">
-                            <HiPlus/>
-                        </button>
+                            {/* Lista as variações selecionadas do produto (se houver) */}
+                            {variations.length > 0 && variations.map((variation, idx) => (
+                                <h2 key={idx} className="text-sm !opacity-80" style={{color: catalog?.text_color}}>
+                                    {variation.name}: {variation.variants}
+                                </h2>
+                            ))}
+
+                            {/* Preço total do item (preço × quantidade) */}
+                            <p className="text-sm font-bold">
+                                {(price * quantity).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                            </p>
+                        </Link>
+
+                        {/* Controles de quantidade do produto */}
+                        <div className="relative flex items-center max-w-[8rem] mt-2">
+                            {/* Botão para diminuir quantidade */}
+                            <button
+                            onClick={() => removeProductFromCatalog(prod.id, variations)}
+                            type="button"
+                            style={{backgroundColor: catalog?.secondary_color}} 
+                            className="hover:opacity-80 border border-gray-300 rounded-s-lg p-2 h-9">
+                                <HiMinus/>
+                            </button>
+
+                            {/* Campo de input para mostrar quantidade (somente leitura) */}
+                            <input 
+                            value={quantity} 
+                            type="text" 
+                            id="quantity-input" 
+                            className="bg-transparent focus:ring-0 focus:border-none border-x-0 border-gray-300 h-9 text-center text-sm block w-full py-2.5" 
+                            readOnly />
+
+                            {/* Botão para aumentar quantidade */}
+                            <button
+                            onClick={() => addProductToCatalog(prod, variations)}
+                            type="button" 
+                            style={{backgroundColor: catalog?.secondary_color}} 
+                            className="hover:opacity-80 border border-gray-300 rounded-e-lg p-2 h-9">
+                                <HiPlus/>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        ))
-    } 
+            )
+        })
+    }
 
     return (
         /* Container principal do carrinho com posicionamento fixo e animação */

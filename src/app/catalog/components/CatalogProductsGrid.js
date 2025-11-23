@@ -58,6 +58,12 @@ export default function CatalogProductsGrid({ catalog }) {
 
     // Função que renderiza a lista de produtos
     const renderProducts = () => {
+        // Se o catálogo não tem produtos, mostra mensagem específica
+        if (!Array.isArray(catalog?.products) || catalog.products.length === 0) {
+            return (
+                <p className="text-lg text-center w-full">Nenhum produto foi adicionado a este catálogo ainda.</p>
+            );
+        }
         // Filtra produtos por nome se houver busca, caso contrário mostra todos
         const products = searchedName
             ? catalog.products.filter(product => stringContainsPattern(product.name, searchedName))
