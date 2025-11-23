@@ -8,7 +8,7 @@
  */
 
 // Configura o cliente do Stripe com a chave de teste
-const stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // Importa a função para acessar headers da requisição
 import { headers } from 'next/headers';
 // Importa as funções necessárias do Firestore para manipulação de dados
@@ -29,7 +29,7 @@ export async function POST(req) {
   // Extrai a assinatura do Stripe do header 'stripe-signature'
   const sig = headersList.get('stripe-signature');
   // Obtém o segredo do webhook das variáveis de ambiente
-  const endpointSecret = process.env.STRIPE_TEST_WEBHOOK_SECRET;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   // Variável para armazenar o evento decodificado
   let event;
