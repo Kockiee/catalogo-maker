@@ -16,7 +16,7 @@
 
 'use client'
 // Importa hooks do React para estado e efeitos
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 // Importa contexto de autenticação
 import { useAuth } from "@/app/contexts/AuthContext";
 // Importa ícone de chama para planos populares
@@ -35,10 +35,25 @@ export default function PlanCard({ recurrenceType = 1, price = 25, disabled = fa
   // Extrai dados do usuário do contexto de autenticação
   const { user } = useAuth();
 
+  // Ref para evitar requisições paralelas que gerariam links duplicados
+  const isGeneratingRef = useRef(false);
+  // Ref para saber se o componente está montado (evita setState após unmount)
+  const mountedRef = useRef(true);
+
+  // Marca montagem / desmontagem do componente
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   // Efeito que gera o link de pagamento quando o componente é montado
   useEffect(() => {
     // Função assíncrona que gera o link de pagamento
     const getPaymentLink = async () => {
+      if (isGeneratingRef.current) return; // já está gerando
+      isGeneratingRef.current = true;
       try {
         // Obtém o token de autenticação do usuário
         const token = await user.getIdToken();
@@ -62,11 +77,22 @@ export default function PlanCard({ recurrenceType = 1, price = 25, disabled = fa
 
         // Extrai o link de pagamento da resposta
         const data = await response.json();
-        setPaymentLink(data.payment_link); // Armazena o link gerado
-        setPaymentLinkGenerated(true); // Marca como gerado
+
+        // Verifica se o payload contém o link antes de marcar como gerado
+        if (!data || !data.payment_link) {
+          throw new Error('Payment link not returned');
+        }
+
+        // Só atualiza estado se o componente ainda estiver montado
+        if (mountedRef.current) {
+          setPaymentLink(data.payment_link); // Armazena o link gerado
+          setPaymentLinkGenerated(true); // Marca como gerado
+        }
       } catch (error) {
         // Registra erro no console para debug
         console.error('Error generating payment link:', error);
+      } finally {
+        isGeneratingRef.current = false;
       }
     };
 

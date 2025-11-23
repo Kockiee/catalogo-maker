@@ -141,7 +141,7 @@ export default function SideBar({ onToggle }) {
           {/* Link externo para Assinatura */}
           <SidebarItem
           text={<p className='flex items-center'>Assinatura <FaExternalLinkAlt className='ml-1 w-3 h-3 text-gray-400'/></p>}
-          href={process.env.NEXT_PUBLIC_STRIPE_TEST_BILLING_PORTAL_URL} 
+          href={process.env.NEXT_PUBLIC_STRIPE_BILLING_PORTAL_URL} 
           target="_blank"
           icon={<HiShoppingBag className='text-primary-50/80 w-6 h-6'/>}
           />
