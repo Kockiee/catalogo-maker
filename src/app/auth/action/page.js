@@ -26,7 +26,7 @@ import { useNotifications } from '@/app/hooks/useNotifications'
  * @param {object} searchParams - Parâmetros de busca da URL
  * @returns {JSX.Element} - Interface para ações de autenticação
  */
-export default function PAGE({searchParams}) {
+export default function PAGE() {
     // Obtém funções do contexto de autenticação
     const { resetPassword, verifyEmail, authLoading } = useAuth()
     // Estado para armazenar a nova senha (para redefinição)
@@ -37,9 +37,10 @@ export default function PAGE({searchParams}) {
     // Estado para indicar verificação concluída com sucesso
     const [verified, setVerified] = useState(false)
 
-    // Extrai parâmetros da URL
-    const oobCode = searchParams.oobCode        // Código de ação do Firebase
-    const mode = searchParams.mode              // Tipo de ação (verifyEmail, resetPassword)
+    // Extrai parâmetros da URL a partir do hook (client components don't receive server props)
+    const searchParamsHook = useSearchParams()
+    const oobCode = searchParamsHook?.get('oobCode') ?? null
+    const mode = searchParamsHook?.get('mode') ?? null
 
     // Efeito que executa ações baseadas nos parâmetros da URL
     useEffect(() => {
@@ -48,15 +49,17 @@ export default function PAGE({searchParams}) {
          */
         async function sendVerifyEmail() {
             try {
-                // Tenta verificar o email usando o código da URL
                 await verifyEmail(oobCode)
                 setVerified(true)
                 notify.success('Email verificado com sucesso!')
             } catch (err) {
-                // Trata erro de código inválido
-                if (err.code === "auth/invalid-action-code") {
+                const code = err?.code
+                if (code === "auth/invalid-action-code") {
                     setError("Código ou URL de verificação inválido!")
                     notify.error('Código ou link de verificação inválido ou expirado.')
+                } else {
+                    setError('Ocorreu um erro ao verificar o email.')
+                    notify.error('Erro ao verificar o email.')
                 }
             }
         }
@@ -69,7 +72,8 @@ export default function PAGE({searchParams}) {
             }
             sendVerifyEmail()
         }
-    }, [])
+    // re-run if values change (hook functions included for safety)
+    }, [mode, oobCode, verifyEmail, notify])
     
     /**
      * Função para processar redefinição de senha
@@ -79,18 +83,19 @@ export default function PAGE({searchParams}) {
         // Previne o comportamento padrão do formulário
         e.preventDefault();
         try {
-            // Tenta redefinir a senha usando o código e nova senha
             await resetPassword(oobCode, password)
         } catch (err) {
-            // Limpa erros anteriores
             setError("")
-            // Trata diferentes tipos de erro do Firebase
-            if (err.code == 'auth/weak-password') {
+            const code = err?.code
+            if (code === 'auth/weak-password') {
                 setError("Sua senha tem que ter pelo menos 6 caracteres.")
                 notify.error('Sua senha tem que ter pelo menos 6 caracteres.')
-            } else if (err.code == 'auth/invalid-action-code') {
+            } else if (code === 'auth/invalid-action-code') {
                 setError("Parece que esse link de redefinição de senha expirou, tente novamente.")
                 notify.error('Link de redefinição expirado ou inválido. Solicite um novo e tente novamente.')
+            } else {
+                setError('Erro ao redefinir a senha.')
+                notify.error('Erro ao redefinir a senha.')
             }
         }
     }
