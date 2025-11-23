@@ -167,11 +167,6 @@ async function getSessionStatus(sessionId, sessionToken) {
 
     
     const data = await checkStatus(); // Verificação do status armazenada na variável
-    
-
-    console.log('[WhatsappAdapter.js] Verificando status da sessão:', sessionId);
-    console.log('[WhatsappAdapter.js] Usando token:', sessionToken);
-    console.log('[WhatsappAdapter.js] Status da sessão verificado:', data);
 
     return { status: data.status }; // Retorna o status
 }

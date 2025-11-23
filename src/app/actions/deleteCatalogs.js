@@ -35,6 +35,15 @@ export async function deleteCatalogs(catalogs, userId) {
                 await deleteDoc(doc.ref); // Deleta documento do produto
             }
         }
+
+        // Busca e deleta todos os pedidos associados ao catálogo
+        const ordersQuery = query(collection(db, "orders"), where("catalog_id", "==", catalogId));
+        const ordersSnapshot = await getDocs(ordersQuery);
+        if (!ordersSnapshot.empty) {
+            for (const orderDoc of ordersSnapshot.docs) {
+                await deleteDoc(orderDoc.ref);
+            }
+        }
         
         // Se há sessão do WhatsApp vinculada, deleta
         if(catalog.whatsapp_session) await deleteWhatsappSession(catalog.whatsapp_session);

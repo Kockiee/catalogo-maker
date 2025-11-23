@@ -45,6 +45,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 export default function OrdersGrid() {
     // Extrai pedidos, função de atualização e catálogos do contexto de ferramentas
     const { orders, updateOrders, catalogs } = useTool();
+    const safeCatalogs = catalogs ?? [];
     // Estado que armazena os índices dos pedidos expandidos
     const [expandedOrders, setExpandedOrders] = useState([]);
     // Estado que controla qual menu de ações está aberto
@@ -84,7 +85,7 @@ export default function OrdersGrid() {
     const renderOrders = () => {
         return orders.map((order, index) => {
             // Encontra os dados do catálogo relacionado ao pedido
-            const catalogData = catalogs.find(catalog => catalog.id === order.catalog_id);
+            const catalogData = safeCatalogs.find(catalog => catalog.id === order.catalog_id) ?? {};
             return <div key={index} className="text-sm rounded-lg border border-gray-200 bg-white shadow-sm m-2 flex flex-wrap w-full hover:shadow-md transition-shadow">
                 {/* Modal de cancelamento de pedido */}
                 {/* Cancel modal — render via component when open for this order */}
@@ -143,7 +144,7 @@ export default function OrdersGrid() {
                                 open={deleteModalOrderId === order.id}
                                 onClose={() => setDeleteModalOrderId(null)}
                                 order={order}
-                                onConfirm={async () => {
+                                    onConfirm={async () => {
                                     await refuseOrder(order, null, false);
                                     notify.success("Pedido excluído com sucesso.");
                                     await updateOrders();
@@ -222,8 +223,8 @@ export default function OrdersGrid() {
                                 <Button
                                     onClick={async() => {
                                         await refuseOrder(order, {
-                                            id: catalogData.whatsapp_session, 
-                                            token: catalogData.whatsapp_session_token
+                                            id: catalogData?.whatsapp_session, 
+                                            token: catalogData?.whatsapp_session_token
                                         }) // Recusa o pedido
                                         await updateOrders() // Atualiza a lista
                                     }}
@@ -235,8 +236,8 @@ export default function OrdersGrid() {
                                 <Button
                                     onClick={async() => {
                                         await acceptOrder(order, {
-                                            id: catalogData.whatsapp_session, 
-                                            token: catalogData.whatsapp_session_token
+                                            id: catalogData?.whatsapp_session, 
+                                            token: catalogData?.whatsapp_session_token
                                         }); // Aceita o pedido
                                         await updateOrders() // Atualiza a lista
                                     }}

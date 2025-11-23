@@ -77,13 +77,29 @@ export default function CatalogsTable() {
       }
     };
 
-    // Função que exclui os catálogos selecionados
-    const handleDeleteCatalogs = async () => {
-      notify.processing("Excluindo catálogos..."); // Mostra notificação de processamento
-      await deleteCatalogs(selectedCatalogs, user.uid); // Executa a exclusão
-      notify.catalogDeleted(); // Mostra notificação de sucesso
-      setSelectedCatalogs([]); // Limpa a seleção
-      updateCatalogs(); // Atualiza a lista de catálogos
+    // Estado para controlar modal de confirmação
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
+
+    // Função que executa a exclusão dos catálogos selecionados (após confirmação)
+    const performDeleteCatalogs = async () => {
+      try {
+        notify.processing("Excluindo catálogos..."); // Mostra notificação de processamento
+        await deleteCatalogs(selectedCatalogs, user.uid); // Executa a exclusão
+        notify.catalogDeleted(); // Mostra notificação de sucesso
+        setSelectedCatalogs([]); // Limpa a seleção
+        await updateCatalogs(); // Atualiza a lista de catálogos
+      } catch (err) {
+        console.error('Erro ao deletar catálogos:', err);
+        notify.error('Erro ao deletar catálogos. Tente novamente.');
+      } finally {
+        setShowConfirmDeleteModal(false);
+      }
+    };
+
+    // Abre o modal de confirmação em vez de deletar imediatamente
+    const handleDeleteCatalogs = () => {
+      if (selectedCatalogs.length === 0) return;
+      setShowConfirmDeleteModal(true);
     };
 
     // Função que renderiza uma linha da tabela para desktop
@@ -183,6 +199,21 @@ export default function CatalogsTable() {
           selectable={true} // Permite seleção de itens
           emptyMessage="Você ainda não criou um catálogo." // Mensagem quando não há dados
         />
+        {/* Modal de confirmação de exclusão */}
+        {showConfirmDeleteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/40" onClick={() => setShowConfirmDeleteModal(false)} />
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-lg z-10 p-6">
+              <h2 className="text-xl font-bold mb-2">Confirmar exclusão</h2>
+              <p className="text-sm text-gray-600 mb-4">Você tem certeza que deseja excluir <strong>{selectedCatalogs.length}</strong> catálogo(s)?</p>
+              <p className="text-sm text-red-600 mb-4">Atenção: todos os pedidos associados a esses catálogos também serão excluídos permanentemente.</p>
+              <div className="flex justify-end space-x-2">
+                <button className="px-4 py-2 rounded bg-gray-100" onClick={() => setShowConfirmDeleteModal(false)}>Cancelar</button>
+                <button className="px-4 py-2 rounded bg-red-600 text-white" onClick={performDeleteCatalogs}>Sim, excluir</button>
+              </div>
+            </div>
+          </div>
+        )}
       </>   
     );
 }
