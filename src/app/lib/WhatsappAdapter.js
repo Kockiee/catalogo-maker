@@ -155,6 +155,9 @@ async function getSessionStatus(sessionId, sessionToken) {
         'Authorization': `Bearer ${sessionToken}`
     };
 
+    console.log('[WhatsappAdapter.js] Verificando status da sessão:', sessionId);
+    console.log('[WhatsappAdapter.js] Usando token:', sessionToken);
+
     // Função interna para verificar status
     const checkStatus = async () => {
         const response = await fetch(`${API_URL}/api/${sessionId}/status-session`, { headers });
@@ -162,7 +165,9 @@ async function getSessionStatus(sessionId, sessionToken) {
         return data;
     };
 
+    
     const data = await checkStatus(); // Verificação do status armazenada na variável
+    
 
     console.log('[WhatsappAdapter.js] Verificando status da sessão:', sessionId);
     console.log('[WhatsappAdapter.js] Usando token:', sessionToken);
