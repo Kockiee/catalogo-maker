@@ -13,7 +13,7 @@ import { useAuth } from "@/app/contexts/AuthContext"
 // Importa funções de navegação do Next.js
 import { useSearchParams } from "next/navigation"
 // Importa hooks do React
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 // Importa componentes da biblioteca Flowbite
 import { Button, Spinner, TextInput } from "flowbite-react"
 // Importa componente de exibição de erros
@@ -43,6 +43,8 @@ export default function PAGE() {
     const mode = searchParamsHook?.get('mode') ?? null
 
     // Efeito que executa ações baseadas nos parâmetros da URL
+    const sentRef = useRef(false)
+
     useEffect(() => {
         /**
          * Função para verificar email automaticamente
@@ -70,10 +72,14 @@ export default function PAGE() {
                 setError("Link de verificação inválido ou expirado.")
                 return
             }
-            sendVerifyEmail()
+            // evita reenvio em loop: só executa uma vez por montagem/parametro
+            if (!sentRef.current) {
+                sentRef.current = true
+                sendVerifyEmail()
+            }
         }
-    // re-run if values change (hook functions included for safety)
-    }, [mode, oobCode, verifyEmail, notify])
+    // re-run apenas quando parâmetros mudarem
+    }, [mode, oobCode])
     
     /**
      * Função para processar redefinição de senha
